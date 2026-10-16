@@ -1,0 +1,25 @@
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+
+# Environment Variables & Local Config
+.env
+.env.local
+
+# IDE Files
+.vscode/
+.idea/
+*.sublime-workspace

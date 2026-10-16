@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+minimumReleaseAgeExclude:
+  - '@tanstack/router-generator@1.167.44'
+  - '@tanstack/router-plugin@1.168.46'
+  - '@tanstack/router-utils@1.162.4'
