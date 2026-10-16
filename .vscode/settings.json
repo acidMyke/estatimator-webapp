@@ -11,13 +11,36 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[json5]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
   "oxc.disableNestedConfig": true,
   "oxc.fmt.disableNestedConfig": true,
+  "oxc.path.oxfmt": "web_app/node_modules/oxfmt/dist/cli.js",
+  "oxc.path.oxlint": "web_app/node_modules/oxlint/dist/cli.js",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.oxc": "explicit"
-  },
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
   },

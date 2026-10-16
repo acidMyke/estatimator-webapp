@@ -7,7 +7,15 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 const config = defineConfig({
-  fmt: {},
+  fmt: {
+    arrowParens: "avoid",
+    printWidth: 120,
+    singleQuote: true,
+    jsxSingleQuote: true,
+    trailingComma: "all",
+    quoteProps: "consistent",
+    sortImports: true,
+  },
   lint: {
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },
