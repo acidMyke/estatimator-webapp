@@ -1,19 +1,25 @@
-import { defineConfig } from 'vite'
-import { devtools } from '@tanstack/devtools-vite'
+import { defineConfig, lazyPlugins } from "vite-plus";
+import { devtools } from "@tanstack/devtools-vite";
 
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
-import viteReact from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 const config = defineConfig({
+  fmt: {},
+  lint: {
+    jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
+    rules: { "vite-plus/prefer-vite-plus-imports": "error" },
+    options: { typeAware: true, typeCheck: true },
+  },
   resolve: { tsconfigPaths: true },
-  plugins: [
+  plugins: lazyPlugins(() => [
     devtools(),
     tailwindcss(),
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({ target: "react", autoCodeSplitting: true }),
     viteReact(),
-  ],
-})
+  ]),
+});
 
-export default config
+export default config;

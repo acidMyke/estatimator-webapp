@@ -6,10 +6,10 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "vp dev",
     "generate-routes": "tsr generate",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vp build",
+    "preview": "vp preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -29,12 +29,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   }
 }
