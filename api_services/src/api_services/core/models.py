@@ -1,7 +1,6 @@
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlmodel import Field, SQLModel
 
 
@@ -22,12 +21,3 @@ class TimestampMixin(SQLModel):
 
 class SoftDeleteMixin(SQLModel):
     deleted_at: datetime | None = Field(default=None, nullable=True, index=True)
-
-    @hybrid_property
-    def is_deleted(self):
-        return self.deleted_at is not None and self.deleted_at < datetime.now(UTC)
-
-    def set_deleted(self):
-        if self.is_deleted is False:
-            self.deleted_at = datetime.now(UTC)
-        return self

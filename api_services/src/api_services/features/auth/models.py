@@ -1,10 +1,9 @@
-from datetime import UTC, datetime
+from datetime import datetime
 from enum import Enum
 from uuid import UUID
 
 from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 from api_services.features.users.models import User
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlmodel import Field, Relationship
 
 
@@ -55,7 +54,3 @@ class UserSession(IdMixin, TimestampMixin, table=True):
 
     user_id: UUID = Field(nullable=False, foreign_key="user.id")
     user: User = Relationship(back_populates="sessions")
-
-    @hybrid_property
-    def is_active(self):
-        return self.expires_at >= datetime.now(UTC)

@@ -7,14 +7,14 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from .config import app_configuration
 
-__engine = create_async_engine(
+database_engine = create_async_engine(
     app_configuration.DATABASE_URL,
     connect_args={"ssl": True},
     echo=app_configuration.SQL_ECHO,
 )
 
 __async_session = async_sessionmaker(
-    __engine,
+    database_engine,
     class_=AsyncSession,
     expire_on_commit=False,
 )
