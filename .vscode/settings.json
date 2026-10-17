@@ -30,7 +30,14 @@
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "always",
+      "source.organizeImports.ruff": "always"
+    }
   },
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
@@ -39,6 +46,8 @@
   "oxc.fmt.disableNestedConfig": true,
   "oxc.path.oxfmt": "web_app/node_modules/oxfmt/dist/cli.js",
   "oxc.path.oxlint": "web_app/node_modules/oxlint/dist/cli.js",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "standard",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "files.watcherExclude": {
