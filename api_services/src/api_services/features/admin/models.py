@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 
 from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
-from api_services.features.admin_auth.models import AdminSession
 from sqlmodel import Field, Relationship
 
 if TYPE_CHECKING:
     from api_services.features.admin_auth.models import (
         AdminPasskey,
         AdminPassword,
+        AdminSession,
     )
 
 

@@ -7,7 +7,6 @@ from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 
 if TYPE_CHECKING:
     from api_services.features.auth.models import (
-        UserAuthenticationMethod,
         UserPasskey,
         UserPassword,
         UserSession,
@@ -16,7 +15,6 @@ if TYPE_CHECKING:
 
 class User(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):
     emails: list["UserEmail"] = Relationship(back_populates="user")
-    auth_methods: list["UserAuthenticationMethod"] = Relationship(back_populates="user")
     passwords: list["UserPassword"] = Relationship(back_populates="user")
     passkeys: list["UserPasskey"] = Relationship(back_populates="user")
     sessions: list["UserSession"] = Relationship(back_populates="user")

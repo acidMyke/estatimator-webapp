@@ -59,5 +59,14 @@
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "api_services/.venv": true,
+    "api_services/.ruff_cache": true,
+    "web_app/.tanstack": true,
+    "web_app/.vite-hooks": true,
+    "web_app/node_modules": true
   }
 }

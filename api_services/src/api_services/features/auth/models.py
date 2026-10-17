@@ -12,22 +12,9 @@ class AuthMethodType(str, Enum):
     PASSKEY = "passkey"
 
 
-class UserAuthenticationMethod(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):
-    method_type: AuthMethodType = Field()
-
-    is_enabled: bool = Field(default=True)
-    is_primary: bool = Field(default=False)
-
-    user_id: UUID = Field(nullable=False, foreign_key="user.id")
-    user: User = Relationship(back_populates="auth_methods")
-
-
 class AuthPasswordBase(IdMixin, TimestampMixin, SoftDeleteMixin):
-    is_active: bool = Field(default=True)
     hashed_password: str = Field(nullable=False)
-    requires_reset: bool = Field(default=False)
-    failed_login_attempts: int = Field(default=0)
-    locked_until: datetime | None = Field(default=None)
+    last_used_at: datetime | None = Field(default=None)
 
 
 class AuthPasskeyBase(IdMixin, TimestampMixin, SoftDeleteMixin):
@@ -42,7 +29,7 @@ class AuthPasskeyBase(IdMixin, TimestampMixin, SoftDeleteMixin):
 class AuthSessionBase(IdMixin, TimestampMixin):
     session_token: str = Field(index=True, unique=True, nullable=False)
     expires_at: datetime = Field(nullable=False)
-    logic_method_type: AuthMethodType = Field()
+    login_method_type: AuthMethodType = Field()
 
 
 class UserPassword(AuthPasswordBase, table=True):
@@ -58,7 +45,6 @@ class UserPasskey(AuthPasskeyBase, table=True):
 class UserSession(AuthSessionBase, table=True):
     ip_address: str | None = Field(default=None)
     user_agent: str | None = Field(default=None)
-    logic_method_type: AuthMethodType = Field()
 
     user_id: UUID = Field(nullable=False, foreign_key="user.id")
     user: User = Relationship(back_populates="sessions")
