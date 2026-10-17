@@ -10,11 +10,11 @@ class IdMixin(SQLModel):
 
 class TimestampMixin(SQLModel):
     created_at: datetime = Field(
-        nullable=False, default_factory=lambda: lambda: datetime.now(UTC)
+        nullable=False, default_factory=lambda: datetime.now(UTC)
     )
     updated_at: datetime = Field(
         nullable=False,
-        default_factory=lambda: lambda: datetime.now(UTC),
+        default_factory=lambda: datetime.now(UTC),
         sa_column_kwargs={"onupdate": lambda: datetime.now(UTC)},
     )
 

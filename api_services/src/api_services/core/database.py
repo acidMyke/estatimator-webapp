@@ -9,7 +9,7 @@ from .config import app_configuration
 
 database_engine = create_async_engine(
     app_configuration.DATABASE_URL,
-    connect_args={"ssl": True},
+    connect_args={"sslmode": "require", "channel_binding": "require"},
     echo=app_configuration.SQL_ECHO,
 )
 

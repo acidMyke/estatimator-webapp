@@ -29,7 +29,16 @@ class AppConfiguration(BaseSettings):
         if "?sslmode=" in v:
             raise ValueError
 
+        if "+asyncpg" not in v:
+            raise ValueError(
+                "DATABASE_URL must start with 'postgresql://' or 'postgresql+asyncpg://'"
+            )
+
         return v
+
+    @property
+    def SYNC_DATABASE_URL(self) -> str:
+        return self.DATABASE_URL.replace("+asyncpg", "+psycopg")
 
 
 app_configuration = AppConfiguration()

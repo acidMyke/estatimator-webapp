@@ -1,2 +1,3 @@
-# If there is any changes needed to be changed here, please discuss with JJ
+# If there is any changes that needed to be done here, please discuss with JJ
 # Otherwise, the changes you made may be refactored/excluded
+
