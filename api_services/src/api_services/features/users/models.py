@@ -7,6 +7,7 @@ from api_services.features.auth.models import (
     UserAuthenticationMethod,
     UserPasskey,
     UserPassword,
+    UserSession,
 )
 
 
@@ -15,6 +16,7 @@ class User(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):
     auth_methods: list[UserAuthenticationMethod] = Relationship(back_populates="user")
     passwords: list[UserPassword] = Relationship(back_populates="user")
     passkeys: list[UserPasskey] = Relationship(back_populates="user")
+    sessions: list[UserSession] = Relationship(back_populates="user")
 
 
 class UserEmail(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):

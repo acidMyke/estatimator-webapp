@@ -25,4 +25,9 @@ class SoftDeleteMixin(SQLModel):
 
     @hybrid_property
     def is_deleted(self):
-        return self.deleted_at is not None
+        return self.deleted_at is not None and self.deleted_at < datetime.now(UTC)
+
+    def set_deleted(self):
+        if self.is_deleted is False:
+            self.deleted_at = datetime.now(UTC)
+        return self

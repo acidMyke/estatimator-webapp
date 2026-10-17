@@ -48,6 +48,7 @@
   "oxc.path.oxlint": "web_app/node_modules/oxlint/dist/cli.js",
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "standard",
+  "python.terminal.useEnvFile": true,
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "files.watcherExclude": {
