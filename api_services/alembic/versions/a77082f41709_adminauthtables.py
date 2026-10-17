@@ -94,7 +94,12 @@ def upgrade() -> None:
         sa.Column("expires_at", sqlmodel.sql.sqltypes.UTCDateTime(), nullable=False),
         sa.Column(
             "login_method_type",
-            sa.Enum("PASSWORD", "PASSKEY", name="authmethodtype"),
+            postgresql.ENUM(
+                "PASSWORD",
+                "PASSKEY",
+                name="authmethodtype",
+                create_type=False,
+            ),
             nullable=False,
         ),
         sa.Column("admin_id", sa.Uuid(), nullable=False),
