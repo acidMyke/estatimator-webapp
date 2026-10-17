@@ -1,25 +1,24 @@
 # If there is any changes that needed to be done here, please discuss with JJ
 # Otherwise, the changes you made may be refactored/excluded
-from collections.abc import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlmodel.ext.asyncio.session import AsyncSession
+from typing import Annotated
 
-from .config import app_configuration
+from fastapi import Depends
+from sqlalchemy import create_engine
+from sqlmodel import Session
 
-database_engine = create_async_engine(
-    app_configuration.DATABASE_URL,
+from .settings import settings
+
+database_engine = create_engine(
+    settings.DATABASE_URL,
     connect_args={"sslmode": "require", "channel_binding": "require"},
-    echo=app_configuration.SQL_ECHO,
-)
-
-__async_session = async_sessionmaker(
-    database_engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
+    echo=settings.SQL_ECHO,
 )
 
 
-async def get_database_session() -> AsyncGenerator[AsyncSession, None]:
-    async with __async_session() as session:
+def __get_session():
+    with Session(database_engine) as session:
         yield session
+
+
+DatabaseSession = Annotated[Session, Depends(__get_session)]
