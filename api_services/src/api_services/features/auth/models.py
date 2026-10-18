@@ -3,13 +3,8 @@ from enum import Enum
 from uuid import UUID
 
 from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
-from api_services.features.users.models import User
+from api_services.features.users.models import CreateUser, User
 from sqlmodel import Field, Relationship
-
-
-class AuthMethodType(str, Enum):
-    PASSWORD = "password"
-    PASSKEY = "passkey"
 
 
 class AuthPasswordBase(IdMixin, TimestampMixin, SoftDeleteMixin):
@@ -26,11 +21,29 @@ class AuthPasskeyBase(IdMixin, TimestampMixin, SoftDeleteMixin):
     last_used_at: datetime | None = Field(default=None)
 
 
+class AuthMethodType(str, Enum):
+    PASSWORD = "PASSWORD"
+    PASSKEY = "PASSKEY"
+
+
 class AuthSessionBase(IdMixin, TimestampMixin):
     session_token: str = Field(index=True, unique=True, nullable=False)
     expires_at: datetime = Field(nullable=False)
     login_method_type: AuthMethodType = Field()
     parent_session_id: UUID | None = Field(default=None, nullable=True)
+
+
+class AuthOtpUsageType(str, Enum):
+    REGISTRATION = "REGISTRATION"
+    EMAIL_CHANGE = "EMAIL_CHANGE"
+    PASSWORD_RESET = "PASSWORD_RESET"
+    TWO_FACTOR = "TWO_FACTOR"
+
+
+class AuthOtpBase(AuthPasswordBase):
+    expires_at: datetime = Field(nullable=False)
+    used_at: datetime | None = Field(default=None)
+    usage_type: AuthOtpUsageType = Field(nullable=False)
 
 
 class UserPassword(AuthPasswordBase, table=True):
@@ -49,3 +62,12 @@ class UserSession(AuthSessionBase, table=True):
 
     user_id: UUID = Field(nullable=False, foreign_key="user.id")
     user: User = Relationship(back_populates="sessions")
+
+
+class UserOtp(AuthOtpBase, table=True):
+    user_id: UUID = Field(foreign_key="user.id")
+    user: User = Relationship()
+
+
+class RegisterPayload(CreateUser):
+    pass
