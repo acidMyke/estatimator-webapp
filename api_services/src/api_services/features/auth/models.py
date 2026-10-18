@@ -1,10 +1,11 @@
 from datetime import datetime
 from enum import Enum
+from typing import Literal
 from uuid import UUID
 
 from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 from api_services.features.users.models import CreateUser, User
-from sqlmodel import Field, Relationship
+from sqlmodel import Field, Relationship, SQLModel
 
 
 class AuthPasswordBase(IdMixin, TimestampMixin, SoftDeleteMixin):
@@ -69,5 +70,18 @@ class UserOtp(AuthOtpBase, table=True):
     user: User = Relationship()
 
 
+class EphemeralTokenData(SQLModel):
+    user_id: UUID = Field()
+    purpose: Literal["registration", "complete_registration"] = Field()
+
+
 class RegisterPayload(CreateUser):
     pass
+
+
+class RegisterationVerifyOtpPayload(SQLModel):
+    otp: str = Field()
+
+
+class RegistrationTokenData(SQLModel):
+    password: str = Field()

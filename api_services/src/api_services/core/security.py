@@ -1,6 +1,7 @@
 # If there is any changes that needed to be done here, please discuss with JJ
 # Otherwise, the changes you made may be refactored/excluded
 import secrets
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from argon2 import PasswordHasher
@@ -27,7 +28,12 @@ def generate_session_token() -> str:
     return secrets.token_urlsafe(32)
 
 
-def jwt_encode(payload: dict[str, Any]):
+def jwt_encode(payload: dict[str, Any], *, max_age: timedelta):
+    now = datetime.now(UTC)
+    payload["iss"] = settings.JWT_ISSUER
+    payload["iat"] = int(now.timestamp())
+    payload["exp"] = int((now + max_age).timestamp())
+
     return encode(
         payload,
         settings.JWT_SECRET_KEY,
@@ -39,6 +45,7 @@ def jwt_decode(token: str):
     return decode(
         token,
         settings.JWT_SECRET_KEY,
+        issuer=[settings.JWT_ISSUER],
         algorithms=[settings.ALGORITHM],
     )
 

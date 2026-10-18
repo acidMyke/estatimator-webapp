@@ -11,6 +11,7 @@ class AppSettings(BaseSettings):
     DATABASE_URL: str
     DEBUG: bool = False
     SQL_ECHO: bool = True
+    JWT_ISSUER: str = "estatimator"
     JWT_SECRET_KEY: str = Field(min_length=64, pattern=r"^[0-9a-fA-F]+$")
     ALGORITHM: str = "HS256"
     USER_SESSION_TOKEN_EXPIRE_DAYS: int = 7

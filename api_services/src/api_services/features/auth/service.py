@@ -5,11 +5,13 @@ from api_services.core.security import (
     generate_otp,
     generate_session_token,
     get_password_hash,
+    jwt_encode,
 )
 from api_services.core.settings import settings
 from api_services.features.auth.models import (
     AuthMethodType,
     AuthOtpUsageType,
+    EphemeralTokenData,
     UserOtp,
     UserSession,
 )
@@ -84,7 +86,7 @@ def create_session(
             httponly=True,
             secure=True,
             samesite="lax",
-            max_age=settings.USER_SESSION_TOKEN_EXPIRE_DAYS * 60,
+            max_age=settings.USER_SESSION_TOKEN_EXPIRE_DAYS * 24 * 60,
         )
 
 
@@ -121,3 +123,23 @@ def create_user_otp(db: Session, user_id: UUID, usage_type: AuthOtpUsageType):
         expires_at=expires_at,
     )
     db.add(user_otp)
+
+
+def issue_ephemeral_token(response: Response, data: EphemeralTokenData):
+    max_age = timedelta(minutes=8)
+    ephemeral_token = jwt_encode(
+        data.model_dump(),
+        max_age=max_age,
+    )
+    response.set_cookie(
+        key="ephemeral_token",
+        value=ephemeral_token,
+        httponly=True,
+        secure=True,
+        samesite="lax",
+        max_age=int(max_age.total_seconds()),
+    )
+
+
+def verify_user_otp(db: Session, user_id: UUID):
+    pass
