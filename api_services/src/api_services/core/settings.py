@@ -13,8 +13,8 @@ class AppSettings(BaseSettings):
     SQL_ECHO: bool = True
     JWT_SECRET_KEY: str = Field(min_length=64, pattern=r"^[0-9a-fA-F]+$")
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    USER_SESSION_TOKEN_EXPIRE_DAYS: int = 7
+    ADMIN_SESSION_TOKEN_EXPIRE_MINUTES: int = 20
 
     @field_validator("DATABASE_URL", mode="after")
     @classmethod

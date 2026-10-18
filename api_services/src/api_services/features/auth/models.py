@@ -30,6 +30,7 @@ class AuthSessionBase(IdMixin, TimestampMixin):
     session_token: str = Field(index=True, unique=True, nullable=False)
     expires_at: datetime = Field(nullable=False)
     login_method_type: AuthMethodType = Field()
+    parent_session_id: UUID | None = Field(default=None, nullable=True)
 
 
 class UserPassword(AuthPasswordBase, table=True):

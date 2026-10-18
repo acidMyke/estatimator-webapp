@@ -1,76 +1,43 @@
-from datetime import UTC, datetime
-from uuid import UUID
+from datetime import UTC, datetime, timedelta
 
-import jwt
+from api_services.features.auth.service import (
+    get_session_data_by_token,
+    refresh_session,
+    revoke_session,
+)
 from fastapi import HTTPException, Request, Response, status
-from sqlmodel import select
 
 from ...core.database import DatabaseSession
-from ...core.security import create_access_token
-from ...core.settings import settings
-from .models import User, UserSession
+from .models import User
 
 
 def get_current_user(request: Request, response: Response, db: DatabaseSession) -> User:
-    access_token = request.cookies.get("access_token")
-    refresh_token = request.cookies.get("refresh_token")
+    session_token = request.cookies.get("session_token")
+    ip_address = request.headers.get("x-forwarded-for")
+    user_agent = request.headers.get("user-agent")
 
-    if not access_token and not refresh_token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
-        )
+    if ip_address:
+        ip_address = ip_address.split(",")[0].strip()
 
-    user_id = None
+    if (not ip_address or ip_address == "") and request.client:
+        ip_address = request.client.host
 
-    if access_token:
-        try:
-            payload = jwt.decode(
-                access_token,
-                settings.JWT_SECRET_KEY,
-                algorithms=[settings.ALGORITHM],
-            )
-            user_id = UUID(payload.get("sub"))
-        except jwt.ExpiredSignatureError:
-            pass  # Move to Step 2
-        except jwt.InvalidTokenError:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid access token"
-            )
+    now = datetime.now(UTC)
 
-    if not user_id:
-        if not refresh_token:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired"
-            )
+    if not session_token or not user_agent:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-        session_data = db.exec(
-            select(UserSession.user_id, UserSession.expires_at).where(
-                UserSession.session_token == refresh_token
-                and UserSession.expires_at > datetime.now(UTC)
-            )
-        ).first()
+    user_session = get_session_data_by_token(db, session_token, user_agent)
 
-        if not session_data:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token expired"
-            )
+    if not user_session:
+        revoke_session(response=response)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-        user_id, expires_at = session_data
-        new_access_token = create_access_token(user_id, expires_at)
+    if now + timedelta(days=1) > user_session.expires_at:
+        refresh_session(db, user_session, ip_address=ip_address, response=response)
 
-        response.set_cookie(
-            key="access_token",
-            value=new_access_token,
-            httponly=True,
-            secure=True,
-            samesite="lax",
-            max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
-        )
-
-    user = db.get(User, user_id)
+    user = db.get(User, user_session.user_id)
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     return user

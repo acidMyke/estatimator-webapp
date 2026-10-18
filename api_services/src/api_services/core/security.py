@@ -1,10 +1,9 @@
 # If there is any changes that needed to be done here, please discuss with JJ
 # Otherwise, the changes you made may be refactored/excluded
 import secrets
-from datetime import UTC, datetime, timedelta
-from uuid import UUID
+from typing import Any
 
-import jwt
+from jwt import decode, encode
 from passlib.context import CryptContext
 
 from .settings import settings
@@ -20,18 +19,21 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def create_access_token(user_id: UUID, expires_at: datetime | None = None) -> str:
-    expire = datetime.now(UTC) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    if expires_at:
-        expire = min(expire, expires_at)
+def generate_session_token() -> str:
+    return secrets.token_urlsafe(32)
 
-    payload = {"sub": str(user_id), "exp": expire}
-    return jwt.encode(
+
+def jwt_encode(payload: dict[str, Any]):
+    return encode(
         payload,
         settings.JWT_SECRET_KEY,
         algorithm=settings.ALGORITHM,
     )
 
 
-def generate_refresh_token_string() -> str:
-    return secrets.token_urlsafe(32)
+def jwt_decode(token: str):
+    return decode(
+        token,
+        settings.JWT_SECRET_KEY,
+        algorithms=[settings.ALGORITHM],
+    )
