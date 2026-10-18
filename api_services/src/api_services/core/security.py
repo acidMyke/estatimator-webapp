@@ -3,20 +3,24 @@
 import secrets
 from typing import Any
 
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 from jwt import decode, encode
-from passlib.context import CryptContext
 
 from .settings import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+ph = PasswordHasher()
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        return ph.verify(hashed_password, plain_password)
+    except VerifyMismatchError:
+        return False
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    return ph.hash(password)
 
 
 def generate_session_token() -> str:
@@ -37,3 +41,8 @@ def jwt_decode(token: str):
         settings.JWT_SECRET_KEY,
         algorithms=[settings.ALGORITHM],
     )
+
+
+def generate_otp(length=6):
+    otp = "".join(secrets.choice("0123456789") for _ in range(length))
+    return otp

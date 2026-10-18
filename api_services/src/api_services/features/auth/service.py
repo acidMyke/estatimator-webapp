@@ -1,9 +1,18 @@
 from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
-from api_services.core.security import generate_session_token
+from api_services.core.security import (
+    generate_otp,
+    generate_session_token,
+    get_password_hash,
+)
 from api_services.core.settings import settings
-from api_services.features.auth.models import AuthMethodType, UserSession
+from api_services.features.auth.models import (
+    AuthMethodType,
+    AuthOtpUsageType,
+    UserOtp,
+    UserSession,
+)
 from fastapi import Response
 from sqlmodel import Session, select
 
@@ -97,3 +106,18 @@ def revoke_session(
 
     if response:
         response.delete_cookie("session_token")
+
+
+def create_user_otp(db: Session, user_id: UUID, usage_type: AuthOtpUsageType):
+    otp = generate_otp()
+    hashed_password = get_password_hash(otp)
+    expires_at = datetime.now(UTC) + timedelta(minutes=5)
+    # TODO: @acidMyke add email sending here
+    print(f"OTP: {otp}")
+    user_otp = UserOtp(
+        user_id=user_id,
+        usage_type=usage_type,
+        hashed_password=hashed_password,
+        expires_at=expires_at,
+    )
+    db.add(user_otp)
