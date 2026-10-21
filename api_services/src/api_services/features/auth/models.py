@@ -83,5 +83,5 @@ class RegisterationVerifyOtpPayload(SQLModel):
     otp: str = Field()
 
 
-class RegistrationTokenData(SQLModel):
+class CompleteRegistrationPayload(SQLModel):
     password: str = Field()

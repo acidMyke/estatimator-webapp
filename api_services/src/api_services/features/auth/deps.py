@@ -1,7 +1,9 @@
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
+from api_services.core.database import DatabaseSession
 from api_services.core.security import jwt_decode
+from api_services.features.auth.models import EphemeralTokenData, User
 from api_services.features.auth.service import (
     get_session_data_by_token,
     refresh_session,
@@ -10,9 +12,6 @@ from api_services.features.auth.service import (
 from fastapi import Depends, HTTPException, Request, Response, status
 from jwt import PyJWTError
 from pydantic import ValidationError
-
-from ...core.database import DatabaseSession
-from .models import EphemeralTokenData, User
 
 
 def get_current_user(request: Request, response: Response, db: DatabaseSession) -> User:

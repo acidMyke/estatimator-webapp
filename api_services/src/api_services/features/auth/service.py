@@ -6,6 +6,7 @@ from api_services.core.security import (
     generate_session_token,
     get_password_hash,
     jwt_encode,
+    verify_password,
 )
 from api_services.core.settings import settings
 from api_services.features.auth.models import (
@@ -13,10 +14,11 @@ from api_services.features.auth.models import (
     AuthOtpUsageType,
     EphemeralTokenData,
     UserOtp,
+    UserPassword,
     UserSession,
 )
 from fastapi import Response
-from sqlmodel import Session, select
+from sqlmodel import Session, desc, select
 
 
 def get_session_data_by_token(
@@ -86,7 +88,9 @@ def create_session(
             httponly=True,
             secure=True,
             samesite="lax",
-            max_age=settings.USER_SESSION_TOKEN_EXPIRE_DAYS * 24 * 60,
+            max_age=int(
+                timedelta(days=settings.USER_SESSION_TOKEN_EXPIRE_DAYS).total_seconds()
+            ),
         )
 
 
@@ -128,7 +132,7 @@ def create_user_otp(db: Session, user_id: UUID, usage_type: AuthOtpUsageType):
 def issue_ephemeral_token(response: Response, data: EphemeralTokenData):
     max_age = timedelta(minutes=8)
     ephemeral_token = jwt_encode(
-        data.model_dump(),
+        data.model_dump(mode="json"),
         max_age=max_age,
     )
     response.set_cookie(
@@ -141,5 +145,53 @@ def issue_ephemeral_token(response: Response, data: EphemeralTokenData):
     )
 
 
-def verify_user_otp(db: Session, user_id: UUID):
-    pass
+def verify_user_otp(
+    db: Session, user_id: UUID, otp: str, usage_type: AuthOtpUsageType
+) -> bool:
+    now = datetime.now(UTC)
+    stmt = (
+        select(UserOtp)
+        .where(
+            UserOtp.user_id == user_id,
+            UserOtp.usage_type == usage_type,
+            UserOtp.used_at == None,
+            UserOtp.deleted_at == None,
+            UserOtp.expires_at > now,
+        )
+        .order_by(desc(UserOtp.created_at))
+    )
+    user_otp = db.exec(stmt).first()
+    if not user_otp:
+        return False
+
+    if not verify_password(otp, user_otp.hashed_password):
+        return False
+
+    user_otp.used_at = now
+    user_otp.last_used_at = now
+    db.add(user_otp)
+    return True
+
+
+def create_user_password(
+    db: Session,
+    user_id: UUID,
+    password: str,
+) -> UserPassword:
+    stmt = select(UserPassword).where(
+        UserPassword.user_id == user_id,
+        UserPassword.deleted_at == None,
+    )
+    existing_passwords = db.exec(stmt).all()
+    now = datetime.now(UTC)
+    for existing in existing_passwords:
+        existing.deleted_at = now
+        db.add(existing)
+
+    hashed_password = get_password_hash(password)
+    user_password = UserPassword(
+        user_id=user_id,
+        hashed_password=hashed_password,
+    )
+    db.add(user_password)
+    return user_password
