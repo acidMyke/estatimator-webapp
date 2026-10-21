@@ -6,7 +6,7 @@
   cd api_services
 ```
 
-then follow the instruction in [API Services Setup](./api_services/README.md#setup)
+then follow the instruction in [API Services Setup](./api_services/README.md#setup-one-time)
 
 in another terminal
 
@@ -14,4 +14,4 @@ in another terminal
   cd web_app
 ```
 
-then follow the instruction in [Web App Setup](./api_services/README.md)
+then follow the instruction in [Web App Setup](./web_app/README.md#setup-one-time)
