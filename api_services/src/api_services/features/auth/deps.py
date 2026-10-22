@@ -1,6 +1,11 @@
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
+from fastapi import Depends, HTTPException, Request, Response, status
+from jwt import PyJWTError
+from pydantic import ValidationError
+from sqlalchemy.exc import NoResultFound
+
 from api_services.core.database import DatabaseSession
 from api_services.core.security import jwt_decode
 from api_services.features.auth.models import EphemeralTokenData, User
@@ -9,16 +14,18 @@ from api_services.features.auth.service import (
     refresh_session,
     revoke_session,
 )
-from fastapi import Depends, HTTPException, Request, Response, status
-from jwt import PyJWTError
-from pydantic import ValidationError
 
 
-def get_current_user(request: Request, response: Response, db: DatabaseSession) -> User:
+def get_optional_current_user(
+    request: Request, response: Response, db: DatabaseSession
+):
     session_token = request.cookies.get("session_token")
-    ip_address = request.headers.get("x-forwarded-for")
     user_agent = request.headers.get("user-agent")
 
+    if not session_token or not user_agent:
+        return None, None
+
+    ip_address = request.headers.get("x-forwarded-for")
     if ip_address:
         ip_address = ip_address.split(",")[0].strip()
 
@@ -27,23 +34,32 @@ def get_current_user(request: Request, response: Response, db: DatabaseSession) 
 
     now = datetime.now(UTC)
 
-    if not session_token or not user_agent:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-
-    user_session = get_session_data_by_token(db, session_token, user_agent)
-
-    if not user_session:
+    try:
+        session = get_session_data_by_token(db, session_token, user_agent)
+    except NoResultFound:
         revoke_session(response=response)
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        return None
 
-    if now + timedelta(days=1) > user_session.expires_at:
-        refresh_session(db, user_session, ip_address=ip_address, response=response)
+    if now + timedelta(days=1) > session.expires_at:
+        refresh_session(db, session, ip_address=ip_address, response=response)
 
-    user = db.get(User, user_session.user_id)
-    if not user:
+    user = db.get(User, session.user_id)
+    if not user or user.deleted_at is not None:
+        return None
+
+    return None, None
+
+
+def get_current_user(session_user=Depends(get_optional_current_user)) -> User:
+    session, user = session_user
+
+    if session is None or user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     return user
+
+
+CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 def get_ephemeral_token(request: Request):
@@ -55,7 +71,7 @@ def get_ephemeral_token(request: Request):
     try:
         raw_token_data = jwt_decode(ephemeral_token)
         return EphemeralTokenData.model_validate(raw_token_data)
-    except (PyJWTError, ValidationError):
+    except PyJWTError, ValidationError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 

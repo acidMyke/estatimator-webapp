@@ -17,8 +17,9 @@ from api_services.features.auth.models import (
     UserPassword,
     UserSession,
 )
+from api_services.features.users.models import User, UserEmail
 from fastapi import Response
-from sqlmodel import Session, desc, select
+from sqlmodel import Session, desc, func, select
 
 
 def get_session_data_by_token(
@@ -195,3 +196,46 @@ def create_user_password(
     )
     db.add(user_password)
     return user_password
+
+
+def authenticate_user(
+    db: Session,
+    email: str,
+    password: str,
+) -> User | None:
+    stmt = (
+        select(UserEmail)
+        .where(
+            func.lower(UserEmail.email) == email.strip().lower(),
+            UserEmail.deleted_at == None,
+        )
+        .order_by(desc(UserEmail.created_at))
+    )
+    user_email = db.exec(stmt).first()
+    if not user_email:
+        return None
+
+    user = db.get(User, user_email.user_id)
+    if not user or user.deleted_at is not None:
+        return None
+
+    pwd_stmt = (
+        select(UserPassword)
+        .where(
+            UserPassword.user_id == user.id,
+            UserPassword.deleted_at == None,
+        )
+        .order_by(desc(UserPassword.created_at))
+    )
+    user_password = db.exec(pwd_stmt).first()
+    if not user_password:
+        return None
+
+    if not verify_password(password, user_password.hashed_password):
+        return None
+
+    user_password.last_used_at = datetime.now(UTC)
+    db.add(user_password)
+    db.commit()
+
+    return user

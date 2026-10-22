@@ -85,3 +85,13 @@ class RegisterationVerifyOtpPayload(SQLModel):
 
 class CompleteRegistrationPayload(SQLModel):
     password: str = Field()
+
+
+class LoginPayload(SQLModel):
+    email: str = Field()
+    password: str = Field()
+
+
+class CheckAuthResponse(SQLModel):
+    is_authenticated: bool
+    email: str | None = None
