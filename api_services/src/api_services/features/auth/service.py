@@ -1,6 +1,9 @@
 from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
+from fastapi import Response
+from sqlmodel import Session, desc, func, select
+
 from api_services.core.security import (
     generate_otp,
     generate_session_token,
@@ -18,8 +21,6 @@ from api_services.features.auth.models import (
     UserSession,
 )
 from api_services.features.users.models import User, UserEmail
-from fastapi import Response
-from sqlmodel import Session, desc, func, select
 
 
 def get_session_data_by_token(
