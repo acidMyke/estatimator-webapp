@@ -5,7 +5,7 @@ from api_services.core.database import DatabaseSession
 from api_services.features.auth.router import router as auth_router
 from api_services.lifespan import lifespan
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, title="Backend Services")
 
 
 app.include_router(auth_router, prefix="/auth")
