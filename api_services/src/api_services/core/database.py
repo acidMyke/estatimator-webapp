@@ -3,10 +3,11 @@
 
 from typing import Annotated
 
-from api_services.core.settings import settings
 from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlmodel import Session
+
+from api_services.core.settings import settings
 
 database_engine = create_engine(
     settings.DATABASE_URL,

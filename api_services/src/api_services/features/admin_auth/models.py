@@ -1,12 +1,13 @@
 from uuid import UUID
 
+from sqlmodel import Field, Relationship
+
 from api_services.features.admin.models import Admin
 from api_services.features.auth.models import (
     AuthPasskeyBase,
     AuthPasswordBase,
     AuthSessionBase,
 )
-from sqlmodel import Field, Relationship
 
 
 class AdminPassword(AuthPasswordBase, table=True):

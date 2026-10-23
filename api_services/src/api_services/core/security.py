@@ -4,10 +4,11 @@ import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from api_services.core.settings import settings
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from jwt import decode, encode
+
+from api_services.core.settings import settings
 
 ph = PasswordHasher()
 

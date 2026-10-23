@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 from sqlmodel import Field, Relationship, SQLModel
+
+from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 
 if TYPE_CHECKING:
     from api_services.features.auth.models import (
@@ -14,10 +15,10 @@ if TYPE_CHECKING:
 
 class User(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):
     is_verified: bool = Field(default=False)
-    emails: list["UserEmail"] = Relationship(back_populates="user")
-    passwords: list["UserPassword"] = Relationship(back_populates="user")
-    passkeys: list["UserPasskey"] = Relationship(back_populates="user")
-    sessions: list["UserSession"] = Relationship(back_populates="user")
+    emails: list[UserEmail] = Relationship(back_populates="user")
+    passwords: list[UserPassword] = Relationship(back_populates="user")
+    passkeys: list[UserPasskey] = Relationship(back_populates="user")
+    sessions: list[UserSession] = Relationship(back_populates="user")
 
 
 class UserEmail(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):

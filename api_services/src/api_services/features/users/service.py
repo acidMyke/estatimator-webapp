@@ -1,5 +1,6 @@
-from api_services.features.users.models import CreateUser, User, UserEmail
 from sqlmodel import Session
+
+from api_services.features.users.models import CreateUser, User, UserEmail
 
 
 def create_user(db: Session, payload: CreateUser):

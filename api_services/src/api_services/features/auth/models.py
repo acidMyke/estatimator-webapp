@@ -3,9 +3,10 @@ from enum import Enum
 from typing import Literal
 from uuid import UUID
 
+from sqlmodel import Field, Relationship, SQLModel
+
 from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 from api_services.features.users.models import CreateUser, User
-from sqlmodel import Field, Relationship, SQLModel
 
 
 class AuthPasswordBase(IdMixin, TimestampMixin, SoftDeleteMixin):
