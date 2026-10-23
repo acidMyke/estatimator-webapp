@@ -3,8 +3,9 @@ from sqlmodel import select
 
 from api_services.core.database import DatabaseSession
 from api_services.features.auth.router import router as auth_router
+from api_services.lifespan import lifespan
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 
 app.include_router(auth_router, prefix="/auth")
