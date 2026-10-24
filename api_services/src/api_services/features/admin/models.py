@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 
 class Admin(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):
-    email: str = Field(nullable=False)
+    email: str = Field(nullable=False, unique=True)
     name: str = Field(nullable=False)
 
-    passwords: list[AdminPasskey] = Relationship(back_populates="admin")
-    passkeys: list[AdminPassword] = Relationship(back_populates="admin")
+    passwords: list[AdminPassword] = Relationship(back_populates="admin")
+    passkeys: list[AdminPasskey] = Relationship(back_populates="admin")
     sessions: list[AdminSession] = Relationship(back_populates="admin")
