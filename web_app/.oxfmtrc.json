@@ -1,0 +1,9 @@
+{
+  "arrowParens": "avoid",
+  "printWidth": 120,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "trailingComma": "all",
+  "quoteProps": "consistent",
+  "sortImports": true
+}
