@@ -4,10 +4,7 @@
  * Backend Services
  * OpenAPI spec version: 0.1.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -20,15 +17,10 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
+  UseQueryResult,
 } from '@tanstack/react-query';
-
 import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import type {
   CheckAuthResponse,
@@ -36,13 +28,8 @@ import type {
   HTTPValidationError,
   LoginPayload,
   RegisterPayload,
-  RegisterationVerifyOtpPayload
-} from './backendServices.schemas.ts';
-
-
-
-
-
+  RegisterationVerifyOtpPayload,
+} from './index.zod.ts';
 
 const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
   const result = { queryKey } as T & { queryKey: K };
@@ -62,411 +49,478 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 /**
  * @summary Login User
  */
-export const loginUserAuthLoginPost = (
-    loginPayload: LoginPayload, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
+export const postAuthLoginLoginUser = (
+  loginPayload: LoginPayload,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<unknown>> => {
+  return axios.post(`/auth/login`, loginPayload, options);
+};
 
+export const getPostAuthLoginLoginUserUrl = () => {
+  return axios
+    .create({
+      baseURL: '',
+      params: null,
+    })
+    .getUri({
+      url: `/auth/login`,
+      baseURL: '',
+    });
+};
 
-    return axios.post(
-      `/auth/login`,
-      loginPayload,options
-    );
-  }
+export const getPostAuthLoginLoginUserMutationKey = () => ['postAuthLoginLoginUser'] as const;
 
-export const getLoginUserAuthLoginPostUrl = () => {
+export const getPostAuthLoginLoginUserMutationOptions = <
+  TError = AxiosError<HTTPValidationError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAuthLoginLoginUser>>,
+    TError,
+    PostAuthLoginLoginUserMutationVariables,
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAuthLoginLoginUser>>,
+  TError,
+  PostAuthLoginLoginUserMutationVariables,
+  TContext
+> => {
+  const mutationKey = getPostAuthLoginLoginUserMutationKey();
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/auth/login`,
-    baseURL: '',
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthLoginLoginUser>>,
+    PostAuthLoginLoginUserMutationVariables
+  > = props => {
+    const { data } = props ?? {};
 
+    return postAuthLoginLoginUser(data, axiosOptions);
+  };
 
-  });
-}
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PostAuthLoginLoginUserMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthLoginLoginUser>>>;
+export type PostAuthLoginLoginUserMutationBody = LoginPayload;
+export type PostAuthLoginLoginUserMutationError = AxiosError<HTTPValidationError>;
+export type PostAuthLoginLoginUserMutationVariables = { data: LoginPayload };
 
-
-
-export const getLoginUserAuthLoginPostMutationKey = () => ['loginUserAuthLoginPost'] as const;
-
-export const getLoginUserAuthLoginPostMutationOptions = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginUserAuthLoginPost>>, TError,LoginUserAuthLoginPostMutationVariables, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof loginUserAuthLoginPost>>, TError,LoginUserAuthLoginPostMutationVariables, TContext> => {
-
-const mutationKey = getLoginUserAuthLoginPostMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginUserAuthLoginPost>>, LoginUserAuthLoginPostMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  loginUserAuthLoginPost(data,axiosOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type LoginUserAuthLoginPostMutationResult = NonNullable<Awaited<ReturnType<typeof loginUserAuthLoginPost>>>
-    export type LoginUserAuthLoginPostMutationBody = LoginPayload
-    export type LoginUserAuthLoginPostMutationError = AxiosError<HTTPValidationError>
-    export type LoginUserAuthLoginPostMutationVariables = {data: LoginPayload}
-
-    /**
+/**
  * @summary Login User
  */
-export const useLoginUserAuthLoginPost = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginUserAuthLoginPost>>, TError,LoginUserAuthLoginPostMutationVariables, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof loginUserAuthLoginPost>>,
-        TError,
-        LoginUserAuthLoginPostMutationVariables,
-        TContext
-      > => {
-      return useMutation(getLoginUserAuthLoginPostMutationOptions(options), queryClient);
-    }
-    /**
+export const usePostAuthLoginLoginUser = <TError = AxiosError<HTTPValidationError>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAuthLoginLoginUser>>,
+      TError,
+      PostAuthLoginLoginUserMutationVariables,
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAuthLoginLoginUser>>,
+  TError,
+  PostAuthLoginLoginUserMutationVariables,
+  TContext
+> => {
+  return useMutation(getPostAuthLoginLoginUserMutationOptions(options), queryClient);
+};
+/**
  * @summary Check Auth
  */
-export const checkAuthAuthMeGet = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CheckAuthResponse>> => {
+export const getAuthMeCheckAuth = (options?: AxiosRequestConfig): Promise<AxiosResponse<CheckAuthResponse>> => {
+  return axios.get(`/auth/me`, options);
+};
 
+export const getGetAuthMeCheckAuthUrl = () => {
+  return axios
+    .create({
+      baseURL: '',
+      params: null,
+    })
+    .getUri({
+      url: `/auth/me`,
+      baseURL: '',
+    });
+};
 
-    return axios.get(
-      `/auth/me`,options
-    );
-  }
+export const getGetAuthMeCheckAuthQueryKey = () => {
+  return [`/auth/me`] as const;
+};
 
-export const getCheckAuthAuthMeGetUrl = () => {
+export const getGetAuthMeCheckAuthQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
+  TError = AxiosError<unknown>,
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthMeCheckAuth>>, TError, TData>>;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
 
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/auth/me`,
-    baseURL: '',
+  const queryKey = queryOptions?.queryKey ?? getGetAuthMeCheckAuthQueryKey();
 
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthMeCheckAuth>>> = ({ signal }) =>
+    getAuthMeCheckAuth({ signal, ...axiosOptions });
 
-  });
-}
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
+export type GetAuthMeCheckAuthQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthMeCheckAuth>>>;
+export type GetAuthMeCheckAuthQueryError = AxiosError<unknown>;
 
-
-
-export const getCheckAuthAuthMeGetQueryKey = () => {
-    return [
-    `/auth/me`
-    ] as const;
-    }
-
-
-export const getCheckAuthAuthMeGetQueryOptions = <TData = Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
-
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getCheckAuthAuthMeGetQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof checkAuthAuthMeGet>>> = ({ signal }) => checkAuthAuthMeGet({ signal, ...axiosOptions });
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type CheckAuthAuthMeGetQueryResult = NonNullable<Awaited<ReturnType<typeof checkAuthAuthMeGet>>>
-export type CheckAuthAuthMeGetQueryError = AxiosError<unknown>
-
-
-export function useCheckAuthAuthMeGet<TData = Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError = AxiosError<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError, TData>> & Pick<
+export function useGetAuthMeCheckAuth<
+  TData = Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
+  TError = AxiosError<unknown>,
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthMeCheckAuth>>, TError, TData>> &
+      Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof checkAuthAuthMeGet>>,
+          Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
           TError,
-          Awaited<ReturnType<typeof checkAuthAuthMeGet>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCheckAuthAuthMeGet<TData = Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError, TData>> & Pick<
+          Awaited<ReturnType<typeof getAuthMeCheckAuth>>
+        >,
+        'initialData'
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetAuthMeCheckAuth<
+  TData = Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
+  TError = AxiosError<unknown>,
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthMeCheckAuth>>, TError, TData>> &
+      Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof checkAuthAuthMeGet>>,
+          Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
           TError,
-          Awaited<ReturnType<typeof checkAuthAuthMeGet>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCheckAuthAuthMeGet<TData = Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+          Awaited<ReturnType<typeof getAuthMeCheckAuth>>
+        >,
+        'initialData'
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetAuthMeCheckAuth<
+  TData = Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
+  TError = AxiosError<unknown>,
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthMeCheckAuth>>, TError, TData>>;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 /**
  * @summary Check Auth
  */
 
-export function useCheckAuthAuthMeGet<TData = Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError = AxiosError<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof checkAuthAuthMeGet>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAuthMeCheckAuth<
+  TData = Awaited<ReturnType<typeof getAuthMeCheckAuth>>,
+  TError = AxiosError<unknown>,
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthMeCheckAuth>>, TError, TData>>;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetAuthMeCheckAuthQueryOptions(options);
 
-  const queryOptions = getCheckAuthAuthMeGetQueryOptions(options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
 
   return withQueryKey(query, queryOptions.queryKey);
 }
 
+/**
+ * @summary Register User
+ */
+export const postAuthRegisterRegisterUser = (
+  registerPayload: RegisterPayload,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/register`, registerPayload, options);
+};
 
+export const getPostAuthRegisterRegisterUserUrl = () => {
+  return axios
+    .create({
+      baseURL: '',
+      params: null,
+    })
+    .getUri({
+      url: `/auth/register`,
+      baseURL: '',
+    });
+};
 
+export const getPostAuthRegisterRegisterUserMutationKey = () => ['postAuthRegisterRegisterUser'] as const;
 
+export const getPostAuthRegisterRegisterUserMutationOptions = <
+  TError = AxiosError<HTTPValidationError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAuthRegisterRegisterUser>>,
+    TError,
+    PostAuthRegisterRegisterUserMutationVariables,
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAuthRegisterRegisterUser>>,
+  TError,
+  PostAuthRegisterRegisterUserMutationVariables,
+  TContext
+> => {
+  const mutationKey = getPostAuthRegisterRegisterUserMutationKey();
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthRegisterRegisterUser>>,
+    PostAuthRegisterRegisterUserMutationVariables
+  > = props => {
+    const { data } = props ?? {};
+
+    return postAuthRegisterRegisterUser(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostAuthRegisterRegisterUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthRegisterRegisterUser>>
+>;
+export type PostAuthRegisterRegisterUserMutationBody = RegisterPayload;
+export type PostAuthRegisterRegisterUserMutationError = AxiosError<HTTPValidationError>;
+export type PostAuthRegisterRegisterUserMutationVariables = { data: RegisterPayload };
 
 /**
  * @summary Register User
  */
-export const registerUserAuthRegisterPost = (
-    registerPayload: RegisterPayload, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-
-
-    return axios.post(
-      `/auth/register`,
-      registerPayload,options
-    );
-  }
-
-export const getRegisterUserAuthRegisterPostUrl = () => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/auth/register`,
-    baseURL: '',
-
-
-  });
-}
-
-
-
-
-export const getRegisterUserAuthRegisterPostMutationKey = () => ['registerUserAuthRegisterPost'] as const;
-
-export const getRegisterUserAuthRegisterPostMutationOptions = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUserAuthRegisterPost>>, TError,RegisterUserAuthRegisterPostMutationVariables, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof registerUserAuthRegisterPost>>, TError,RegisterUserAuthRegisterPostMutationVariables, TContext> => {
-
-const mutationKey = getRegisterUserAuthRegisterPostMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerUserAuthRegisterPost>>, RegisterUserAuthRegisterPostMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  registerUserAuthRegisterPost(data,axiosOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RegisterUserAuthRegisterPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerUserAuthRegisterPost>>>
-    export type RegisterUserAuthRegisterPostMutationBody = RegisterPayload
-    export type RegisterUserAuthRegisterPostMutationError = AxiosError<HTTPValidationError>
-    export type RegisterUserAuthRegisterPostMutationVariables = {data: RegisterPayload}
-
-    /**
- * @summary Register User
- */
-export const useRegisterUserAuthRegisterPost = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUserAuthRegisterPost>>, TError,RegisterUserAuthRegisterPostMutationVariables, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof registerUserAuthRegisterPost>>,
-        TError,
-        RegisterUserAuthRegisterPostMutationVariables,
-        TContext
-      > => {
-      return useMutation(getRegisterUserAuthRegisterPostMutationOptions(options), queryClient);
-    }
-    /**
+export const usePostAuthRegisterRegisterUser = <TError = AxiosError<HTTPValidationError>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAuthRegisterRegisterUser>>,
+      TError,
+      PostAuthRegisterRegisterUserMutationVariables,
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAuthRegisterRegisterUser>>,
+  TError,
+  PostAuthRegisterRegisterUserMutationVariables,
+  TContext
+> => {
+  return useMutation(getPostAuthRegisterRegisterUserMutationOptions(options), queryClient);
+};
+/**
  * @summary Register Complete User
  */
-export const registerCompleteUserAuthRegisterCompletePost = (
-    completeRegistrationPayload: CompleteRegistrationPayload, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+export const postAuthRegisterCompleteRegisterCompleteUser = (
+  completeRegistrationPayload: CompleteRegistrationPayload,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/register/complete`, completeRegistrationPayload, options);
+};
 
+export const getPostAuthRegisterCompleteRegisterCompleteUserUrl = () => {
+  return axios
+    .create({
+      baseURL: '',
+      params: null,
+    })
+    .getUri({
+      url: `/auth/register/complete`,
+      baseURL: '',
+    });
+};
 
-    return axios.post(
-      `/auth/register/complete`,
-      completeRegistrationPayload,options
-    );
-  }
+export const getPostAuthRegisterCompleteRegisterCompleteUserMutationKey = () =>
+  ['postAuthRegisterCompleteRegisterCompleteUser'] as const;
 
-export const getRegisterCompleteUserAuthRegisterCompletePostUrl = () => {
+export const getPostAuthRegisterCompleteRegisterCompleteUserMutationOptions = <
+  TError = AxiosError<HTTPValidationError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAuthRegisterCompleteRegisterCompleteUser>>,
+    TError,
+    PostAuthRegisterCompleteRegisterCompleteUserMutationVariables,
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAuthRegisterCompleteRegisterCompleteUser>>,
+  TError,
+  PostAuthRegisterCompleteRegisterCompleteUserMutationVariables,
+  TContext
+> => {
+  const mutationKey = getPostAuthRegisterCompleteRegisterCompleteUserMutationKey();
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/auth/register/complete`,
-    baseURL: '',
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthRegisterCompleteRegisterCompleteUser>>,
+    PostAuthRegisterCompleteRegisterCompleteUserMutationVariables
+  > = props => {
+    const { data } = props ?? {};
 
+    return postAuthRegisterCompleteRegisterCompleteUser(data, axiosOptions);
+  };
 
-  });
-}
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PostAuthRegisterCompleteRegisterCompleteUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthRegisterCompleteRegisterCompleteUser>>
+>;
+export type PostAuthRegisterCompleteRegisterCompleteUserMutationBody = CompleteRegistrationPayload;
+export type PostAuthRegisterCompleteRegisterCompleteUserMutationError = AxiosError<HTTPValidationError>;
+export type PostAuthRegisterCompleteRegisterCompleteUserMutationVariables = { data: CompleteRegistrationPayload };
 
-
-
-export const getRegisterCompleteUserAuthRegisterCompletePostMutationKey = () => ['registerCompleteUserAuthRegisterCompletePost'] as const;
-
-export const getRegisterCompleteUserAuthRegisterCompletePostMutationOptions = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerCompleteUserAuthRegisterCompletePost>>, TError,RegisterCompleteUserAuthRegisterCompletePostMutationVariables, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof registerCompleteUserAuthRegisterCompletePost>>, TError,RegisterCompleteUserAuthRegisterCompletePostMutationVariables, TContext> => {
-
-const mutationKey = getRegisterCompleteUserAuthRegisterCompletePostMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerCompleteUserAuthRegisterCompletePost>>, RegisterCompleteUserAuthRegisterCompletePostMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  registerCompleteUserAuthRegisterCompletePost(data,axiosOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RegisterCompleteUserAuthRegisterCompletePostMutationResult = NonNullable<Awaited<ReturnType<typeof registerCompleteUserAuthRegisterCompletePost>>>
-    export type RegisterCompleteUserAuthRegisterCompletePostMutationBody = CompleteRegistrationPayload
-    export type RegisterCompleteUserAuthRegisterCompletePostMutationError = AxiosError<HTTPValidationError>
-    export type RegisterCompleteUserAuthRegisterCompletePostMutationVariables = {data: CompleteRegistrationPayload}
-
-    /**
+/**
  * @summary Register Complete User
  */
-export const useRegisterCompleteUserAuthRegisterCompletePost = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerCompleteUserAuthRegisterCompletePost>>, TError,RegisterCompleteUserAuthRegisterCompletePostMutationVariables, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof registerCompleteUserAuthRegisterCompletePost>>,
-        TError,
-        RegisterCompleteUserAuthRegisterCompletePostMutationVariables,
-        TContext
-      > => {
-      return useMutation(getRegisterCompleteUserAuthRegisterCompletePostMutationOptions(options), queryClient);
-    }
-    /**
+export const usePostAuthRegisterCompleteRegisterCompleteUser = <
+  TError = AxiosError<HTTPValidationError>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAuthRegisterCompleteRegisterCompleteUser>>,
+      TError,
+      PostAuthRegisterCompleteRegisterCompleteUserMutationVariables,
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAuthRegisterCompleteRegisterCompleteUser>>,
+  TError,
+  PostAuthRegisterCompleteRegisterCompleteUserMutationVariables,
+  TContext
+> => {
+  return useMutation(getPostAuthRegisterCompleteRegisterCompleteUserMutationOptions(options), queryClient);
+};
+/**
  * @summary Register Verify Otp User
  */
-export const registerVerifyOtpUserAuthRegisterVerifyOtpPost = (
-    registerationVerifyOtpPayload: RegisterationVerifyOtpPayload, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+export const postAuthRegisterVerifyOtpRegisterVerifyOtpUser = (
+  registerationVerifyOtpPayload: RegisterationVerifyOtpPayload,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/register/verify-otp`, registerationVerifyOtpPayload, options);
+};
 
+export const getPostAuthRegisterVerifyOtpRegisterVerifyOtpUserUrl = () => {
+  return axios
+    .create({
+      baseURL: '',
+      params: null,
+    })
+    .getUri({
+      url: `/auth/register/verify-otp`,
+      baseURL: '',
+    });
+};
 
-    return axios.post(
-      `/auth/register/verify-otp`,
-      registerationVerifyOtpPayload,options
-    );
-  }
+export const getPostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationKey = () =>
+  ['postAuthRegisterVerifyOtpRegisterVerifyOtpUser'] as const;
 
-export const getRegisterVerifyOtpUserAuthRegisterVerifyOtpPostUrl = () => {
+export const getPostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationOptions = <
+  TError = AxiosError<HTTPValidationError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAuthRegisterVerifyOtpRegisterVerifyOtpUser>>,
+    TError,
+    PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationVariables,
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAuthRegisterVerifyOtpRegisterVerifyOtpUser>>,
+  TError,
+  PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationVariables,
+  TContext
+> => {
+  const mutationKey = getPostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationKey();
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/auth/register/verify-otp`,
-    baseURL: '',
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAuthRegisterVerifyOtpRegisterVerifyOtpUser>>,
+    PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationVariables
+  > = props => {
+    const { data } = props ?? {};
 
+    return postAuthRegisterVerifyOtpRegisterVerifyOtpUser(data, axiosOptions);
+  };
 
-  });
-}
+  return { mutationFn, ...mutationOptions };
+};
 
+export type PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAuthRegisterVerifyOtpRegisterVerifyOtpUser>>
+>;
+export type PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationBody = RegisterationVerifyOtpPayload;
+export type PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationError = AxiosError<HTTPValidationError>;
+export type PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationVariables = { data: RegisterationVerifyOtpPayload };
 
-
-
-export const getRegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationKey = () => ['registerVerifyOtpUserAuthRegisterVerifyOtpPost'] as const;
-
-export const getRegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationOptions = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerVerifyOtpUserAuthRegisterVerifyOtpPost>>, TError,RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationVariables, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof registerVerifyOtpUserAuthRegisterVerifyOtpPost>>, TError,RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationVariables, TContext> => {
-
-const mutationKey = getRegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerVerifyOtpUserAuthRegisterVerifyOtpPost>>, RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationVariables> = (props) => {
-          const {data} = props ?? {};
-
-          return  registerVerifyOtpUserAuthRegisterVerifyOtpPost(data,axiosOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerVerifyOtpUserAuthRegisterVerifyOtpPost>>>
-    export type RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationBody = RegisterationVerifyOtpPayload
-    export type RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationError = AxiosError<HTTPValidationError>
-    export type RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationVariables = {data: RegisterationVerifyOtpPayload}
-
-    /**
+/**
  * @summary Register Verify Otp User
  */
-export const useRegisterVerifyOtpUserAuthRegisterVerifyOtpPost = <TError = AxiosError<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerVerifyOtpUserAuthRegisterVerifyOtpPost>>, TError,RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationVariables, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof registerVerifyOtpUserAuthRegisterVerifyOtpPost>>,
-        TError,
-        RegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationVariables,
-        TContext
-      > => {
-      return useMutation(getRegisterVerifyOtpUserAuthRegisterVerifyOtpPostMutationOptions(options), queryClient);
-    }
+export const usePostAuthRegisterVerifyOtpRegisterVerifyOtpUser = <
+  TError = AxiosError<HTTPValidationError>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAuthRegisterVerifyOtpRegisterVerifyOtpUser>>,
+      TError,
+      PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationVariables,
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAuthRegisterVerifyOtpRegisterVerifyOtpUser>>,
+  TError,
+  PostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationVariables,
+  TContext
+> => {
+  return useMutation(getPostAuthRegisterVerifyOtpRegisterVerifyOtpUserMutationOptions(options), queryClient);
+};

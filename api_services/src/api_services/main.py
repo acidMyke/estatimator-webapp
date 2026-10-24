@@ -8,7 +8,7 @@ from api_services.lifespan import lifespan
 app = FastAPI(lifespan=lifespan, title="Backend Services")
 
 
-app.include_router(auth_router, prefix="/auth")
+app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK, tags=["System"])

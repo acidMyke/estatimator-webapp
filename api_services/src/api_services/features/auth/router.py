@@ -27,9 +27,7 @@ from api_services.features.auth.service import (
 from api_services.features.users.models import User, UserEmail
 from api_services.features.users.service import create_user
 
-router = APIRouter(
-    tags=["auth"],
-)
+router = APIRouter()
 
 
 @router.post("/register", status_code=status.HTTP_204_NO_CONTENT)
