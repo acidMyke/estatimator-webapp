@@ -182,6 +182,7 @@ Project-specific skills live in `.agents/skills/`. Invoke them when relevant ins
 
 - **`sqlmodel-orm-dbhelper`** — use for designing/modifying SQLModel models, engine/session configuration, relationships, timestamps, and indexing in `api_services`. References under `.agents/skills/sqlmodel-orm-dbhelper/references/` cover relationships, engine config, performance, field types, and migrations.
 - **`router-query-integration`** — use when wiring TanStack Router loaders to TanStack Query (prefetching, `queryOptions`, avoiding waterfalls) in `web_app`.
+- **`shadcn`** — use for shadcn/ui work in `web_app`: adding/searching components, composing UI, and design-system/token work. Already initialized via `web_app/components.json` (`style: base-vega`, `baseColor: mauve`, `iconLibrary: tabler`, aliases to `@/components`, `@/components/ui`, `@/lib/utils`, `@/hooks`), and the project is on the **Base UI flavor** (`@base-ui/react` + `render`, not Radix `asChild`). `cn` lives in `src/lib/utils.ts` (re-exported from the `cn` package). Design preset: `b6C24NuyWY` (vega/mauve, sky theme, small radius, Geist Mono + Manrope). No components/hooks are added yet — `src/components/` and `src/hooks/` don't exist (verify with `pnpm exec shadcn info --json`). Rules under `.agents/skills/shadcn/rules/` cover styling, forms, composition, icons, and base-vs-radix differences.
 
 ## General Conventions
 
