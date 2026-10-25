@@ -1,3 +1,4 @@
+import subprocess
 from contextlib import asynccontextmanager
 from hashlib import sha256
 from json import dumps
@@ -5,18 +6,22 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-OPENAPI_SPEC_PATH = REPO_ROOT / "openapi" / "spec.json"
+BACKEND_ROOT, REPO_ROOT = Path(__file__).resolve().parents[2:4]
+OPENAPI_SPEC_PATH = BACKEND_ROOT / "openapi" / "spec.json"
 OPENAPI_HASH_PATH = OPENAPI_SPEC_PATH.with_suffix(".json.sha256")
-FRONTEND_DIR = REPO_ROOT / "frontend"
+FRONTEND_DIR = REPO_ROOT / "web_app"
+FRONTEND_CLIENT_PATH = FRONTEND_DIR / "src" / "api"
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     spec_changed = write_openapi_spec_and_hash(app)
-    if spec_changed:
+    client_api_empty = not FRONTEND_CLIENT_PATH.is_dir() or not any(
+        FRONTEND_CLIENT_PATH.iterdir()
+    )
+    if spec_changed or client_api_empty:
         print("openapi spec changed: regenerating ovral client")
-        # TODO: @acidmyke add ovral client generator
+        generate_orval_client()
 
     yield
 
@@ -35,3 +40,23 @@ def write_openapi_spec_and_hash(app: FastAPI) -> bool:
     OPENAPI_HASH_PATH.write_text(f"{current_hash}\n", encoding="utf-8")
 
     return current_hash != previous_hash
+
+
+def generate_orval_client():
+    try:
+        subprocess.run(
+            ["vp", "exec", "orval"],
+            check=True,
+            cwd=FRONTEND_DIR,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            capture_output=True,
+        )
+    except (
+        FileNotFoundError,
+        subprocess.CalledProcessError,
+        subprocess.TimeoutExpired,
+        PermissionError,
+    ):
+        print("failed to generate orval client")

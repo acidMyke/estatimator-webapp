@@ -6,13 +6,20 @@
  */
 import * as zod from 'zod/mini';
 
-export const LoginPayload = /*#__PURE__*/ zod.object({
+export const AdminLoginPayload = /*#__PURE__*/ zod.object({
   email: /*#__PURE__*/ zod.string(),
   password: /*#__PURE__*/ zod.string(),
 });
 
-export type LoginPayload = zod.input<typeof LoginPayload>;
-export type LoginPayloadOutput = zod.output<typeof LoginPayload>;
+export type AdminLoginPayload = zod.input<typeof AdminLoginPayload>;
+export type AdminLoginPayloadOutput = zod.output<typeof AdminLoginPayload>;
+
+export const AdminLoginResponse = /*#__PURE__*/ zod.object({
+  mfa_required: /*#__PURE__*/ zod.boolean(),
+});
+
+export type AdminLoginResponse = zod.input<typeof AdminLoginResponse>;
+export type AdminLoginResponseOutput = zod.output<typeof AdminLoginResponse>;
 
 export const ValidationError = /*#__PURE__*/ zod.object({
   ctx: /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.looseObject({})),
@@ -42,6 +49,59 @@ export const HTTPValidationError = /*#__PURE__*/ zod.object({
 export type HTTPValidationError = zod.input<typeof HTTPValidationError>;
 export type HTTPValidationErrorOutput = zod.output<typeof HTTPValidationError>;
 
+export const AdminTotpCodePayload = /*#__PURE__*/ zod.object({
+  code: /*#__PURE__*/ zod.string(),
+});
+
+export type AdminTotpCodePayload = zod.input<typeof AdminTotpCodePayload>;
+export type AdminTotpCodePayloadOutput = zod.output<typeof AdminTotpCodePayload>;
+
+export const AdminCheckAuthResponse = /*#__PURE__*/ zod.object({
+  email: /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.union([/*#__PURE__*/ zod.string(), /*#__PURE__*/ zod.null()])),
+  is_authenticated: /*#__PURE__*/ zod.boolean(),
+});
+
+export type AdminCheckAuthResponse = zod.input<typeof AdminCheckAuthResponse>;
+export type AdminCheckAuthResponseOutput = zod.output<typeof AdminCheckAuthResponse>;
+
+export const AdminRegisterPayload = /*#__PURE__*/ zod.object({
+  email: /*#__PURE__*/ zod.string(),
+  name: /*#__PURE__*/ zod.string(),
+});
+
+export type AdminRegisterPayload = zod.input<typeof AdminRegisterPayload>;
+export type AdminRegisterPayloadOutput = zod.output<typeof AdminRegisterPayload>;
+
+export const AdminCompleteRegistrationPayload = /*#__PURE__*/ zod.object({
+  password: /*#__PURE__*/ zod.string(),
+});
+
+export type AdminCompleteRegistrationPayload = zod.input<typeof AdminCompleteRegistrationPayload>;
+export type AdminCompleteRegistrationPayloadOutput = zod.output<typeof AdminCompleteRegistrationPayload>;
+
+export const AdminRegisterVerifyOtpPayload = /*#__PURE__*/ zod.object({
+  otp: /*#__PURE__*/ zod.string(),
+});
+
+export type AdminRegisterVerifyOtpPayload = zod.input<typeof AdminRegisterVerifyOtpPayload>;
+export type AdminRegisterVerifyOtpPayloadOutput = zod.output<typeof AdminRegisterVerifyOtpPayload>;
+
+export const AdminTotpSetupResponse = /*#__PURE__*/ zod.object({
+  otpauth_uri: /*#__PURE__*/ zod.string(),
+  secret: /*#__PURE__*/ zod.string(),
+});
+
+export type AdminTotpSetupResponse = zod.input<typeof AdminTotpSetupResponse>;
+export type AdminTotpSetupResponseOutput = zod.output<typeof AdminTotpSetupResponse>;
+
+export const LoginPayload = /*#__PURE__*/ zod.object({
+  email: /*#__PURE__*/ zod.string(),
+  password: /*#__PURE__*/ zod.string(),
+});
+
+export type LoginPayload = zod.input<typeof LoginPayload>;
+export type LoginPayloadOutput = zod.output<typeof LoginPayload>;
+
 export const CheckAuthResponse = /*#__PURE__*/ zod.object({
   email: /*#__PURE__*/ zod.optional(/*#__PURE__*/ zod.union([/*#__PURE__*/ zod.string(), /*#__PURE__*/ zod.null()])),
   is_authenticated: /*#__PURE__*/ zod.boolean(),
@@ -70,6 +130,64 @@ export const RegisterationVerifyOtpPayload = /*#__PURE__*/ zod.object({
 
 export type RegisterationVerifyOtpPayload = zod.input<typeof RegisterationVerifyOtpPayload>;
 export type RegisterationVerifyOtpPayloadOutput = zod.output<typeof RegisterationVerifyOtpPayload>;
+export const PostAdminAuthLoginLoginAdminBody = /*#__PURE__*/ zod.object({
+  email: /*#__PURE__*/ zod.string(),
+  password: /*#__PURE__*/ zod.string(),
+});
+
+export type PostAdminAuthLoginLoginAdminBody = zod.input<typeof PostAdminAuthLoginLoginAdminBody>;
+export type PostAdminAuthLoginLoginAdminBodyOutput = zod.output<typeof PostAdminAuthLoginLoginAdminBody>;
+
+export const PostAdminAuthLoginTotpLoginAdminTotpBody = /*#__PURE__*/ zod.object({
+  code: /*#__PURE__*/ zod.string(),
+});
+
+export type PostAdminAuthLoginTotpLoginAdminTotpBody = zod.input<typeof PostAdminAuthLoginTotpLoginAdminTotpBody>;
+export type PostAdminAuthLoginTotpLoginAdminTotpBodyOutput = zod.output<
+  typeof PostAdminAuthLoginTotpLoginAdminTotpBody
+>;
+
+export const PostAdminAuthRegisterRegisterAdminBody = /*#__PURE__*/ zod.object({
+  email: /*#__PURE__*/ zod.string(),
+  name: /*#__PURE__*/ zod.string(),
+});
+
+export type PostAdminAuthRegisterRegisterAdminBody = zod.input<typeof PostAdminAuthRegisterRegisterAdminBody>;
+export type PostAdminAuthRegisterRegisterAdminBodyOutput = zod.output<typeof PostAdminAuthRegisterRegisterAdminBody>;
+
+export const PostAdminAuthRegisterCompleteRegisterCompleteAdminBody = /*#__PURE__*/ zod.object({
+  password: /*#__PURE__*/ zod.string(),
+});
+
+export type PostAdminAuthRegisterCompleteRegisterCompleteAdminBody = zod.input<
+  typeof PostAdminAuthRegisterCompleteRegisterCompleteAdminBody
+>;
+export type PostAdminAuthRegisterCompleteRegisterCompleteAdminBodyOutput = zod.output<
+  typeof PostAdminAuthRegisterCompleteRegisterCompleteAdminBody
+>;
+
+export const PostAdminAuthRegisterVerifyOtpRegisterVerifyOtpAdminBody = /*#__PURE__*/ zod.object({
+  otp: /*#__PURE__*/ zod.string(),
+});
+
+export type PostAdminAuthRegisterVerifyOtpRegisterVerifyOtpAdminBody = zod.input<
+  typeof PostAdminAuthRegisterVerifyOtpRegisterVerifyOtpAdminBody
+>;
+export type PostAdminAuthRegisterVerifyOtpRegisterVerifyOtpAdminBodyOutput = zod.output<
+  typeof PostAdminAuthRegisterVerifyOtpRegisterVerifyOtpAdminBody
+>;
+
+export const PostAdminAuthTotpVerifyVerifyAdminTotpSetupBody = /*#__PURE__*/ zod.object({
+  code: /*#__PURE__*/ zod.string(),
+});
+
+export type PostAdminAuthTotpVerifyVerifyAdminTotpSetupBody = zod.input<
+  typeof PostAdminAuthTotpVerifyVerifyAdminTotpSetupBody
+>;
+export type PostAdminAuthTotpVerifyVerifyAdminTotpSetupBodyOutput = zod.output<
+  typeof PostAdminAuthTotpVerifyVerifyAdminTotpSetupBody
+>;
+
 export const PostAuthLoginLoginUserBody = /*#__PURE__*/ zod.object({
   email: /*#__PURE__*/ zod.string(),
   password: /*#__PURE__*/ zod.string(),

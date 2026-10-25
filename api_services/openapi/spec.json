@@ -1,6 +1,136 @@
 {
   "components": {
     "schemas": {
+      "AdminCheckAuthResponse": {
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "is_authenticated": {
+            "title": "Is Authenticated",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "is_authenticated"
+        ],
+        "title": "AdminCheckAuthResponse",
+        "type": "object"
+      },
+      "AdminCompleteRegistrationPayload": {
+        "properties": {
+          "password": {
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "password"
+        ],
+        "title": "AdminCompleteRegistrationPayload",
+        "type": "object"
+      },
+      "AdminLoginPayload": {
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "AdminLoginPayload",
+        "type": "object"
+      },
+      "AdminLoginResponse": {
+        "properties": {
+          "mfa_required": {
+            "title": "Mfa Required",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "mfa_required"
+        ],
+        "title": "AdminLoginResponse",
+        "type": "object"
+      },
+      "AdminRegisterPayload": {
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "name"
+        ],
+        "title": "AdminRegisterPayload",
+        "type": "object"
+      },
+      "AdminRegisterVerifyOtpPayload": {
+        "properties": {
+          "otp": {
+            "title": "Otp",
+            "type": "string"
+          }
+        },
+        "required": [
+          "otp"
+        ],
+        "title": "AdminRegisterVerifyOtpPayload",
+        "type": "object"
+      },
+      "AdminTotpCodePayload": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "AdminTotpCodePayload",
+        "type": "object"
+      },
+      "AdminTotpSetupResponse": {
+        "properties": {
+          "otpauth_uri": {
+            "title": "Otpauth Uri",
+            "type": "string"
+          },
+          "secret": {
+            "title": "Secret",
+            "type": "string"
+          }
+        },
+        "required": [
+          "secret",
+          "otpauth_uri"
+        ],
+        "title": "AdminTotpSetupResponse",
+        "type": "object"
+      },
       "CheckAuthResponse": {
         "properties": {
           "email": {
@@ -143,6 +273,280 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/admin/auth/login": {
+      "post": {
+        "operationId": "login_admin_admin_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminLoginPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLoginResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login Admin",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/login/totp": {
+      "post": {
+        "operationId": "login_admin_totp_admin_auth_login_totp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminTotpCodePayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLoginResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login Admin Totp",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/logout": {
+      "post": {
+        "operationId": "logout_admin_admin_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Logout Admin",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/me": {
+      "get": {
+        "operationId": "check_admin_auth_admin_auth_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCheckAuthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Check Admin Auth",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/register": {
+      "post": {
+        "operationId": "register_admin_admin_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminRegisterPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register Admin",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/register/complete": {
+      "post": {
+        "operationId": "register_complete_admin_admin_auth_register_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminCompleteRegistrationPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register Complete Admin",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/register/verify-otp": {
+      "post": {
+        "operationId": "register_verify_otp_admin_admin_auth_register_verify_otp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminRegisterVerifyOtpPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register Verify Otp Admin",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/totp/setup": {
+      "post": {
+        "operationId": "setup_admin_totp_admin_auth_totp_setup_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminTotpSetupResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Setup Admin Totp",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/totp/verify": {
+      "post": {
+        "operationId": "verify_admin_totp_setup_admin_auth_totp_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminTotpCodePayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Verify Admin Totp Setup",
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
     "/auth/login": {
       "post": {
         "operationId": "login_user_auth_login_post",
@@ -178,7 +582,7 @@
         },
         "summary": "Login User",
         "tags": [
-          "auth"
+          "Auth"
         ]
       }
     },
@@ -199,7 +603,7 @@
         },
         "summary": "Check Auth",
         "tags": [
-          "auth"
+          "Auth"
         ]
       }
     },
@@ -233,7 +637,7 @@
         },
         "summary": "Register User",
         "tags": [
-          "auth"
+          "Auth"
         ]
       }
     },
@@ -267,7 +671,7 @@
         },
         "summary": "Register Complete User",
         "tags": [
-          "auth"
+          "Auth"
         ]
       }
     },
@@ -301,7 +705,7 @@
         },
         "summary": "Register Verify Otp User",
         "tags": [
-          "auth"
+          "Auth"
         ]
       }
     },
