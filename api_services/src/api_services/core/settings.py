@@ -19,6 +19,8 @@ class AppSettings(BaseSettings):
     ADMIN_ALLOWED_EMAIL_DOMAINS: list[str] = Field(
         default=["acidmyke.link", "uowmail.edu.au", "sim.edu.sg"]
     )
+    MAILJET_API_KEY: str | None
+    MAILJET_API_SECRET: str | None
 
     @field_validator("DATABASE_URL", mode="after")
     @classmethod
@@ -40,6 +42,10 @@ class AppSettings(BaseSettings):
     @classmethod
     def normalize_admin_allowed_email_domains(cls, v: list[str]) -> list[str]:
         return [domain.strip().lower() for domain in v if domain.strip()]
+
+    @property
+    def is_mailjet_configured(self):
+        return self.MAILJET_API_KEY is not None and self.MAILJET_API_SECRET is not None
 
 
 settings = AppSettings()  # pyright: ignore[reportCallIssue]
