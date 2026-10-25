@@ -1,9 +1,10 @@
 from logging.config import fileConfig
 
-import api_services.models
 from alembic import context
+
 from api_services.core.database import database_engine
 from api_services.core.settings import settings
+from api_services.models import target_metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,7 +19,6 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = api_services.models.target_metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
