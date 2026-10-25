@@ -2,6 +2,7 @@ from fastapi import FastAPI, status
 from sqlmodel import select
 
 from api_services.core.database import DatabaseSession
+from api_services.features.admin_auth.router import router as admin_auth_router
 from api_services.features.auth.router import router as auth_router
 from api_services.lifespan import lifespan
 
@@ -9,6 +10,7 @@ app = FastAPI(lifespan=lifespan, title="Backend Services")
 
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+app.include_router(admin_auth_router, prefix="/admin/auth", tags=["Admin Auth"])
 
 
 @app.get("/healthcheck", status_code=status.HTTP_200_OK, tags=["System"])

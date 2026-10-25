@@ -1,8 +1,13 @@
 # If there is any changes that needed to be done here, please discuss with JJ
 # Otherwise, the changes you made may be refactored/excluded
+import base64
+import hashlib
+import hmac
 import secrets
+import struct
 from datetime import UTC, datetime, timedelta
 from typing import Any
+from urllib.parse import quote
 
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
@@ -53,3 +58,55 @@ def jwt_decode(token: str):
 def generate_otp(length=6):
     otp = "".join(secrets.choice("0123456789") for _ in range(length))
     return otp
+
+
+def generate_totp_secret(length: int = 20) -> str:
+    return base64.b32encode(secrets.token_bytes(length)).decode("ascii").rstrip("=")
+
+
+def build_otpauth_uri(secret: str, account: str, issuer: str = "estatimator") -> str:
+    label = quote(f"{issuer}:{account}")
+    return (
+        f"otpauth://totp/{label}?secret={secret}"
+        f"&issuer={quote(issuer)}&algorithm=SHA1&digits=6&period=30"
+    )
+
+
+def generate_totp(
+    secret: str,
+    for_time: datetime | None = None,
+    *,
+    period: int = 30,
+    digits: int = 6,
+) -> str:
+    key = base64.b32decode(secret + "=" * (-len(secret) % 8))
+    counter = int((for_time or datetime.now(UTC)).timestamp()) // period
+    digest = hmac.new(key, struct.pack(">Q", counter), hashlib.sha1).digest()
+    offset = digest[-1] & 0x0F
+    code = (struct.unpack(">I", digest[offset : offset + 4])[0] & 0x7FFFFFFF) % (
+        10**digits
+    )
+    return str(code).zfill(digits)
+
+
+def verify_totp(
+    secret: str,
+    code: str,
+    *,
+    valid_window: int = 1,
+    period: int = 30,
+) -> bool:
+    if not code or not code.isdigit():
+        return False
+
+    now = datetime.now(UTC)
+    for offset in range(-valid_window, valid_window + 1):
+        candidate = generate_totp(
+            secret,
+            now + timedelta(seconds=period * offset),
+            period=period,
+        )
+        if hmac.compare_digest(candidate, code):
+            return True
+
+    return False

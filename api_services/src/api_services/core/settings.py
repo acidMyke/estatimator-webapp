@@ -16,6 +16,9 @@ class AppSettings(BaseSettings):
     ALGORITHM: str = "HS256"
     USER_SESSION_TOKEN_EXPIRE_DAYS: int = 7
     ADMIN_SESSION_TOKEN_EXPIRE_MINUTES: int = 20
+    ADMIN_ALLOWED_EMAIL_DOMAINS: list[str] = Field(
+        default=["acidmyke.link", "uowmail.edu.au", "sim.edu.sg"]
+    )
 
     @field_validator("DATABASE_URL", mode="after")
     @classmethod
@@ -32,6 +35,11 @@ class AppSettings(BaseSettings):
             )
 
         return v
+
+    @field_validator("ADMIN_ALLOWED_EMAIL_DOMAINS", mode="after")
+    @classmethod
+    def normalize_admin_allowed_email_domains(cls, v: list[str]) -> list[str]:
+        return [domain.strip().lower() for domain in v if domain.strip()]
 
 
 settings = AppSettings()  # pyright: ignore[reportCallIssue]
