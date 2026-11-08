@@ -1,0 +1,21 @@
+from typing import TYPE_CHECKING
+
+from sqlmodel import Field, Relationship
+
+from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
+
+if TYPE_CHECKING:
+    from api_services.features.admin_auth.models import (
+        AdminPasskey,
+        AdminPassword,
+        AdminSession,
+    )
+
+
+class Admin(IdMixin, TimestampMixin, SoftDeleteMixin, table=True):
+    email: str = Field(nullable=False, unique=True)
+    name: str = Field(nullable=False)
+
+    passwords: list[AdminPassword] = Relationship(back_populates="admin")
+    passkeys: list[AdminPasskey] = Relationship(back_populates="admin")
+    sessions: list[AdminSession] = Relationship(back_populates="admin")

@@ -1,0 +1,42 @@
+[project]
+name = "api_services"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "acidMyke", email = "13977709+acidMyke@users.noreply.github.com" },
+]
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.20.0",
+    "argon2-cffi>=25.1.0",
+    "fastapi>=0.143.2",
+    "greenlet>=3.5.6",
+    "psycopg[binary]>=3.3.6",
+    "pydantic-settings>=2.16.0",
+    "pyjwt>=2.15.1",
+    "python-multipart>=0.0.32",
+    "ruff>=0.17.1",
+    "sqlalchemy[asyncio]>=2.0.54",
+    "sqlmodel>=0.0.48",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.scripts]
+api_services = "api_services:main"
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+src = ["src"]
+
+[tool.ruff.lint]
+ignore = ["EXE002"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["api_services"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends"]

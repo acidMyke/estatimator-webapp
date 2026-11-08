@@ -1,0 +1,73 @@
+services:
+  dev-container:
+    image: ghcr.io/astral-sh/uv:python3.15-trixie
+    volumes:
+      - ../:/workspace:cached
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
+      POSTGRES_DB: localdb
+      POSTGRES_HOST: postgis
+      POSTGRES_PORT: 5432
+    command: sleep infinity
+    depends_on:
+      - postgis
+
+  postgis:
+    image: postgis/postgis:17-3.5-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
+      POSTGRES_DB: localdb
+    ports:
+      - '5433:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    shm_size: 256mb
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin-web
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    user: root
+    entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
+    depends_on:
+      - postgis
+    configs:
+      - source: pgadmin-servers
+        target: /pgadmin4/servers.json
+      - source: pgadmin-pgpass
+        target: /pgpass
+
+volumes:
+  pgdata:
+
+
+configs:
+  pgadmin-servers:
+    content: |
+      {
+        "Servers": {
+          "1": {
+            "Group": "Servers",
+            "Name": "Local PostGIS",
+            "Host": "postgis",
+            "Port": 5432,
+            "MaintenanceDB": "localdb",
+            "Username": "postgres",
+            "PassFile": "/pgpass",
+            "SSLMode": "prefer"
+          }
+        }
+      }
+
+  pgadmin-pgpass:
+    content: "postgis:5432:*:postgres:${POSTGRES_PASSWORD:-lAOE278hpZQ8}"

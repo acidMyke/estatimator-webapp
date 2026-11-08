@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "router-query-integration",
+  "owner": "madappgang",
+  "repo": "claude-code",
+  "path": "plugins/frontend/skills/router-query-integration",
+  "branch": "main",
+  "sha": "70ccf5139d19e65deaf0e3366ebcdf585b4efa0e",
+  "source": "manual"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "sqlmodel-orm-dbhelper",
+  "description": "SQLModel ORM database helper for Python - models, relationships, migrations, and query patterns",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ali Jilani"
+  },
+  "category": "development",
+  "keywords": ["sqlmodel", "orm", "database", "python", "sql"]
+}
