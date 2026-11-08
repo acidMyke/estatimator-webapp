@@ -112,3 +112,8 @@ else
   git remote add origin "$EXPECTED_ORIGIN"
   echo "Added Git remote origin: $EXPECTED_ORIGIN"
 fi
+
+echo ""
+echo "=== 5. Some tools ==="
+
+uv tool install --with ipykernel jupyterlab
