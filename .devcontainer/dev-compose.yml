@@ -7,6 +7,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
       POSTGRES_DB: localdb
+      POSTGRES_HOST: postgis
+      POSTGRES_PORT: 5432
     command: sleep infinity
     depends_on:
       - postgis

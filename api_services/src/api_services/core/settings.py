@@ -2,12 +2,16 @@
 # But if your feature requires API keys / tokens, sensitive configuration, feel free to add it here
 # If there is new environment variables added, it also need to be in the deployed environment, get JJ to do this :D
 
-from pydantic import Field, field_validator
+from urllib.parse import quote_plus
+
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
+    )
     DATABASE_URL: str
     DEBUG: bool = False
     SQL_ECHO: bool = True
@@ -20,21 +24,30 @@ class AppSettings(BaseSettings):
         default=["acidmyke.link", "uowmail.edu.au", "sim.edu.sg"]
     )
 
-    @field_validator("DATABASE_URL", mode="after")
-    @classmethod
-    def assemble_async_db_url(cls, v: str) -> str:
-        if v is None or v == "":
-            raise ValueError("DATABASE_URL is None or empty")
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: SecretStr = Field()
+    POSTGRES_DB: str = "localdb"
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5432
 
-        if v.startswith("postgresql://"):
-            v = v.replace("postgresql://", "postgresql+psycopg://", 1)
+    @property
+    def _database_url(self) -> str:
+        username = quote_plus(self.POSTGRES_USER)
+        password = quote_plus(self.POSTGRES_PASSWORD.get_secret_value())
 
-        if "+psycopg" not in v:
-            raise ValueError(
-                "DATABASE_URL must start with 'postgresql://' or 'postgresql+psycopg://'"
-            )
+        return (
+            f"{username}:{password}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}"
+            f"/{self.POSTGRES_DB}"
+        )
 
-        return v
+    @property
+    def sync_connection_string(self) -> str:
+        return f"postgresql+psycopg://{self._database_url}"
+
+    @property
+    def async_connection_string(self) -> str:
+        return f"postgresql+asyncpg://{self._database_url}"
 
     @field_validator("ADMIN_ALLOWED_EMAIL_DOMAINS", mode="after")
     @classmethod

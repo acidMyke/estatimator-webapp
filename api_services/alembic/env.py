@@ -39,7 +39,7 @@ def run_migrations_offline() -> None:
 
     """
     context.configure(
-        url=settings.DATABASE_URL,
+        url=settings.sync_connection_string,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
