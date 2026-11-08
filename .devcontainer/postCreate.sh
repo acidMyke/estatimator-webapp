@@ -1,11 +1,6 @@
 #!/bin/sh
 set -e
 
-if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
-  echo "ERROR: This script must be run inside a Git repository."
-  exit 1
-fi
-
 # If setup exits early or is interrupted, show how to resume it.
 on_exit() {
   status=$?
@@ -18,31 +13,43 @@ on_exit() {
   fi
 }
 
-trap on_exit EXIT
+trap on_exit 0
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
+if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
+  echo "ERROR: This script must be run inside a Git repository."
+  exit 1
+fi
+
+echo "Ello, I've pre-configure helpful quickstart setup script that will setup the following"
+echo "- Github CLI sign-in (with access to set your signing keys)"
+echo "- Git user.name & user.email"
+echo "- SSH git commit signing keys and help to upload it to your github accounts"
+
+echo "if you don't feel like having it automated, feel free to setup these up mannually"
+echo ""
 echo "=== 1. GitHub CLI Authentication ==="
 
-# Always use HTTPS for Git operations.
-gh config --local set git_protocol https --host github.com
-
 if ! gh auth status --hostname github.com >/dev/null 2>&1; then
-  gh auth login --hostname github.com --git-protocol https --web
+  gh auth login --hostname github.com --git-protocol https --web -s admin:ssh_signing_key
 else
   echo "Already authenticated with GitHub CLI."
 fi
 
 # Configure Git to use GitHub CLI for HTTPS authentication.
+gh config set git_protocol https --host github.com 
 gh auth setup-git --hostname github.com
 
 echo ""
 echo "=== 2. Git User Identity Setup ==="
-CURRENT_NAME=$(git config --global user.name || true)
-CURRENT_EMAIL=$(git config --global user.email || true)
+CURRENT_NAME=$(git config user.name || true)
+CURRENT_EMAIL=$(git config user.email || true)
 
 if [ -z "$CURRENT_NAME" ]; then
   printf "Enter your Git user.name: "
   read -r GIT_NAME
-  git config --global user.name "$GIT_NAME"
+  git config --local user.name "$GIT_NAME"
 else
   GIT_NAME="$CURRENT_NAME"
   echo "Git user.name configured as: $GIT_NAME"
@@ -51,7 +58,7 @@ fi
 if [ -z "$CURRENT_EMAIL" ]; then
   printf "Enter your Git user.email: "
   read -r GIT_EMAIL
-  git config --global user.email "$GIT_EMAIL"
+  git config --local user.email "$GIT_EMAIL"
 else
   GIT_EMAIL="$CURRENT_EMAIL"
   echo "Git user.email configured as: $GIT_EMAIL"
@@ -88,6 +95,11 @@ git config --local commit.gpgsign true
 echo "SSH commit signing successfully configured!"
 echo "Key title: $SSH_KEY_TITLE"
 echo "Public key: $SSH_KEY_PATH.pub"
+
+echo ""
+echo "Regarding the signing keys, they are optional keys use the sign the git commits"
+echo "These doesn't grant any access to your github accounts"
+echo "Feel free to delete '$SSH_KEY_TITLE' from your Github account after we get our grades"
 
 echo ""
 echo "=== 4. Git Remote Origin Setup ==="

@@ -1,1 +1,3 @@
 pgdata
+.pnpm-store
+.ruff_cache
