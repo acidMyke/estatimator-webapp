@@ -1,0 +1,1187 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Mailjet API",
+    "description": "A complete collection of all publicly available endpoints and methods for the Mailjet API.\n\n## Status codes and errors\n\nThe Mailjet API uses conventional HTTP response codes to indicate the success or failure of an API request. Overall:\n\n- Codes in the `2xx` range indicate that the request was processed successfully.\n- Codes in the `4xx` range indicate that there was an error with the request (e.g. unauthorized access, a required parameter is missing etc.).\n- Codes in the `5xx` range indicate that there is an issue with Mailjet's servers.\n\nError responses will usually include an Error Identifier, Error Message and Status Code.\n\n| Code | Reason | Description |\n| --- | --- | --- |\n| `200` | OK | All went well. Congrats! |\n| `201` | Created | The `POST` request was successfully executed. |\n| `204` | No Content | No content found or expected to return. Returned when a `DELETE` request was successful. |\n| `304` | Not Modified | The `PUT` request didn't affect any record. |\n| `400` | Bad Request | One or more parameters are missing or maybe misspelled (unknown resource or action). |\n| `401` | Unauthorized | You have specified an incorrect API Key / API Secret Key pair. You may be unauthorized to access the API or your API key may be inactive. Visit the API keys Management section to check your keys. |\n| `403` | Forbidden | You are not authorized to access this resource. |\n| `404` | Not Found | The resource with the specified ID you are trying to reach does not exist. |\n| `405` | Method Not Allowed | The method requested on the resource does not exist. |\n| `429` | Too Many Requests | You have reached the maximum number of calls allowed per minute by our API. Please review your integration to reduce the number of calls issued by your system. |\n| `500` | Internal Server Error | Something went wrong on our side. When such an error occurs, the response contains an error identifier (e.g. `\"ErrorIdentifier\": \"D4DF574C-0C5F-45C7-BA52-7AA8E533C3DE\"`), which is crucial for tracking the problem and identifying the root cause. Please contact our support team, providing the error identifier. |",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.mailjet.com"
+    }
+  ],
+  "paths": {
+    "/v3.1/send": {
+      "post": {
+        "x-seo": {
+          "title": "Send an email message via Send API v3.1",
+          "description": "Send API v3.1 is built mainly for reliability, providing very detailed information in case of sending errors. This results in a lower sending limit…"
+        },
+        "tags": [
+          "Send Emails"
+        ],
+        "summary": "Send an email message via Send API v3.1",
+        "description": "Send API v3.1 is built mainly for reliability, providing very detailed information in case of sending errors. This results in a lower sending limit, however - Send API v3.1 allows you to send up to 50 messages in a single API call, as opposed to v3, where the limit is 100 messages per call.\n\nAdditionally, Send API v3.1 includes a Sandbox mode. When enabled, the API will perform all the required validations and return success or error messages, but the message will not be sent.\n",
+        "operationId": "postSendV31",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "SandboxMode": {
+                    "type": "boolean",
+                    "description": "When true, the API call will be run in Sandbox mode. This will disable the delivery of the message, but the API will still perform all necessary validations. You will still receive success or error messages related to the processing of the message. If the message is processed successfully, you will receive the standard response payload but without the Message ID and UUID.\n\nDefault value: `false`\n",
+                    "examples": [
+                      true
+                    ]
+                  },
+                  "AdvanceErrorHandling": {
+                    "type": "boolean",
+                    "description": "When true, enables additional error checks relating to the Send API v3.1 payload. Keep in mind that For a list of all error checks enabled by this, please see the [Send API errors](/docs/email-api/send-api-v31/send-api-errors) section in the Email API Guides."
+                  },
+                  "Globals": {
+                    "type": "object",
+                    "description": "An object containing properties that will be applied to all message objects (). Use this whenever you have property values that are the same across multiple messages in the payload.\n\nIn `Globals` you can specify any of the message properties __except `To`__.\n\nIf the properties are specified in both `Globals` and in a message object:\n\n  - String, integer and boolean properties will be overwritten by the message properties of the same name.\n  - Object type properties (`From`, `Sender`, `ReplyTo`, `TemplateErrorReporting`, `Headers`, `Variables`) will be merged with the message property, overwriting any concurrent property.\n  - Array type properties (`Cc`, `Bcc`, `Attachments`, `InlineAttachments`) will be appended.\n\nFor more information and examples click [here](/docs/email-api/send-api-v31/set-global-payload-properties).\n"
+                  },
+                  "Messages": {
+                    "type": "array",
+                    "description": "A JSON array containing message objects.",
+                    "items": {
+                      "required": [
+                        "From",
+                        "To"
+                      ],
+                      "properties": {
+                        "From": {
+                          "type": "object",
+                          "description": "A JSON object containing 2 properties - `Email` and `Name`. Specifies the sender name and email address:\n\n1. When `Sender` is not specified, the email address will be used to send the message. In such cases, it must be a valid, activated sender for this account. See the `/sender` and `/metasender` resources for more info.\n\n2. When `Sender` is specified, the `Sender` email address will be used to send the message, while the `From` email address will be displayed in the recipient's inbox. In such cases, it is not necessary for the `From` address to be validated. When the `Sender` and `From` domains differ, the information will be displayed in the inbox as `From {from_email} via / sent on behalf of {sender_domain}`.\n\n> Note: If the `From` domain has a DMARC policy in effect (e.g. Yahoo, AOL), the message will not be delivered. Instead, it will either bounce or be considered as Spam.\n",
+                          "required": [
+                            "Email"
+                          ],
+                          "properties": {
+                            "Email": {
+                              "type": "string",
+                              "format": "email",
+                              "description": "The `From` email address.",
+                              "readOnly": false,
+                              "examples": [
+                                "pilot@mailjet.com"
+                              ]
+                            },
+                            "Name": {
+                              "type": "string",
+                              "description": "The name of the sender. Will be displayed next to the sender email in the recipient's mailbox.",
+                              "readOnly": false,
+                              "examples": [
+                                "Your Mailjet Pilot"
+                              ]
+                            }
+                          }
+                        },
+                        "Sender": {
+                          "type": "object",
+                          "description": "A JSON object containing 2 properties - `Email` and `Name`. Specifies the sender name and email address. Used when you want to send emails on behalf of a different email address. Must be a valid, activated sender for this account. See the `/sender` and `/metasender` resources for more info. Only `Email` is a mandatory property within this object.\n\nThe `Sender` email address will be used to send the message, while the `From` email address will be displayed in the recipient's inbox. In such cases, it is not necessary for the `From` address to be verified. However, the information will be displayed in the inbox as `From {from_email} via / sent on behalf of {sender_domain}`.\n\n> Note: This option is disabled by default and is no longer available for new setups. Existing Default Sender configurations continue to work, but Mailjet no longer enables this functionality on new requests.\n",
+                          "required": [
+                            "Email"
+                          ],
+                          "properties": {
+                            "Email": {
+                              "type": "string",
+                              "format": "email",
+                              "description": "The email address used to send the message.",
+                              "readOnly": false,
+                              "examples": [
+                                "copilot@mailjet.com"
+                              ]
+                            },
+                            "Name": {
+                              "type": "string",
+                              "description": "User-selected name for the `Sender` email address.",
+                              "readOnly": false,
+                              "examples": [
+                                "Your Mailjet Co-pilot"
+                              ]
+                            }
+                          }
+                        },
+                        "To": {
+                          "type": "array",
+                          "description": "A JSON array of recipients. Each recipient object within the array may contain the name, but must always contain the recipient email.",
+                          "items": {
+                            "required": [
+                              "Email"
+                            ],
+                            "properties": {
+                              "Email": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "The email address of the recipient.",
+                                "readOnly": false,
+                                "examples": [
+                                  "passenger@mailjet.com"
+                                ]
+                              },
+                              "Name": {
+                                "type": "string",
+                                "description": "The name of the recipient. Will be displayed next to the recipient's email in their mailbox.",
+                                "readOnly": false,
+                                "examples": [
+                                  "Passenger 1"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "Cc": {
+                          "type": "array",
+                          "description": "A JSON array of recipients who are supposed to receive a carbon copy (cc) of this message. Used together with `To` and `Bcc` (optional). Each recipient object within the array may contain the name, but must always contain the recipient email.",
+                          "items": {
+                            "required": [
+                              "Email"
+                            ],
+                            "properties": {
+                              "Email": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "The email address of the recipient.",
+                                "readOnly": false,
+                                "examples": [
+                                  "passenger2@mailjet.com"
+                                ]
+                              },
+                              "Name": {
+                                "type": "string",
+                                "description": "The name of the recipient. Will be displayed next to the recipient's email in their mailbox.",
+                                "readOnly": false,
+                                "examples": [
+                                  "Passenger 2"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "Bcc": {
+                          "type": "array",
+                          "description": "A JSON array recipients who are supposed to receive a blind carbon copy (bcc) of this message. Use this when you do not want your other recipients to see that you are sending a copy of the message to this email address. Used together with `To` and `Cc` (optional). Each recipient object within the array may contain the name, but must always contain the recipient email.",
+                          "items": {
+                            "required": [
+                              "Email"
+                            ],
+                            "properties": {
+                              "Email": {
+                                "type": "string",
+                                "format": "email",
+                                "description": "The email address of the recipient.",
+                                "readOnly": false,
+                                "examples": [
+                                  "passenger3@mailjet.com"
+                                ]
+                              },
+                              "Name": {
+                                "type": "string",
+                                "description": "The name of the recipient. Will be displayed next to the recipient's email in their mailbox.",
+                                "readOnly": false,
+                                "examples": [
+                                  "Passenger 3"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "ReplyTo": {
+                          "type": "object",
+                          "description": "An object containing the email address and name (optional), to which replies to this message will go.",
+                          "required": [
+                            "Email"
+                          ],
+                          "properties": {
+                            "Email": {
+                              "type": "string",
+                              "format": "email",
+                              "description": "The reply-to email address.",
+                              "readOnly": false,
+                              "examples": [
+                                "copilot@mailjet.com"
+                              ]
+                            },
+                            "Name": {
+                              "type": "string",
+                              "description": "The name of the reply-to contact. Will be displayed next to the reply-to email in the respective mailbox.",
+                              "readOnly": false,
+                              "examples": [
+                                "Your Mailjet Co-pilot"
+                              ]
+                            }
+                          }
+                        },
+                        "Subject": {
+                          "maxLength": 255,
+                          "type": "string",
+                          "description": "The email subject line.",
+                          "readOnly": false,
+                          "examples": [
+                            "Your email flight plan!"
+                          ]
+                        },
+                        "TextPart": {
+                          "type": "string",
+                          "description": "Provides the Text part of the message. Mandatory, if the `HTMLPart` and `TemplateID` parameters are not specified.",
+                          "readOnly": false,
+                          "examples": [
+                            "Dear passenger, welcome to Mailjet! May the delivery force be with you!"
+                          ]
+                        },
+                        "HTMLPart": {
+                          "type": "string",
+                          "description": "Provides the HTML part of the message. Mandatory, if the `TextPart` and `TemplateID` parameters are not specified.",
+                          "readOnly": false,
+                          "examples": [
+                            "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                          ]
+                        },
+                        "TemplateID": {
+                          "type": "integer",
+                          "description": "Unique numeric ID of the template to be used as email content. If the HTML/Text parts are specified, `TemplateID` will overwrite them. Equivalent to using the `X-MJ-TemplateID` header through SMTP.",
+                          "readOnly": false,
+                          "examples": [
+                            12345
+                          ]
+                        },
+                        "TemplateLanguage": {
+                          "type": "boolean",
+                          "description": "When true, activates the template language processing. Equivalent to using the `X-MJ-TemplateLanguage` header through SMTP.\n\nDefault value: `false`\n",
+                          "readOnly": false,
+                          "examples": [
+                            false
+                          ]
+                        },
+                        "TemplateErrorReporting": {
+                          "type": "object",
+                          "description": "An object containing the email address and name of the recipient, to whom a carbon copy with the error message is sent to in case of sending issues. Can only be used when `TemplateLanguage=true`. Equivalent to using the `X-MJ-TemplateErrorReporting` header through SMTP.",
+                          "required": [
+                            "Email"
+                          ],
+                          "properties": {
+                            "Email": {
+                              "type": "string",
+                              "format": "email",
+                              "description": "The email address, to which the carbon copy of the email with the error message will be sent.",
+                              "readOnly": false,
+                              "examples": [
+                                "errors@mailjet.com"
+                              ]
+                            },
+                            "Name": {
+                              "type": "string",
+                              "description": "The name of the recipient, to whom the carbon copy of the email with the error message will be sent.",
+                              "readOnly": false,
+                              "examples": [
+                                "Error Email"
+                              ]
+                            }
+                          }
+                        },
+                        "TemplateErrorDeliver": {
+                          "type": "boolean",
+                          "description": "When true, the message delivery will proceed if an error is discovered in the templating language. When false, the message delivery will be stopped. Can only be used when `TemplateLanguage=true`. Equivalent to using the `X-MJ-TemplateErrorDeliver` header through SMTP.\n\nDefault value: `false`\n",
+                          "readOnly": false,
+                          "examples": [
+                            true
+                          ]
+                        },
+                        "Attachments": {
+                          "type": "array",
+                          "description": "A JSON array containing descriptions of the files attached to this message. The array contains the Filename, Content type and Base64 encoded content of the file. The total size of the API call payload - including all attachments, inline attachments and message content - should not exceed 15 MB.",
+                          "items": {
+                            "required": [
+                              "Filename",
+                              "ContentType",
+                              "Base64Content"
+                            ],
+                            "properties": {
+                              "Filename": {
+                                "type": "string",
+                                "description": "The full name of the file (including the file extension).",
+                                "readOnly": false,
+                                "examples": [
+                                  "test.txt"
+                                ]
+                              },
+                              "ContentType": {
+                                "type": "string",
+                                "description": "Defines the type of content being sent out using a MIME type. See the [official MIME type](https://www.iana.org/assignments/media-types/media-types.xhtml) list for additional information.",
+                                "readOnly": false,
+                                "examples": [
+                                  "text/plain"
+                                ]
+                              },
+                              "Base64Content": {
+                                "type": "string",
+                                "format": "Base64 encoded content",
+                                "description": "Base64 encoded content of the attached file.",
+                                "readOnly": false,
+                                "examples": [
+                                  "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "InlinedAttachments": {
+                          "type": "array",
+                          "description": "A JSON array containing descriptions of the files attached to this message, that are available for inline use. Inline attachments can be visible directly in the body of the message, depending on the email client support. Insert the file into the HTML code of the email by using `cid:Filename`, or, if you have specified `ContentID`, by using `cid:ContentID`. The total size of the API call payload - including all attachments, inline attachments and message content - should not exceed 15 MB.",
+                          "items": {
+                            "required": [
+                              "Filename",
+                              "ContentType",
+                              "Base64Content"
+                            ],
+                            "properties": {
+                              "Filename": {
+                                "type": "string",
+                                "description": "The full name of the file (including the file extension).",
+                                "readOnly": false,
+                                "examples": [
+                                  "logo.gif"
+                                ]
+                              },
+                              "ContentType": {
+                                "type": "string",
+                                "description": "Defines the type of content being sent out using a MIME type. See the [official MIME type](https://www.iana.org/assignments/media-types/media-types.xhtml) list for additional information.",
+                                "readOnly": false,
+                                "examples": [
+                                  "image/gif"
+                                ]
+                              },
+                              "Base64Content": {
+                                "type": "string",
+                                "format": "Base64 encoded content",
+                                "description": "Base64 encoded content of the attached file.",
+                                "readOnly": false,
+                                "examples": [
+                                  "R0lGODlhEAAQAOYAAP////748v39/Pvq1vr6+lJSVeqlK/zqyv7+/unKjJ+emv78+fb29pucnfrlwvTCi9ra2vTCa6urrWdoaurr6/Pz8uHh4vn49PO7QqGfmumaN+2uS1ZWWfr27uyuLnBxd/z8+0pLTvHAWvjar/zr2Z6cl+jal+2kKmhqcEJETvHQbPb07lBRVPv6+cjJycXFxn1+f//+/f337nF0efO/Mf306NfW0fjHSJOTk/TKlfTp0Prlx/XNj83HuPfEL+/v8PbJgueXJOzp4MG8qUNES9fQqN3d3vTJa/vq1f317P769f/8+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjY5ODYxMzYzMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjY5ODYxMzczMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNjk4NjEzNDMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNjk4NjEzNTMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAAAQABAAAAdUgACCg4SFhoeIiYRGLhaKhA0TMDgSLxAUiEIZHAUsIUQpKAo9Og6FNh8zJUNFJioYQIgJRzc+NBEkiAcnBh4iO4o8QRsjj0gaOY+CDwPKzs/Q0YSBADs="
+                                ]
+                              },
+                              "ContentID": {
+                                "type": "string",
+                                "description": "Name of the `cid` to be inserted in the HTML content of the message. The value must be unique across all inline attachments in the message.",
+                                "readOnly": false,
+                                "examples": [
+                                  "logo"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "Priority": {
+                          "type": "integer",
+                          "description": "Indicates the processing priority inside your account (API Key) scheduling queue. Equivalent of using the `X-Mailjet-Prio` header through SMTP.\n\nThere are two queues - low priority (`0`, `1`) and high priority (`2`, `3`):\n\n- `0` - low priority queue, processed first in, first out\n- `1` - goes before the low priority queue, processed last in, first out\n- `2` - high priority queue, processed first in, first out\n- `3` - goes before the high priority queue, processed last in, first out\n\nSend transactional messages with `2` and marketing messages with `0`. Codes `1` and `3` are intended for narrow cases where tight control of the email flow is necessary - `3` can block messages sent with `2`, so it is not advised for large volumes. Whether high or low priority, the processing speed is the same - only the order changes.\n\n[More information](https://documentation.mailjet.com/hc/en-us/articles/360043571894-Email-Priority-Management).\n\nDefault value: `2`\n",
+                          "readOnly": false,
+                          "examples": [
+                            2
+                          ]
+                        },
+                        "CustomCampaign": {
+                          "type": "string",
+                          "description": "Specifies a custom campaign name, to  which all messages with this property value will be assigned. If the campaign doesn't already exist it will be automatically created in the Mailjet system. API users are allowed to send multiple emails from the same campaign name to the same contacts. To block this feature, use the `DeduplicateCampaign` property. Equivalent of using `X-Mailjet-Campaign` header through SMTP.",
+                          "readOnly": false,
+                          "examples": [
+                            "SendAPI_campaign"
+                          ]
+                        },
+                        "DeduplicateCampaign": {
+                          "type": "boolean",
+                          "description": "Enables or disables the option to send messages from the same campaign to the same contact multiple times. Equivalent of using `X-Mailjet-DeduplicateCampaign` header through SMTP.\n\nWhen set to `true`, a contact that has already received a message carrying a particular `CustomCampaign` value will not receive another message from that same campaign. When `false`, the same contact can receive multiple messages from the same grouped campaign.\n\nDefault value: `false`\n",
+                          "readOnly": false,
+                          "examples": [
+                            true
+                          ]
+                        },
+                        "TrackOpens": {
+                          "enum": [
+                            "account_default",
+                            "disabled",
+                            "enabled",
+                            "anon"
+                          ],
+                          "type": "string",
+                          "description": "Enable or disable open tracking on this message. This property will overwrite the preferences selected in the [Mailjet account](https://app.mailjet.com/account/settings). Equivalent of using `X-Mailjet-TrackOpen` header through SMTP.\n\nAllowed Values:\n  - `account_default` = use the values specified in the [Mailjet account](https://app.mailjet.com/account/settings)\n  - `disabled` = disable tracking for this message\n  - `enabled` = enable tracking for this message\n  - `anon` = record opens without linking them to the individual recipient\n\nThis property is set per message object, so a single request can carry different values for different recipients - for example `enabled` for contacts who consented to tracking and `disabled` or `anon` for those who did not. Use `CustomCampaign` to keep those messages grouped under one campaign for reporting.\n\nDefault value: `account_default`\n",
+                          "readOnly": false,
+                          "examples": [
+                            "account_default"
+                          ]
+                        },
+                        "TrackClicks": {
+                          "enum": [
+                            "account_default",
+                            "disabled",
+                            "enabled",
+                            "anon"
+                          ],
+                          "type": "string",
+                          "description": "Enable or disable click tracking on this message. This property will overwrite the preferences selected in the [Mailjet account](https://app.mailjet.com/account/settings). Equivalent of using `X-Mailjet-TrackClick` header through SMTP.\n\nAllowed Values:\n  - `account_default` = use the values specified in the [Mailjet account](https://app.mailjet.com/account/settings)\n  - `disabled` = disable tracking for this message\n  - `enabled` = enable tracking for this message\n  - `anon` = record clicks without linking them to the individual recipient\n\nThis property is set per message object, so a single request can carry different values for different recipients - for example `enabled` for contacts who consented to tracking and `disabled` or `anon` for those who did not. Use `CustomCampaign` to keep those messages grouped under one campaign for reporting.\n\nDefault value: `account_default`\n",
+                          "readOnly": false,
+                          "examples": [
+                            "account_default"
+                          ]
+                        },
+                        "CustomID": {
+                          "type": "string",
+                          "description": "Select a user-defined custom ID.",
+                          "readOnly": false,
+                          "examples": [
+                            "CustomValue"
+                          ]
+                        },
+                        "EventPayload": {
+                          "type": "string",
+                          "description": "Defines a payload attached to the message. The Parse API will return the values in the payload. Any standard format can be used - XML, JSON, CSV etc. Equivalent of using `X-MJ-EventPayload` header through SMTP.",
+                          "readOnly": false,
+                          "examples": [
+                            "Eticket,1234,row,15,seat,B"
+                          ]
+                        },
+                        "URLTags": {
+                          "type": "string",
+                          "description": "URL tags to append every URL link in the message. The user needs to provide the query between the `?` and `#` characters in the URL. The URLTags value needs to be URL-encoded.",
+                          "examples": [
+                            "utm_source=newsletter&utm_medium=email&utm_campaign=sale1"
+                          ]
+                        },
+                        "Headers": {
+                          "type": "object",
+                          "description": "A JSON object containing additional email headers. Specified as `{header_name}:{header_value}` pairs.\n",
+                          "readOnly": false,
+                          "examples": [
+                            {
+                              "X-my-custom-header": "Custom text"
+                            }
+                          ]
+                        },
+                        "Variables": {
+                          "type": "object",
+                          "description": "A JSON object containing variables used to modify the content of your email. Specified as `{var_name}:{var_value}` pairs. Enter the information in the template text / HTML part by using the `[[var:{var_name}]]` format. Equivalent of using `X-MJ-Vars` header through SMTP.",
+                          "readOnly": false,
+                          "examples": [
+                            {
+                              "day": "Monday",
+                              "personalmessage": "Happy birthday!"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "Messages"
+                ]
+              },
+              "example": {
+                "Messages": [
+                  {
+                    "From": {
+                      "Email": "no-reply@example.com",
+                      "Name": "Example Sender"
+                    },
+                    "To": [
+                      {
+                        "Email": "contact@example.com",
+                        "Name": "Example Contact"
+                      }
+                    ],
+                    "Subject": "Hello from Mailjet",
+                    "TextPart": "Greetings from Mailjet!",
+                    "HTMLPart": "<h3>Hello from Mailjet</h3>"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default OK response for `/send`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Messages": {
+                      "description": "A JSON array containing message objects.",
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "Status": {
+                            "type": "string",
+                            "description": "Indicates the sending status of the message.\n\nPossible values:\n\n- `success`\n- `error`\n",
+                            "examples": [
+                              "success"
+                            ]
+                          },
+                          "Errors": {
+                            "type": "array",
+                            "description": "A JSON array containing information about any errors with the processing of this message. Will be displayed only if processing errors occur. Each error will generate a separate error object with the below properties.",
+                            "items": {
+                              "properties": {
+                                "ErrorIdentifier": {
+                                  "type": "string",
+                                  "format": "UUID",
+                                  "description": "A 128-bit universally unique identifier (UUID) for this error.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "1ab23cd4-e567-8901-2345-6789f0gh1i2j"
+                                  ]
+                                },
+                                "ErrorCode": {
+                                  "type": "string",
+                                  "description": "An internal Mailjet error code for this error. See [Send API Errors](/docs/email-api/send-api-v31/send-api-errors) for more information.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "send-0010"
+                                  ]
+                                },
+                                "StatusCode": {
+                                  "type": "integer",
+                                  "description": "The error status code. See [Send API Errors](/docs/email-api/send-api-v31/send-api-errors) for more information.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    400
+                                  ]
+                                },
+                                "ErrorMessage": {
+                                  "type": "string",
+                                  "description": "An error message informing the user what the issue is.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "Template ID \"123456789\" doesn't exist for your account."
+                                  ]
+                                },
+                                "ErrorRelatedTo": {
+                                  "type": "object",
+                                  "description": "Indicates which part of the payload this error is related to.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "TemplateID"
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "CustomID": {
+                            "type": "string",
+                            "description": "A user-defined custom ID.",
+                            "examples": [
+                              "CustomValue"
+                            ]
+                          },
+                          "To": {
+                            "type": "array",
+                            "description": "A JSON array containing information about the messages sent to recipients in To.",
+                            "items": {
+                              "properties": {
+                                "Email": {
+                                  "type": "string",
+                                  "format": "email",
+                                  "description": "The email address of this recipient.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "passenger@mailjet.com"
+                                  ]
+                                },
+                                "MessageUUID": {
+                                  "type": "string",
+                                  "format": "UUID",
+                                  "description": "A 128-bit universally unique identifier (UUID) for this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "1ab23cd4-e567-8901-2345-6789f0gh1i2j"
+                                  ]
+                                },
+                                "MessageID": {
+                                  "type": "integer",
+                                  "format": "int64",
+                                  "description": "Unique numeric ID of this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    1234567890987654400
+                                  ]
+                                },
+                                "MessageHref": {
+                                  "type": "string",
+                                  "description": "URL link that can be used for an API call to retrieve more information about this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "https://api.mailjet.com/v3/message/1234567890987654321"
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "Cc": {
+                            "type": "array",
+                            "description": "A JSON array containing information about the messages sent to recipients in Cc.",
+                            "items": {
+                              "properties": {
+                                "Email": {
+                                  "type": "string",
+                                  "format": "email",
+                                  "description": "The email address of this recipient.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "passenger2@mailjet.com"
+                                  ]
+                                },
+                                "MessageUUID": {
+                                  "type": "string",
+                                  "format": "UUID",
+                                  "description": "A 128-bit universally unique identifier (UUID) for this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "9ab87cd6-e567-8901-2345-6789f0gh1i2j"
+                                  ]
+                                },
+                                "MessageID": {
+                                  "type": "integer",
+                                  "format": "int64",
+                                  "description": "Unique numeric ID for this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    9876543210987655000
+                                  ]
+                                },
+                                "MessageHref": {
+                                  "type": "string",
+                                  "description": "URL link that can be used for an API call to retrieve more information about this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "https://api.mailjet.com/v3/message/9876543210987654321"
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "Bcc": {
+                            "type": "array",
+                            "description": "A JSON array containing information about the messages sent to recipients in Bcc.",
+                            "items": {
+                              "properties": {
+                                "Email": {
+                                  "type": "string",
+                                  "format": "email",
+                                  "description": "The email address of this recipient.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "passenger3@mailjet.com"
+                                  ]
+                                },
+                                "MessageUUID": {
+                                  "type": "string",
+                                  "format": "UUID",
+                                  "description": "A 128-bit universally unique identifier (UUID) for this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "9ab87cd6-e567-8901-2345-1234ab4321ba"
+                                  ]
+                                },
+                                "MessageID": {
+                                  "type": "integer",
+                                  "format": "int64",
+                                  "description": "Unique numeric ID for this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    123123123321321330
+                                  ]
+                                },
+                                "MessageHref": {
+                                  "type": "string",
+                                  "description": "URL link that can be used for an API call to retrieve more information about this message.",
+                                  "readOnly": true,
+                                  "examples": [
+                                    "https://api.mailjet.com/v3/message/123123123321321321"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "One or more parameters are missing or maybe misspelled (unknown resource or action)."
+          },
+          "401": {
+            "description": "You have specified an incorrect API Key / API Secret Key pair. You may be unauthorized to access the API or your API key may be inactive. Visit API keys Management section to check your keys."
+          },
+          "403": {
+            "description": "You are not authorized to access this resource."
+          },
+          "404": {
+            "description": "The resource with the specified ID you are trying to reach does not exist."
+          },
+          "429": {
+            "description": "You have reached the maximum number of calls allowed per minute by our API. Please review your integration to reduce the number of calls issued by your system."
+          },
+          "500": {
+            "description": "An unexpected error occurred on the server. Please contact our support team, providing the error identifier (`ErrorIdentifier`) and we will do our best to help."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "curl",
+            "label": "cURL",
+            "source": "curl -s \\\n\t-X POST \\\n\t--user \"$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE\" \\\n\thttps://api.mailjet.com/v3.1/send \\\n\t-H 'Content-Type: application/json' \\\n\t-d '{\n      \"SandboxMode\":true,\n      \"Messages\":[\n        {\n          \"From\":{\n            \"Email\":\"pilot@mailjet.com\",\n            \"Name\":\"Your Mailjet Pilot\"\n          },\n          \"HTMLPart\":\"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\",\n          \"Subject\":\"Your email flight plan!\",\n          \"TextPart\":\"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n          \"To\":[\n            {\n              \"Email\":\"passenger@mailjet.com\",\n              \"Name\":\"Passenger 1\"\n            }\n          ]\n        }\n      ]\n\t}'"
+          },
+          {
+            "lang": "PHP",
+            "label": "PHP",
+            "source": "<?php\nrequire 'vendor/autoload.php';\nuse \\Mailjet\\Resources;\n$mj = new \\Mailjet\\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3.1']);\n$body = [\n  'SandboxMode' => true,\n  'Messages' => [\n    [\n      'From' => [\n        'Email' => \"pilot@mailjet.com\",\n        'Name' => \"Your Mailjet Pilot\"\n      ],\n      'HTMLPart' => \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\",\n      'Subject' => \"Your email flight plan!\",\n      'TextPart' => \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n      'To' => [\n        [\n          'Email' => \"passenger@mailjet.com\",\n          'Name' => \"Passenger 1\"\n        ]\n      ]\n    ]\n  ]\n];\n$response = $mj->post(Resources::$Email, ['body' => $body]);\n$response->success() && var_dump($response->getData());\n?>"
+          },
+          {
+            "lang": "Node.js",
+            "label": "Node",
+            "source": "const mailjet = require ('node-mailjet')\n\t.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)\nconst request = mailjet\n\t.post(\"send\", {'version': 'v3.1'})\n\t.request({\n      \"SandboxMode\":true,\n      \"Messages\":[\n        {\n          \"From\":{\n            \"Email\":\"pilot@mailjet.com\",\n            \"Name\":\"Your Mailjet Pilot\"\n          },\n          \"HTMLPart\":\"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\",\n          \"Subject\":\"Your email flight plan!\",\n          \"TextPart\":\"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n          \"To\":[\n            {\n             \"Email\":\"passenger@mailjet.com\",\n             \"Name\":\"Passenger 1\"\n            }\n          ]\n        }\n      ]\n    })\nrequest\n\t.then((result) => {\n\t\tconsole.log(result.body)\n\t})\n\t.catch((err) => {\n\t\tconsole.log(err.statusCode)\n\t})"
+          },
+          {
+            "lang": "Ruby",
+            "label": "Ruby",
+            "source": "require 'mailjet'\nMailjet.configure do |config|\n  config.api_key = ENV['MJ_APIKEY_PUBLIC']\n  config.secret_key = ENV['MJ_APIKEY_PRIVATE']\n  config.api_version = \"v3.1\"\nend\nvariable = Mailjet::Send.create(\n  sandbox_mode: true,\n  messages: [\n    {\n      'from': {\n        'email' => \"pilot@mailjet.com\",\n        'name' => \"Your Mailjet Pilot\"\n      },\n      'htmlpart' => \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\",\n      'subject' => \"Your email flight plan!\",\n      'text_part' => \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n      'to': [\n        {\n          'email' => \"passenger@mailjet.com\",\n          'name' => \"Passenger 1\"\n        }\n      ]\n    }\n  ]\n)\np variable.attributes['Messages']"
+          },
+          {
+            "lang": "Python",
+            "label": "Python",
+            "source": "from mailjet_rest import Client\nimport os\napi_key = os.environ['MJ_APIKEY_PUBLIC']\napi_secret = os.environ['MJ_APIKEY_PRIVATE']\nmailjet = Client(auth=(api_key, api_secret), version='v3.1')\ndata = {\n  'SandboxMode': True,\n  'Messages': [\n    {\n      'From': {\n        \"Email\": \"pilot@mailjet.com\",\n        \"Name\": \"Your Mailjet Pilot\"\n      },\n      \"HTMLPart\": \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\",\n      \"Subject\": \"Your email flight plan!\",\n      \"TextPart\": \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n      'To': [\n        {\n          \"Email\": \"passenger@mailjet.com\",\n          \"Name\": \"Passenger 1\"\n        }\n      ]\n    }\n  ]\n}\nresult = mailjet.send.create(data=data)\nprint result.status_code\nprint result.json()"
+          },
+          {
+            "lang": "Java",
+            "label": "Java",
+            "source": "package com.my.project;\nimport com.mailjet.client.errors.MailjetException;\nimport com.mailjet.client.errors.MailjetSocketTimeoutException;\nimport com.mailjet.client.MailjetClient;\nimport com.mailjet.client.MailjetRequest;\nimport com.mailjet.client.MailjetResponse;\nimport com.mailjet.client.ClientOptions;\nimport com.mailjet.client.resource.Emailv31;\nimport org.json.JSONArray;\nimport org.json.JSONObject;\npublic class MyClass {\n    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {\n      MailjetClient client;\n      MailjetRequest request;\n      MailjetResponse response;\n      client = new MailjetClient(System.getenv(\"MJ_APIKEY_PUBLIC\"), System.getenv(\"MJ_APIKEY_PRIVATE\"), new ClientOptions(\"v3.1\"));\n      request = new MailjetRequest(Emailv31.resource)\n            .property(Emailv31.SANDBOXMODE, true)\n            .property(Emailv31.MESSAGES, new JSONArray()\n                .put(new JSONObject()\n                    .put(Emailv31.Message.FROM, new JSONObject()\n                        .put(\"Email\", \"pilot@mailjet.com\")\n                        .put(\"Name\", \"Your Mailjet Pilot\")\n                    )\n                    .put(\"HTMLPart\", \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\")\n                    .put(\"Subject\", \"Your email flight plan!\")\n                    .put(\"TextPart\", \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\")\n                    .put(Emailv31.Message.TO, new JSONArray()\n                        .put(new JSONObject()\n                            .put(\"Email\", \"passenger@mailjet.com\")\n                            .put(\"Name\", \"Passenger 1\")\n                        )\n                    )\n                    )\n            )\n      );\n      response = client.post(request);\n      System.out.println(response.getStatus());\n      System.out.println(response.getData());\n    }\n}"
+          },
+          {
+            "lang": "C#",
+            "label": "C#",
+            "source": "using Mailjet.Client;\nusing Mailjet.Client.Resources;\nusing System;\nusing Newtonsoft.Json.Linq;\nnamespace Mailjet.ConsoleApplication\n{\n   class Program\n   {\n      static void Main(string[] args)\n      {\n         RunAsync().Wait();\n      }\n      static async Task RunAsync()\n      {\n         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable(\"MJ_APIKEY_PUBLIC\"), Environment.GetEnvironmentVariable(\"MJ_APIKEY_PRIVATE\"))\n         {\n            Version = ApiVersion.V3_1,\n         };\n         MailjetRequest request = new MailjetRequest\n         {\n            Resource = Send.Resource,\n         }\n             .Property(Send.SandboxMode, true)\n             .Property(Send.Messages, new JArray {\n                 new JObject {\n                     {\"From\", new JObject {\n                         {\"Email\", \"pilot@mailjet.com\"},\n                         {\"Name\", \"Your Mailjet Pilot\"}\n                     }},\n                     {\"HTMLPart\", \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\"},\n                     {\"Subject\", \"Your email flight plan!\"},\n                     {\"TextPart\", \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\"},\n                     {\"To\", new JArray {\n                         new JObject {\n                             {\"Email\", \"passenger@mailjet.com\"},\n                             {\"Name\", \"Passenger 1\"}\n                         }\n                     }}\n                 }\n             });\n         MailjetResponse response = await client.PostAsync(request);\n         if (response.IsSuccessStatusCode)\n         {\n            Console.WriteLine(string.Format(\"Total: {0}, Count: {1}\\n\", response.GetTotal(), response.GetCount()));\n            Console.WriteLine(response.GetData());\n         }\n         else\n         {\n            Console.WriteLine(string.Format(\"StatusCode: {0}\\n\", response.StatusCode));\n            Console.WriteLine(string.Format(\"ErrorInfo: {0}\\n\", response.GetErrorInfo()));\n            Console.WriteLine(response.GetData());\n            Console.WriteLine(string.Format(\"ErrorMessage: {0}\\n\", response.GetErrorMessage()));\n         }\n      }\n   }\n}"
+          }
+        ]
+      }
+    },
+    "/v3/send": {
+      "post": {
+        "x-seo": {
+          "title": "Send an email message via Send API v3",
+          "description": "Send a message via Send API v3. Send API v3 is built mainly for speed, allowing you to send up to 100 messages in a single API call, as opposed to v3.1…"
+        },
+        "tags": [
+          "Send Emails"
+        ],
+        "summary": "Send an email message via Send API v3",
+        "description": "Send a message via Send API v3. Send API v3 is built mainly for speed, allowing you to send up to 100 messages in a single API call, as opposed to v3.1, where the limit is 50 messages per call. However, it lacks some of the more complex functionalities of Send API v3.1 like detailed feedback information in case of sending errors.",
+        "operationId": "postSendV3",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FromEmail": {
+                    "type": "string",
+                    "description": "Specifies the sender email address:\n\n1. When `Sender` is not specified, the email address will be used to send the message. In such cases, it must be a valid, activated sender for this account. See the `/sender` and `/metasender` resources for more info.\n\n2. When `Sender` is specified as `True`, your default sender email address will be used to send the message instead, while the `FromEmail` will be displayed in the recipient's inbox. In such cases, it is not necessary for the `FromEmail` to be validated. When the default sender and `FromEmail` domains differ, the information will be displayed in the inbox as `From {FromEmail} via / sent on behalf of {default_sender_domain}`.\n\n> Note: If the `FromEmail` domain has a DMARC policy in effect (e.g. Yahoo, AOL), the message will not be delivered. Instead, it will either bounce or be considered as Spam.\n",
+                    "examples": [
+                      "pilot@mailjet.com"
+                    ]
+                  },
+                  "FromName": {
+                    "type": "string",
+                    "description": "Sender name that will be displayed in the recipient's mailbox.",
+                    "examples": [
+                      "Your Mailjet Pilot"
+                    ]
+                  },
+                  "Sender": {
+                    "type": "boolean",
+                    "description": "When true, default sender email address will be used to send the message, while the `FromEmail` will be displayed in the recipient's inbox. In such cases, it is not necessary for the `FromEmail` to be verified. However, the information will be displayed in the inbox as `From {from_email} via / sent on behalf of {sender_domain}`.\n\nDefault value: `false`\n\n> Note: This option is disabled by default and is no longer available for new setups. Existing Default Sender configurations continue to work, but Mailjet no longer enables this functionality on new requests.\n",
+                    "examples": [
+                      true
+                    ]
+                  },
+                  "Recipients": {
+                    "type": "array",
+                    "description": "A JSON array containing the list of recipients. Must include at least an `Email` property in each element. Required, unless `To` is specified. Cannot be used together with `Cc` and `Bcc`.",
+                    "items": {
+                      "required": [
+                        "Email"
+                      ],
+                      "properties": {
+                        "Email": {
+                          "type": "string",
+                          "format": "email",
+                          "description": "The email address of the recipient.",
+                          "readOnly": false,
+                          "examples": [
+                            "passenger@mailjet.com"
+                          ]
+                        },
+                        "Name": {
+                          "type": "string",
+                          "description": "The name of the recipient. Will be displayed next to the email in the recipient's mailbox.",
+                          "readOnly": false,
+                          "examples": [
+                            "Passenger 1"
+                          ]
+                        },
+                        "Vars": {
+                          "type": "string",
+                          "description": "Variables used in the message content for this recipient. Specified as a JSON array of `var_name:var_value`. Inserted in the text and/or HTML part of the message as `[[var: var_value]]`.\n",
+                          "examples": [
+                            "array"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "To": {
+                    "type": "string",
+                    "description": "The email address (and name, optionally) of the recipients. Interchangeable with `Recipients`. Acceptable formats are  `john@example.com` or `<john@example.com>` or `\"John Doe\" <john@example.com>`. Can include multiple contacts, which should  be separated by commas. Can be used together with `Cc` and `Bcc`.",
+                    "examples": [
+                      "Passenger 1 <passenger@mailjet.com>"
+                    ]
+                  },
+                  "Cc": {
+                    "type": "string",
+                    "description": "The email address (and name, optionally) of a recipient who is supposed to receive a carbon copy (cc) of this message. Used together with `To` and `Bcc` (optional). Acceptable formats are  `john@example.com` or `<john@example.com>` or `\"John Doe\" <john@example.com>`. Can include multiple contacts, which should  be separated by commas.",
+                    "examples": [
+                      "Passenger 2 <passenger2@mailjet.com>"
+                    ]
+                  },
+                  "Bcc": {
+                    "type": "string",
+                    "description": "The email address (and name, optionally) of a recipient who is supposed to receive a blind carbon copy (bcc) of this message. Use this when you do not want your other recipients to see that you are sending a copy of the message to this email address. Used together with `To` and `Cc` (optional). Acceptable formats are  `john@example.com` or `<john@example.com>` or `\"John Doe\" <john@example.com>`. Can include multiple contacts, which should  be separated by commas.",
+                    "examples": [
+                      "Passenger 3 <passenger3@mailjet.com>"
+                    ]
+                  },
+                  "Subject": {
+                    "type": "string",
+                    "description": "The email subject line.",
+                    "examples": [
+                      "Your email flight plan!"
+                    ]
+                  },
+                  "Text-part": {
+                    "type": "string",
+                    "description": "Provides the Text part of the message. Mandatory, if the `Html-part` parameter is not specified.",
+                    "examples": [
+                      "Dear passenger, welcome to Mailjet! May the delivery force be with you!"
+                    ]
+                  },
+                  "Html-part": {
+                    "type": "string",
+                    "description": "Provides the HTML part of the message. Mandatory, if the `Text-part` parameter is not specified.",
+                    "examples": [
+                      "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+                    ]
+                  },
+                  "Mj-TemplateID": {
+                    "type": "integer",
+                    "description": "The Template ID or Name to use as this email content. If the HTML/Text parts are specified, `Mj-TemplateID` will overwrite them. Equivalent to using the `X-MJ-TemplateID` header through SMTP.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "Mj-TemplateLanguage": {
+                    "type": "boolean",
+                    "description": "When true, activates the template language processing. Equivalent to using the `X-MJ-TemplateLanguage` header through SMTP.\n\nDefault value: `false`\n",
+                    "examples": [
+                      false
+                    ]
+                  },
+                  "Mj-TemplateErrorReporting": {
+                    "type": "string",
+                    "description": "An email address, where a carbon copy with the error message is sent to in case of sending issues. Can only be used when `Mj-TemplateLanguage=true`. Equivalent to using the `X-MJ-TemplateErrorReporting` header through SMTP.",
+                    "examples": [
+                      "reports@example.com"
+                    ]
+                  },
+                  "Mj-TemplateErrorDeliver": {
+                    "type": "string",
+                    "description": "Defines if the message will be delivered if an error is discovered in the templating language. Can only be used when `Mj-TemplateLanguage=true`. Equivalent to using the `X-MJ-TemplateErrorDeliver` header through SMTP.\n\nPossible values:\n\n- `deliver`\n- `0`\n\nDefault value: `0`\n",
+                    "examples": [
+                      "0"
+                    ]
+                  },
+                  "Attachments": {
+                    "type": "array",
+                    "description": "A JSON object containing descriptions of the files attached to this message. Contains the Filename, Content type and Base64 encoded content of the file. The total size of the API call payload - including all attachments, inline attachments and message content - should not exceed 15 MB.",
+                    "items": {
+                      "required": [
+                        "Filename",
+                        "Content-type",
+                        "Content"
+                      ],
+                      "properties": {
+                        "Filename": {
+                          "type": "string",
+                          "description": "The full name of the file (including the file extension).",
+                          "readOnly": false,
+                          "examples": [
+                            "test.txt"
+                          ]
+                        },
+                        "Content-type": {
+                          "type": "string",
+                          "description": "Defines the type of content being sent out using a MIME type. See the [official MIME type](https://www.iana.org/assignments/media-types/media-types.xhtml) list for additional information.",
+                          "readOnly": false,
+                          "examples": [
+                            "text/plain"
+                          ]
+                        },
+                        "Content": {
+                          "type": "string",
+                          "format": "Base64 encoded content",
+                          "description": "Base64 encoded content of the attached file.",
+                          "readOnly": false,
+                          "examples": [
+                            "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "Inline_attachments": {
+                    "type": "array",
+                    "description": "A JSON object containing descriptions of the files attached to this message, that are available for inline use. Inline attachments can be visible directly in the body of the message, depending on the email client support. Insert the file into the HTML code of the email by using `cid:Filename`. The total size of the API call payload - including all attachments, inline attachments and message content - should not exceed 15 MB.",
+                    "items": {
+                      "required": [
+                        "Filename",
+                        "Content-type",
+                        "Content"
+                      ],
+                      "properties": {
+                        "Filename": {
+                          "type": "string",
+                          "description": "The full name of the file (including the file extension).",
+                          "readOnly": false,
+                          "examples": [
+                            "logo.gif"
+                          ]
+                        },
+                        "Content-type": {
+                          "type": "string",
+                          "description": "Defines the type of content being sent out using a MIME type. See the [official MIME type](https://www.iana.org/assignments/media-types/media-types.xhtml) list for additional information.",
+                          "readOnly": false,
+                          "examples": [
+                            "image/gif"
+                          ]
+                        },
+                        "Content": {
+                          "type": "string",
+                          "format": "Base64 encoded content",
+                          "description": "Base64 encoded content of the attached file.",
+                          "readOnly": false,
+                          "examples": [
+                            "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"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "Mj-prio": {
+                    "type": "integer",
+                    "description": "Indicates the processing priority inside your account (API Key) scheduling queue. Equivalent of using the `X-Mailjet-Prio` header through SMTP.\n\nThere are two queues - low priority (`0`, `1`) and high priority (`2`, `3`):\n\n- `0` - low priority queue, processed first in, first out\n- `1` - goes before the low priority queue, processed last in, first out\n- `2` - high priority queue, processed first in, first out\n- `3` - goes before the high priority queue, processed last in, first out\n\nSend transactional messages with `2` and marketing messages with `0`. Codes `1` and `3` are intended for narrow cases where tight control of the email flow is necessary - `3` can block messages sent with `2`, so it is not advised for large volumes. Whether high or low priority, the processing speed is the same - only the order changes.\n\n[More information](https://documentation.mailjet.com/hc/en-us/articles/360043571894-Email-Priority-Management).\n\nDefault value: `2`\n",
+                    "examples": [
+                      2
+                    ]
+                  },
+                  "Mj-campaign": {
+                    "type": "string",
+                    "description": "Specifies a custom campaign name, to  which all messages with this property value will be assigned. If the campaign doesn't already exist it will be automatically created in the Mailjet system. API users are allowed to send multiple emails from the same campaign name to the same contacts. To block this feature, use the `Mj-deduplicatecampaign` property. Equivalent of using `X-Mailjet-Campaign` header through SMTP.",
+                    "examples": [
+                      "SendAPI_campaign"
+                    ]
+                  },
+                  "Mj-deduplicatecampaign": {
+                    "type": "integer",
+                    "description": "Enables or disables the option to send messages from the same campaign to the same contact multiple times. Equivalent of using `X-Mailjet-DeduplicateCampaign` header through SMTP.\n\nWhen set to `1`, a contact that has already received a message carrying a particular `Mj-campaign` value will not receive another message from that same campaign. When `0`, the same contact can receive multiple messages from the same grouped campaign.\n\nPossible values:\n\n- `0`\n- `1`\n\nDefault value: `0`\n",
+                    "examples": [
+                      1
+                    ]
+                  },
+                  "Mj-trackopen": {
+                    "type": "integer",
+                    "description": "Enable or disable open tracking on this message. This property will overwrite the preferences selected in the [Mailjet account](https://app.mailjet.com/account/settings). Equivalent of using `X-Mailjet-TrackOpen` header through SMTP.\n\nAllowed Values:\n\n- `0` = use the values specified in the [Mailjet account](https://app.mailjet.com/account/settings)\n- `1` = disable tracking for this message\n- `2` = enable tracking for this message\n- `3` = anonymous tracking - opens are recorded without linking them to the individual recipient\n\nThis property is set per message object, so a single request can carry different values for different recipients. Use `Mj-campaign` to keep those messages grouped under one campaign for reporting.\n\nDefault value: `0`\n",
+                    "examples": [
+                      0
+                    ]
+                  },
+                  "Mj-trackclick": {
+                    "type": "integer",
+                    "description": "Enable or disable click tracking on this message. This property will overwrite the preferences selected in the [Mailjet account](https://app.mailjet.com/account/settings). Equivalent of using `X-Mailjet-TrackClick` header through SMTP.\n\nAllowed Values:\n\n- `0` = use the values specified in the [Mailjet account](https://app.mailjet.com/account/settings)\n- `1` = disable tracking for this message\n- `2` = enable tracking for this message\n- `3` = anonymous tracking - clicks are recorded without linking them to the individual recipient\n\nThis property is set per message object, so a single request can carry different values for different recipients. Use `Mj-campaign` to keep those messages grouped under one campaign for reporting.\n\nDefault value: `0`\n",
+                    "examples": [
+                      0
+                    ]
+                  },
+                  "Mj-CustomID": {
+                    "type": "string",
+                    "description": "Select a user-defined custom ID.",
+                    "examples": [
+                      "CustomValue"
+                    ]
+                  },
+                  "Mj-EventPayload": {
+                    "type": "string",
+                    "description": "Defines a payload attached to the message. The Parse API will return the values in the payload. Any standard format can be used - XML, JSON, CSV etc. Equivalent of using `X-MJ-EventPayload` header through SMTP.",
+                    "examples": [
+                      "Eticket,1234,row,15,seat,B"
+                    ]
+                  },
+                  "Headers": {
+                    "type": "object",
+                    "description": "A JSON object containing additional email headers. Specified as `{header_name}:{header_value}` pairs.\n",
+                    "examples": [
+                      {
+                        "X-my-custom-header": "Custom text"
+                      }
+                    ]
+                  },
+                  "Vars": {
+                    "type": "object",
+                    "description": "A JSON object containing variables used to modify the content of your email. Specified as `{var_name}:{var_value}` pairs. Enter the information in the template text / HTML part by using the `[[var:{var_name}]]` format. Equivalent of using `X-MJ-Vars` header through SMTP.\n",
+                    "examples": [
+                      {
+                        "day": "Monday",
+                        "personalmessage": "Happy birthday!"
+                      }
+                    ]
+                  }
+                }
+              },
+              "example": {
+                "FromEmail": "no-reply@example.com",
+                "FromName": "Example Sender",
+                "To": "Example Contact <contact@example.com>",
+                "Subject": "Hello from Mailjet",
+                "Text-part": "Greetings from Mailjet!",
+                "Html-part": "<h3>Hello from Mailjet</h3>"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Default OK response for /send",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Sent": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "Email": {
+                            "type": "string",
+                            "description": "The email address for the recipient of this message.",
+                            "examples": [
+                              "passenger@mailjet.com"
+                            ]
+                          },
+                          "MessageID": {
+                            "type": "integer",
+                            "description": "Unique numeric ID of this message.",
+                            "examples": [
+                              1234567890987654400
+                            ]
+                          },
+                          "MessageUUID": {
+                            "type": "string",
+                            "description": "A 128-bit universally unique identifier (UUID) for this message.",
+                            "examples": [
+                              "1ab23cd4-e567-8901-2345-6789f0gh1i2j"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "One or more parameters are missing or maybe misspelled (unknown resource or action)."
+          },
+          "401": {
+            "description": "You have specified an incorrect API Key / API Secret Key pair. You may be unauthorized to access the API or your API key may be inactive. Visit API keys Management section to check your keys."
+          },
+          "403": {
+            "description": "You are not authorized to access this resource."
+          },
+          "404": {
+            "description": "The resource with the specified ID you are trying to reach does not exist."
+          },
+          "429": {
+            "description": "You have reached the maximum number of calls allowed per minute by our API. Please review your integration to reduce the number of calls issued by your system."
+          },
+          "500": {
+            "description": "An unexpected error occurred on the server. Please contact our support team, providing the error identifier (`ErrorIdentifier`) and we will do our best to help."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "x-codeSamples": [
+          {
+            "lang": "curl",
+            "label": "cURL",
+            "source": "curl -s \\\n\t-X POST \\\n\t--user \"$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE\" \\\n\thttps://api.mailjet.com/v3/send \\\n\t-H 'Content-Type: application/json' \\\n\t-d '{\n      \"FromEmail\":\"pilot@mailjet.com\",\n      \"FromName\":\"Your Mailjet Pilot\",\n      \"Recipients\":[\n        {\n          \"Email\":\"passenger@mailjet.com\",\n          \"Name\":\"Passenger 1\"\n        }\n      ],\n      \"Subject\":\"Your email flight plan!\",\n      \"Text-part\":\"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n      \"Html-part\":\"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\"\n\t}'"
+          },
+          {
+            "lang": "PHP",
+            "label": "PHP",
+            "source": "<?php\nrequire 'vendor/autoload.php';\nuse \\Mailjet\\Resources;\n$mj = new \\Mailjet\\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3']);\n$body = [\n  'FromEmail' => \"pilot@mailjet.com\",\n  'FromName' => \"Your Mailjet Pilot\",\n  'Recipients' => [\n    [\n      'Email' => \"passenger@mailjet.com\",\n      'Name' => \"Passenger 1\"\n    ]\n  ],\n  'Subject' => \"Your email flight plan!\",\n  'Text-part' => \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n  'Html-part' => \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\"\n];\n$response = $mj->post(Resources::$Email, ['body' => $body]);\n$response->success() && var_dump($response->getData());\n?>"
+          },
+          {
+            "lang": "Node.js",
+            "label": "Node",
+            "source": "const mailjet = require ('node-mailjet')\n\t.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)\nconst request = mailjet\n\t.post(\"send\", {'version': 'v3'})\n\t.request({\n      \"FromEmail\":\"pilot@mailjet.com\",\n      \"FromName\":\"Your Mailjet Pilot\",\n      \"Recipients\":[\n        {\n          \"Email\":\"passenger@mailjet.com\",\n          \"Name\":\"Passenger 1\"\n        }\n      ],\n      \"Subject\":\"Your email flight plan!\",\n      \"Text-part\":\"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n      \"Html-part\":\"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\"\n    })\nrequest\n\t.then((result) => {\n\t\tconsole.log(result.body)\n\t})\n\t.catch((err) => {\n\t\tconsole.log(err.statusCode)\n\t})"
+          },
+          {
+            "lang": "Ruby",
+            "label": "Ruby",
+            "source": "require 'mailjet'\nMailjet.configure do |config|\n  config.api_key = ENV['MJ_APIKEY_PUBLIC']\n  config.secret_key = ENV['MJ_APIKEY_PRIVATE']\n  config.api_version = \"v3\"\nend\nvariable = Mailjet::Send.create(\n  from_email: \"pilot@mailjet.com\",\n  from_name: \"Your Mailjet Pilot\",\n  recipients: [\n    {\n      'email' => \"passenger@mailjet.com\",\n      'name' => \"Passenger 1\"\n    }\n  ],\n       ,\n  subject: \"Your email flight plan!\",\n  text_part: \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n  html_part: \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\"\n)\np variable.attributes['Messages']"
+          },
+          {
+            "lang": "Python",
+            "label": "Python",
+            "source": "from mailjet_rest import Client\nimport os\napi_key = os.environ['MJ_APIKEY_PUBLIC']\napi_secret = os.environ['MJ_APIKEY_PRIVATE']\nmailjet = Client(auth=(api_key, api_secret), version='v3')\ndata = {\n  'FromEmail': \"pilot@mailjet.com\",\n  'FromName': \"Your Mailjet Pilot\",\n  'Recipients': [\n    {\n      \"Email\": \"passenger@mailjet.com\",\n      \"Name\": \"Passenger 1\"\n    }\n  ],\n  'Subject': \"Your email flight plan!\",\n  'Text-part': \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\",\n  'Html-part': \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\"\n}\nresult = mailjet.send.create(data=data)\nprint result.status_code\nprint result.json()"
+          },
+          {
+            "lang": "Java",
+            "label": "Java",
+            "source": "package com.my.project;\nimport com.mailjet.client.errors.MailjetException;\nimport com.mailjet.client.errors.MailjetSocketTimeoutException;\nimport com.mailjet.client.MailjetClient;\nimport com.mailjet.client.MailjetRequest;\nimport com.mailjet.client.MailjetResponse;\nimport com.mailjet.client.ClientOptions;\nimport com.mailjet.client.resource.Emailv31;\nimport org.json.JSONArray;\nimport org.json.JSONObject;\npublic class MyClass {\n    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {\n      MailjetClient client;\n      MailjetRequest request;\n      MailjetResponse response;\n      client = new MailjetClient(System.getenv(\"MJ_APIKEY_PUBLIC\"), System.getenv(\"MJ_APIKEY_PRIVATE\"), new ClientOptions(\"v3\"));\n      request = new MailjetRequest(Emailv31.resource)\n            .property(Emailv31.FROMEMAIL, \"pilot@mailjet.com\")\n            .property(Emailv31.FROMNAME, \"Your Mailjet Pilot\")\n            .property(Emailv31.RECIPIENTS, new JSONArray()\n                .put(new JSONObject()\n                    .put(\"Email\", \"passenger@mailjet.com\")\n                    .put(\"Name\", \"Passenger 1\")\n                )\n            )\n            .property(Emailv31.SUBJECT, \"Your email flight plan!\")\n            .property(Emailv31.TEXTPART, \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\")\n            .property(Emailv31.HTMLPART, \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\")\n      );\n      response = client.post(request);\n      System.out.println(response.getStatus());\n      System.out.println(response.getData());\n    }\n}"
+          },
+          {
+            "lang": "C#",
+            "label": "C#",
+            "source": "using Mailjet.Client;\nusing Mailjet.Client.Resources;\nusing System;\nusing Newtonsoft.Json.Linq;\nnamespace Mailjet.ConsoleApplication\n{\n   class Program\n   {\n      static void Main(string[] args)\n      {\n         RunAsync().Wait();\n      }\n      static async Task RunAsync()\n      {\n         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable(\"MJ_APIKEY_PUBLIC\"), Environment.GetEnvironmentVariable(\"MJ_APIKEY_PRIVATE\"))\n         {\n            Version = ApiVersion.V3,\n         };\n         MailjetRequest request = new MailjetRequest\n         {\n            Resource = Send.Resource,\n         }\n             .Property(Send.FromEmail, \"pilot@mailjet.com\")\n             .Property(Send.FromName, \"Your Mailjet Pilot\")\n             .Property(Send.Recipients, new JArray {\n                 new JObject {\n                     {\"Email\", \"passenger@mailjet.com\"},\n                     {\"Name\", \"Passenger 1\"}\n                 }\n             })\n             .Property(Send.Subject, \"Your email flight plan!\")\n             .Property(Send.Textpart, \"Dear passenger, welcome to Mailjet! May the delivery force be with you!\")\n             .Property(Send.Htmlpart, \"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!\");\n         MailjetResponse response = await client.PostAsync(request);\n         if (response.IsSuccessStatusCode)\n         {\n            Console.WriteLine(string.Format(\"Total: {0}, Count: {1}\\n\", response.GetTotal(), response.GetCount()));\n            Console.WriteLine(response.GetData());\n         }\n         else\n         {\n            Console.WriteLine(string.Format(\"StatusCode: {0}\\n\", response.StatusCode));\n            Console.WriteLine(string.Format(\"ErrorInfo: {0}\\n\", response.GetErrorInfo()));\n            Console.WriteLine(response.GetData());\n            Console.WriteLine(string.Format(\"ErrorMessage: {0}\\n\", response.GetErrorMessage()));\n         }\n      }\n   }\n}"
+          }
+        ]
+      }
+    }
+  }
+}
