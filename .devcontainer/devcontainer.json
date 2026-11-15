@@ -1,0 +1,89 @@
+{
+  "name": "Estatimator environment",
+  "dockerComposeFile": "dev-compose.yml",
+  "service": "dev-container",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "zsh .devcontainer/postCreate.sh",
+  "postStartCommand": "zsh .devcontainer/postStart.sh",
+  "features": {
+    "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {
+      "jqVersion": "latest",
+      "yqVersion": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:2.1.1": {
+      "version": "24",
+      "pnpmVersion": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2.7.1": {
+      "installJq": true,
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oxc.oxc-vscode",
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "tamasfe.even-better-toml",
+        "ms-toolsai.jupyter",
+        "vitest.explorer",
+        "njpwerner.autodocstring",
+        "mhutchie.git-graph",
+        "mechatroner.rainbow-csv"
+      ],
+      "settings": {
+        "[javascript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[javascriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[typescript]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[typescriptreact]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[json]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[jsonc]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[json5]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[css]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[yaml]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[html]": { "editor.defaultFormatter": "oxc.oxc-vscode" },
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.tabSize": 4,
+          "editor.insertSpaces": true,
+          "editor.detectIndentation": false,
+          "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "always",
+            "source.organizeImports.ruff": "always"
+          }
+        },
+        "[toml]": { "editor.defaultFormatter": "tamasfe.even-better-toml" },
+        "oxc.disableNestedConfig": true,
+        "oxc.fmt.disableNestedConfig": true,
+        "oxc.path.oxfmt": "./web_app/node_modules/.bin/oxfmt",
+        "oxc.path.oxlint": "./web_app/node_modules/.bin/oxlint",
+        "oxc.path.tsgolint": "./web_app/node_modules/.bin/tsgolint",
+        "oxc.configPath": "./web_app/.oxlintrc.json",
+        "oxc.fmt.configPath": "./web_app/.oxfmtrc.json",
+        "python.analysis.autoImportCompletions": true,
+        "python.analysis.typeCheckingMode": "standard",
+        "python.terminal.useEnvFile": true,
+        "vitest.vitestPackagePath": "./web_app/node_modules/vitest/package.json",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "files.watcherExclude": { "**/routeTree.gen.ts": true },
+        "search.exclude": { "**/routeTree.gen.ts": true },
+        "files.readonlyInclude": { "**/routeTree.gen.ts": true },
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/*.pyc": true,
+          "api_services/.venv": true,
+          "api_services/.ruff_cache": true,
+          "web_app/.tanstack": true,
+          "web_app/.vite-hooks": true,
+          "web_app/node_modules": true
+        }
+      }
+    }
+  }
+}

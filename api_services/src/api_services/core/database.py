@@ -10,7 +10,7 @@ from sqlmodel import Session
 from api_services.core.settings import settings
 
 database_engine = create_engine(
-    settings.DATABASE_URL,
+    settings.sync_connection_string,
     connect_args={"sslmode": "require", "channel_binding": "require"},
     echo=settings.SQL_ECHO,
 )
