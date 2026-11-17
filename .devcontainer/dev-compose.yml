@@ -39,6 +39,9 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+      PGADMIN_CONFIG_WTF_CSRF_ENABLED: "False"
+      PGADMIN_CONFIG_WTF_CSRF_SSL_STRICT: "False"
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
     user: root
     entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
     depends_on:
