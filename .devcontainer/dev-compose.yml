@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: localdb
       POSTGRES_HOST: postgis
       POSTGRES_PORT: 5432
+      MAILPIT_HOST: mailpit
+      MAILPIT_PORT: 8025
     command: sleep infinity
     depends_on:
       - postgis
@@ -47,8 +49,24 @@ services:
       - source: pgadmin-pgpass
         target: /pgpass
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    volumes:
+      - 'mailpit-data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment: 
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACEEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
 volumes:
   pgdata:
+  mailpit-data:
 
 
 configs:

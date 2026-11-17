@@ -2,6 +2,8 @@
 # But if your feature requires API keys / tokens, sensitive configuration, feel free to add it here
 # If there is new environment variables added, it also need to be in the deployed environment, get JJ to do this :D
 
+from base64 import b64encode
+from typing import cast
 from urllib.parse import quote_plus
 
 from pydantic import Field, SecretStr, field_validator
@@ -23,9 +25,16 @@ class AppSettings(BaseSettings):
     ADMIN_ALLOWED_EMAIL_DOMAINS: list[str] = Field(
         default=["acidmyke.link", "uowmail.edu.au", "sim.edu.sg"]
     )
+
+    # EMAIL CONFIGS
+    MAILPIT_HOST: str = "localhost"
+    MAILPIT_PORT: int = 8025
     MAILJET_API_KEY: str | None
     MAILJET_API_SECRET: str | None
+    FROM_EMAIL: str = "no-reply-for-fyp@acidmyke.link"
+    FROM_NAME: str = "Final Year Project System"
 
+    # DB CONFIGS
     POSTGRES_USER: str = "postgres"
     POSTGRES_PASSWORD: SecretStr = Field()
     POSTGRES_DB: str = "localdb"
@@ -59,6 +68,15 @@ class AppSettings(BaseSettings):
     @property
     def is_mailjet_configured(self):
         return self.MAILJET_API_KEY is not None and self.MAILJET_API_SECRET is not None
+
+    @property
+    def mailjet_auth_token(self):
+        if not self.is_mailjet_configured:
+            raise ValueError("MAILJET_API_KEY or MAILJET_API_SECRET is not configured")
+        username = cast(str, self.MAILJET_API_KEY)
+        password = cast(str, self.MAILJET_API_SECRET)
+        credentials = f"{username}:{password}".encode()
+        return b64encode(credentials).decode("utf-8")
 
 
 settings = AppSettings()  # pyright: ignore[reportCallIssue]
