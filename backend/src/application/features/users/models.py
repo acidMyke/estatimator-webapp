@@ -3,10 +3,10 @@ from uuid import UUID
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
+from application.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 
 if TYPE_CHECKING:
-    from api_services.features.auth.models import (
+    from application.features.auth.models import (
         UserPasskey,
         UserPassword,
         UserSession,

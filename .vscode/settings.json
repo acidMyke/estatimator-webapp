@@ -52,7 +52,7 @@
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "standard",
   "python.terminal.useEnvFile": true,
-  "python.defaultInterpreterPath": "${workspaceFolder}/api_services/.venv/bin/python",
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
   "vitest.vitestPackagePath": "./web_app/node_modules/vitest/package.json",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
@@ -83,6 +83,6 @@
     "*.tsx": "${capture}.ts",
     "tsconfig.json": "tsconfig.*.json",
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock, pnpm-workspace.yaml",
-    "pyproject.toml": "uv.lock, .python-version",
+    "pyproject.toml": "uv.lock, .python-version"
   }
 }

@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 
-from api_services.core.database import DatabaseSession
-from api_services.core.security import build_otpauth_uri
-from api_services.features.admin.models import Admin
-from api_services.features.admin.service import create_admin, get_admin_by_email
-from api_services.features.admin_auth.deps import (
+from application.core.database import DatabaseSession
+from application.core.security import build_otpauth_uri
+from application.features.admin.models import Admin
+from application.features.admin.service import create_admin, get_admin_by_email
+from application.features.admin_auth.deps import (
     AdminCompleteRegistrationToken,
     AdminMfaToken,
     AdminRegistrationToken,
     CurrentAdmin,
     get_optional_current_admin,
 )
-from api_services.features.admin_auth.models import (
+from application.features.admin_auth.models import (
     AdminCheckAuthResponse,
     AdminCompleteRegistrationPayload,
     AdminEphemeralTokenData,
@@ -22,7 +22,7 @@ from api_services.features.admin_auth.models import (
     AdminTotpCodePayload,
     AdminTotpSetupResponse,
 )
-from api_services.features.admin_auth.service import (
+from application.features.admin_auth.service import (
     ADMIN_EPHEMERAL_COOKIE,
     authenticate_admin,
     create_admin_password,
@@ -39,7 +39,7 @@ from api_services.features.admin_auth.service import (
     verify_admin_totp,
     verify_and_enable_admin_totp,
 )
-from api_services.features.auth.models import AuthMethodType
+from application.features.auth.models import AuthMethodType
 
 router = APIRouter()
 

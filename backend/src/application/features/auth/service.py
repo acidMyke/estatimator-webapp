@@ -4,15 +4,15 @@ from uuid import UUID
 from fastapi import Response
 from sqlmodel import Session, desc, func, select
 
-from api_services.core.security import (
+from application.core.security import (
     generate_otp,
     generate_session_token,
     get_password_hash,
     jwt_encode,
     verify_password,
 )
-from api_services.core.settings import settings
-from api_services.features.auth.models import (
+from application.core.settings import settings
+from application.features.auth.models import (
     AuthMethodType,
     AuthOtpUsageType,
     EphemeralTokenData,
@@ -20,7 +20,7 @@ from api_services.features.auth.models import (
     UserPassword,
     UserSession,
 )
-from api_services.features.users.models import User, UserEmail
+from application.features.users.models import User, UserEmail
 
 
 def get_session_data_by_token(

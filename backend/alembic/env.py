@@ -1,10 +1,9 @@
 from logging.config import fileConfig
 
 from alembic import context
-
-from api_services.core.database import database_engine
-from api_services.core.settings import settings
-from api_services.models import target_metadata
+from application.core.database import database_engine
+from application.core.settings import settings
+from application.models import target_metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

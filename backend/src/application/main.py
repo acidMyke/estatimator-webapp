@@ -1,10 +1,10 @@
 from fastapi import FastAPI, status
 from sqlmodel import select
 
-from api_services.core.database import DatabaseSession
-from api_services.features.admin_auth.router import router as admin_auth_router
-from api_services.features.auth.router import router as auth_router
-from api_services.lifespan import lifespan
+from application.core.database import DatabaseSession
+from application.features.admin_auth.router import router as admin_auth_router
+from application.features.auth.router import router as auth_router
+from application.lifespan import lifespan
 
 app = FastAPI(lifespan=lifespan, title="Backend Services")
 

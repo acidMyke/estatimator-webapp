@@ -3,10 +3,10 @@
 ## Setup
 
 ```sh
-  cd api_services
+  cd backend
 ```
 
-then follow the instruction in [API Services Setup](./api_services/README.md#setup-one-time)
+then follow the instruction in [API Services Setup](./backend/README.md#setup-one-time)
 
 in another terminal
 

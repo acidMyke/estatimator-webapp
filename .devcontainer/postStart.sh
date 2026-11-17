@@ -11,16 +11,16 @@ echo "=== Starting dependency installation ==="
 
 # Python dependencies
 echo ""
-echo "=== Running uv sync in api_services ==="
+echo "=== Running uv sync in backend ==="
 
-if [ -d "api_services" ]; then
+if [ -d "backend" ]; then
   (
-    cd api_services
+    cd backend
     uv sync
   )
   echo "Python dependencies installed successfully."
 else
-  echo "WARNING: Directory 'api_services' not found. Skipping."
+  echo "WARNING: Directory 'backend' not found. Skipping."
 fi
 
 # Node.js dependencies

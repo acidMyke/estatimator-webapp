@@ -1,6 +1,6 @@
 from sqlmodel import Session, func, select
 
-from api_services.features.admin.models import Admin
+from application.features.admin.models import Admin
 
 
 def get_admin_by_email(db: Session, email: str) -> Admin | None:

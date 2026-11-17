@@ -5,9 +5,9 @@ from uuid import UUID
 from pydantic import model_validator
 from sqlmodel import Field, Relationship, SQLModel
 
-from api_services.core.models import IdMixin, TimestampMixin
-from api_services.features.admin.models import Admin
-from api_services.features.auth.models import (
+from application.core.models import IdMixin, TimestampMixin
+from application.features.admin.models import Admin
+from application.features.auth.models import (
     AuthOtpBase,
     AuthPasskeyBase,
     AuthPasswordBase,

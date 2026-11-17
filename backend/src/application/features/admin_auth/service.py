@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import Response
 from sqlmodel import Session, desc, func, select
 
-from api_services.core.security import (
+from application.core.security import (
     generate_otp,
     generate_session_token,
     generate_totp_secret,
@@ -13,17 +13,17 @@ from api_services.core.security import (
     verify_password,
     verify_totp,
 )
-from api_services.core.settings import settings
-from api_services.features.admin.models import Admin
-from api_services.features.admin.service import get_admin_by_email
-from api_services.features.admin_auth.models import (
+from application.core.settings import settings
+from application.features.admin.models import Admin
+from application.features.admin.service import get_admin_by_email
+from application.features.admin_auth.models import (
     AdminEphemeralTokenData,
     AdminOtp,
     AdminPassword,
     AdminSession,
     AdminTotpSecret,
 )
-from api_services.features.auth.models import AuthMethodType, AuthOtpUsageType
+from application.features.auth.models import AuthMethodType, AuthOtpUsageType
 
 ADMIN_SESSION_COOKIE = "admin_session_token"
 ADMIN_EPHEMERAL_COOKIE = "admin_ephemeral_token"

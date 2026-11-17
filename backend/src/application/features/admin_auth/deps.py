@@ -6,15 +6,15 @@ from jwt import PyJWTError
 from pydantic import ValidationError
 from sqlalchemy.exc import NoResultFound
 
-from api_services.core.database import DatabaseSession
-from api_services.core.security import jwt_decode
-from api_services.features.admin.models import Admin
-from api_services.features.admin_auth.models import (
+from application.core.database import DatabaseSession
+from application.core.security import jwt_decode
+from application.features.admin.models import Admin
+from application.features.admin_auth.models import (
     AdminEphemeralTokenData,
     AdminEphemeralTokenPurpose,
     AdminSession,
 )
-from api_services.features.admin_auth.service import (
+from application.features.admin_auth.service import (
     ADMIN_EPHEMERAL_COOKIE,
     ADMIN_SESSION_COOKIE,
     get_admin_session_data_by_token,

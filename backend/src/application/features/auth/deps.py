@@ -6,10 +6,10 @@ from jwt import PyJWTError
 from pydantic import ValidationError
 from sqlalchemy.exc import NoResultFound
 
-from api_services.core.database import DatabaseSession
-from api_services.core.security import jwt_decode
-from api_services.features.auth.models import EphemeralTokenData, User
-from api_services.features.auth.service import (
+from application.core.database import DatabaseSession
+from application.core.security import jwt_decode
+from application.features.auth.models import EphemeralTokenData, User
+from application.features.auth.service import (
     get_session_data_by_token,
     refresh_session,
     revoke_session,

@@ -1,5 +1,5 @@
 [project]
-name = "api_services"
+name = "application"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [project.scripts]
-api_services = "api_services:main"
+application = "application:main"
 
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
@@ -37,7 +37,7 @@ src = ["src"]
 ignore = ["EXE002"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["api_services"]
+known-first-party = ["application"]
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Depends"]

@@ -1,4 +1,4 @@
-from api_services.clients.mailjet_send.client import (
+from application.clients.mailjet_send.client import (
     AuthenticatedClient as MailjetClient,
 )
 

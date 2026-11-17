@@ -5,8 +5,8 @@ from uuid import UUID
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
-from api_services.features.users.models import CreateUser, User
+from application.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
+from application.features.users.models import CreateUser, User
 
 
 class AuthPasswordBase(IdMixin, TimestampMixin, SoftDeleteMixin):

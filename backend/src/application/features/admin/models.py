@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship
 
-from api_services.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
+from application.core.models import IdMixin, SoftDeleteMixin, TimestampMixin
 
 if TYPE_CHECKING:
-    from api_services.features.admin_auth.models import (
+    from application.features.admin_auth.models import (
         AdminPasskey,
         AdminPassword,
         AdminSession,

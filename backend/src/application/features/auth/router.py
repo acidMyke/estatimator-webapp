@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlmodel import desc, select
 
-from api_services.core.database import DatabaseSession
-from api_services.features.auth.deps import (
+from application.core.database import DatabaseSession
+from application.features.auth.deps import (
     EphemeralToken,
     get_optional_current_user,
 )
-from api_services.features.auth.models import (
+from application.features.auth.models import (
     AuthMethodType,
     AuthOtpUsageType,
     CheckAuthResponse,
@@ -16,7 +16,7 @@ from api_services.features.auth.models import (
     RegisterationVerifyOtpPayload,
     RegisterPayload,
 )
-from api_services.features.auth.service import (
+from application.features.auth.service import (
     authenticate_user,
     create_session,
     create_user_otp,
@@ -24,8 +24,8 @@ from api_services.features.auth.service import (
     issue_ephemeral_token,
     verify_user_otp,
 )
-from api_services.features.users.models import User, UserEmail
-from api_services.features.users.service import create_user
+from application.features.users.models import User, UserEmail
+from application.features.users.service import create_user
 
 router = APIRouter()
 
