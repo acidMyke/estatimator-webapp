@@ -7,8 +7,8 @@ from application.core.setttings.base import BaseAppSettings
 class EmailSettings(BaseAppSettings):
     MAILPIT_HOST: str = "localhost"
     MAILPIT_PORT: int = 8025
-    MAILJET_API_KEY: str | None
-    MAILJET_API_SECRET: str | None
+    MAILJET_API_KEY: str | None = None
+    MAILJET_API_SECRET: str | None = None
     FROM_EMAIL: str = "no-reply-for-fyp@acidmyke.link"
     FROM_NAME: str = "Final Year Project System"
 

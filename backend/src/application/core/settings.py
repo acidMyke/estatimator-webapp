@@ -14,7 +14,6 @@ class AppSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
-    DATABASE_URL: str
     DEBUG: bool = False
     SQL_ECHO: bool = True
     JWT_ISSUER: str = "estatimator"
@@ -29,8 +28,8 @@ class AppSettings(BaseSettings):
     # EMAIL CONFIGS
     MAILPIT_HOST: str = "localhost"
     MAILPIT_PORT: int = 8025
-    MAILJET_API_KEY: str | None
-    MAILJET_API_SECRET: str | None
+    MAILJET_API_KEY: str | None = None
+    MAILJET_API_SECRET: str | None = None
     FROM_EMAIL: str = "no-reply-for-fyp@acidmyke.link"
     FROM_NAME: str = "Final Year Project System"
 
