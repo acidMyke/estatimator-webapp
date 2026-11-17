@@ -5,6 +5,21 @@
   "workspaceFolder": "/workspace",
   "postCreateCommand": "zsh .devcontainer/postCreate.sh",
   "postStartCommand": "zsh .devcontainer/postStart.sh",
+  "forwardPorts": [5050],
+  "portsAttributes": {
+    "5050": {
+      "label": "pgAdmin",
+      "onAutoForward": "openBrowserOnce"
+    },
+    "5000": {
+      "label": "api_services",
+      "onAutoForward": "openBrowserOnce"
+    },
+    "5017": {
+      "label": "web_app",
+      "onAutoForward": "openBrowserOnce"
+    }
+  },
   "features": {
     "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {
       "jqVersion": "latest",
