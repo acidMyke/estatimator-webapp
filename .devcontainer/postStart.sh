@@ -16,7 +16,7 @@ echo "=== Running uv sync in backend ==="
 if [ -d "backend" ]; then
   (
     cd backend
-    uv sync
+    uv sync --all-extras
   )
   echo "Python dependencies installed successfully."
 else
