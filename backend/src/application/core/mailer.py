@@ -1,22 +1,22 @@
 from dataclasses import dataclass
 from typing import cast
 
-from application.clients.mailjet_send.api.send_emails import post_send_v31
-from application.clients.mailjet_send.client import (
+from application.core.settings.email import email_settings as settings
+from mailjet_send_client.api.send_emails import post_send_v31
+from mailjet_send_client.client import (
     AuthenticatedClient as MailjetClient,
 )
-from application.clients.mailjet_send.models.post_send_v31_body import PostSendV31Body
-from application.clients.mailjet_send.models.post_send_v31_body_messages_item import (
+from mailjet_send_client.models.post_send_v31_body import PostSendV31Body
+from mailjet_send_client.models.post_send_v31_body_messages_item import (
     PostSendV31BodyMessagesItem,
 )
-from application.clients.mailjet_send.models.post_send_v31_body_messages_item_from import (
+from mailjet_send_client.models.post_send_v31_body_messages_item_from import (
     PostSendV31BodyMessagesItemFrom,
 )
-from application.clients.mailjet_send.models.post_send_v31_body_messages_item_to_item import (
+from mailjet_send_client.models.post_send_v31_body_messages_item_to_item import (
     PostSendV31BodyMessagesItemToItem,
 )
-from application.clients.mailjet_send.types import UNSET
-from application.core.settings.email import email_settings as settings
+from mailjet_send_client.types import UNSET
 
 mailjet_client = cast(
     MailjetClient,
