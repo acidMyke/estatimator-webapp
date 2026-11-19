@@ -2,7 +2,7 @@ services:
   dev-container:
     image: ghcr.io/astral-sh/uv:python3.15-trixie
     volumes:
-      - ../:/workspace:cached
+      - ../:/hdbeeprice:cached
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
@@ -57,7 +57,7 @@ services:
     container_name: mailpit
     restart: unless-stopped
     volumes:
-      - 'mailpit-data:/data
+      - mailpit-data:/data
     ports:
       - 8025:8025
       - 1025:1025
