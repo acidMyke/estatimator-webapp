@@ -79,9 +79,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-ipykernel = [
-    { name = "jupyterlab" },
-]
 ml = [
     { name = "ipykernel" },
     { name = "joblib" },
@@ -117,7 +114,6 @@ requires-dist = [
     { name = "httpx2", extras = ["cli", "http2"], specifier = ">=2.16.0" },
     { name = "ipykernel", marker = "extra == 'ml'", specifier = ">=7.4.0" },
     { name = "joblib", marker = "extra == 'ml'", specifier = ">=1.6.0" },
-    { name = "jupyterlab", marker = "extra == 'ipykernel'", specifier = ">=4.6.6" },
     { name = "jupyterlab", marker = "extra == 'ml'", specifier = ">=4.6.6" },
     { name = "lightgbm", marker = "extra == 'ml'", specifier = ">=4.7.0" },
     { name = "numpy", marker = "extra == 'ml'", specifier = ">=2.5.5" },
@@ -134,7 +130,7 @@ requires-dist = [
     { name = "uvicorn", extras = ["standard"], marker = "extra == 'web'", specifier = ">=0.54.0" },
     { name = "xgboost", marker = "extra == 'ml'", specifier = ">=3.4.1" },
 ]
-provides-extras = ["web", "ml", "ipykernel"]
+provides-extras = ["web", "ml"]
 
 [package.metadata.requires-dev]
 dev = [
