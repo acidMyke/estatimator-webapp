@@ -6,13 +6,13 @@
     "module": "ESNext",
     "paths": {
       "#/*": ["./src/*"],
-      "@/*": ["./src/*"],
       "#api/*": ["./src/api/*"],
-      "@/components": ["./src/components"],
-      "@/utils": ["./src/lib/utils"],
-      "@/ui": ["./src/components/ui"],
-      "@/lib": ["./src/lib"],
-      "@/hooks": ["./src/hooks"]
+      "#components/*": ["./src/components/*"],
+      "#utils": ["./src/lib/utils"],
+      "#ui/*": ["./src/components/ui/*"],
+      "#form/*": ["./src/components/form/*"],
+      "#lib/*": ["./src/lib/*"],
+      "#hooks/*": ["./src/hooks/*"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
