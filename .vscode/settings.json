@@ -54,6 +54,7 @@
   "python.terminal.useEnvFile": true,
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
   "vitest.vitestPackagePath": "./web_app/node_modules/vitest/package.json",
+  "js/ts.preferences.importModuleSpecifier": "shortest",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "files.watcherExclude": {
