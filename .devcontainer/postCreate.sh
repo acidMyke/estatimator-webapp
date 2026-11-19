@@ -117,3 +117,25 @@ echo ""
 echo "=== 5. Some tools ==="
 
 uv tool install --with ipykernel jupyterlab
+
+echo ""
+echo "=== 6. Environment Variable ==="
+
+
+ENV_FILE="backend/.env"
+EXAMPLE_FILE="backend/.env.example"
+
+if ! grep -q '^JWT_SECRET_KEY=.' "$ENV_FILE"; then
+    JWT_SECRET=$(openssl rand -hex 32)
+
+    if grep -q '^JWT_SECRET_KEY=' "$ENV_FILE"; then
+        sed -i.bak "s|^JWT_SECRET_KEY=.*|JWT_SECRET_KEY=$JWT_SECRET|" "$ENV_FILE"
+        rm -f "$ENV_FILE.bak"
+    else
+        echo "JWT_SECRET_KEY=$JWT_SECRET" >> "$ENV_FILE"
+    fi
+
+    echo "JWT_SECRET_KEY generated."
+else
+    echo "JWT_SECRET_KEY already configured. Skipping."
+fi
