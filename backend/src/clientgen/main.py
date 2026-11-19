@@ -7,13 +7,16 @@ from openapi_python_client.parser.errors import ErrorLevel
 MAILJET_SPEC_URL = (
     "https://artifacts.apis.io/mailjet/openapi/mailjet-send-api-openapi.yml"
 )
+FLYIO_SPEC_URL = "https://docs.fly.io/api/machines/openapi.json"
 
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / "src"
 
 OPENAPI_DIR = ROOT / "openapi" / "external"
+
 MAILJET_CLIENT_DIR = SRC_DIR / "mailjet_send_client"
+FLYIO_CLIENT_DIR = SRC_DIR / "flyio_machines_client"
 
 
 def generate_client(
@@ -56,6 +59,12 @@ def main():
         OPENAPI_DIR / "filtered-mailjet.json",
         MAILJET_CLIENT_DIR,
         "mailjet-send-client",
+    )
+
+    generate_client(
+        OPENAPI_DIR / "flyio-machines.json",
+        FLYIO_CLIENT_DIR,
+        "flyio-machines-client",
     )
 
 
