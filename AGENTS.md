@@ -9,7 +9,7 @@ Guidance for AI coding agents working in this repository. Read this before makin
 | Layer                 | Path        | Stack                                                                                                                                                    |
 | --------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Backend (Python)      | `./backend` | Python ≥3.14, FastAPI, SQLModel + SQLAlchemy 2.0 (sync), Alembic, PostgreSQL (`psycopg`), managed with `uv`, formatted/linted with `ruff`                |
-| Frontend (TypeScript) | `./web_app` | React 19, Vite via `vite-plus` (`vp`), TanStack Router (file-based) + TanStack Query, Tailwind CSS v4, `orval` client generation, package manager `pnpm` |
+| Frontend (TypeScript) | `./web_app` | React 19, Vite via pnpm, TanStack Router (file-based) + TanStack Query, Tailwind CSS v4, `orval` client generation, package manager `pnpm` |
 
 The backend owns the API contract. On startup it writes an OpenAPI spec (`backend/openapi/spec.json`), and the frontend generates its typed API client from that spec via `orval`. **Treat the backend OpenAPI spec as the single source of truth for API types.**
 
@@ -45,7 +45,7 @@ estatimator-webapp/
 │           └── <feature>/{models,service,router,deps}.py
 └── web_app/                         # TypeScript frontend
     ├── package.json                 # scripts: dev, generate-routes, build, preview
-    ├── vite.config.ts               # vite-plus + fmt/lint config + plugins
+    ├── vite.config.ts               # vite + fmt/lint config + plugins
     ├── orval.config.ts              # generates src/api from ../backend/openapi/spec.json
     ├── tsconfig.json                # strict TS, paths #/* and @/*
     ├── tsr.config.json              # TanStack Router target: react
@@ -122,28 +122,28 @@ The following files carry explicit "discuss with the maintainer (JJ) before chan
 
 ### Setup & run
 
-Run all commands from `web_app/`. The toolchain is **`vp`** (vite-plus), not raw `vite`.
+Run all commands from `web_app/`. The toolchain is **`pnpm`**, not raw `vite`.
 
 ```sh
-vp install               # install deps (pnpm under the hood)
-vp dev                   # dev server (router plugin regenerates routeTree.gen.ts on the fly)
-vp build                 # production build
-vp preview               # preview build
-vp run generate-routes   # package.json script → `tsr generate` (manual routeTree regen)
-vp exec orval            # regenerate src/api/* from the backend OpenAPI spec (no npm script exists)
+pnpm install               # install deps (pnpm under the hood)
+pnpm dev                   # dev server (router plugin regenerates routeTree.gen.ts on the fly)
+pnpm build                 # production build
+pnpm preview               # preview build
+pnpm run generate-routes   # package.json script → `tsr generate` (manual routeTree regen)
+pnpm exec orval            # regenerate src/api/* from the backend OpenAPI spec (no npm script exists)
 ```
 
-> If `tsr` / `orval` report "not found in node_modules/.bin", the dependency install is incomplete — re-run `vp install`. `vp dlx <package>` can execute a package binary without installing it as a dependency.
+> If `tsr` / `orval` report "not found in node_modules/.bin", the dependency install is incomplete — re-run `pnpm install`. `pnpm dlx <package>` can execute a package binary without installing it as a dependency.
 
 ### Format & lint
 
 Formatting and linting are configured inside `vite.config.ts` (`fmt` and `lint` blocks) and executed by `oxfmt`/`oxlint` (the OXC toolchain), not Prettier/ESLint:
 
 ```sh
-vp fmt           # format
-vp fmt --check   # verify formatting
-vp lint          # lint
-vp check         # combined format + lint + type check
+pnpm fmt           # format
+pnpm fmt --check   # verify formatting
+pnpm lint          # lint
+pnpm check         # combined format + lint + type check
 ```
 
 Key formatting rules (from `vite.config.ts`): `printWidth: 120`, single quotes (including JSX), trailing commas, sorted imports.
@@ -155,7 +155,7 @@ Key formatting rules (from `vite.config.ts`): `printWidth: 120`, single quotes (
 - **Data fetching**: TanStack Query. Follow the `router-query-integration` skill — define `queryOptions` helpers, prefetch in route loaders with `queryClient.ensureQueryData(...)`, then consume with `useQuery`/`useSuspenseQuery`.
 - **TypeScript is strict**: `strict`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`, `verbatimModuleSyntax` are enabled. Type-only imports must use `import type`.
 - **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite`); global styles in `src/styles.css`.
-- **Package manager**: `pnpm` (see `pnpm-lock.yaml` / `pnpm-workspace.yaml`), invoked through `vp`.
+- **Package manager**: `pnpm` (see `pnpm-lock.yaml` / `pnpm-workspace.yaml`), invoked through `pnpm`.
 
 ### Generated code — do not edit by hand
 
@@ -190,7 +190,7 @@ Project-specific skills live in `.agents/skills/`. Invoke them when relevant ins
 - Match existing naming: Python `snake_case` (SQLModel fields, functions), TypeScript `camelCase` for values / `PascalCase` for components and types.
 - Run the relevant formatter/linter before finishing:
   - Backend: `uv run ruff check . && uv run ruff format .`
-  - Frontend: `vp check`
+  - Frontend: `pnpm check`
 - Regenerate and commit derived artifacts when inputs change: Alembic migrations, `openapi/spec.json` (+ hash), `routeTree.gen.ts`, and `src/api/*`.
 - Do not commit secrets. `.env` holds real credentials; `.env.example` documents the expected variables.
 - Prefer ASCII/UTF-8 text; keep files free of `__pycache__`/build output (already gitignored).

@@ -6,10 +6,17 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite",
     "generate-routes": "tsr generate",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "check": "oxfmt --check && oxlint && tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

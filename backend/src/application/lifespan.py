@@ -45,7 +45,7 @@ def write_openapi_spec_and_hash(app: FastAPI) -> bool:
 def generate_orval_client():
     try:
         subprocess.run(
-            ["vp", "exec", "orval"],
+            ["pnpm", "orval"],
             check=True,
             cwd=FRONTEND_DIR,
             text=True,
