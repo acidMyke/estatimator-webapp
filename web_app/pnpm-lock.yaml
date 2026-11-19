@@ -205,12 +205,18 @@ importers:
       cn:
         specifier: ^0.5.0
         version: 0.5.2
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react:
         specifier: ^19.2.0
         version: 19.3.1
       react-dom:
         specifier: ^19.2.0
         version: 19.3.1(react@19.3.1)
+      sonner:
+        specifier: ^2.0.8
+        version: 2.0.8(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       tailwindcss:
         specifier: ^4.1.18
         version: 4.3.5
@@ -2503,6 +2509,12 @@ packages:
     engines: {node: ^18 || >=20}
     hasBin: true
 
+  next-themes@0.4.6:
+    resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+
   node-releases@2.0.65:
     resolution: {integrity: sha512-PfvofsGQ+MiOQIPkX9fU8ELUWmy5zL74CdQaph/ismKszfFkfwXaw0cGiwbwym2hT9k5+mdyl8O5WQ1MD8EHmA==}
     engines: {node: '>=18'}
@@ -2808,6 +2820,16 @@ packages:
     engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
     peerDependencies:
       solid-js: ^1.6.12
+
+  sonner@2.0.8:
+    resolution: {integrity: sha512-UM/ByIoFra8yzV75n1o0Puu0bw5U/9UNnDacrJNspekBewIfsQ3D6ez1nvlWpt7aTsO6rujQtifBpycwIivqlg==}
+    peerDependencies:
+      '@types/react': ^18.0.0 || ^19.0.0
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
@@ -5062,6 +5084,11 @@ snapshots:
 
   nanoid@5.1.16: {}
 
+  next-themes@0.4.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
+    dependencies:
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+
   node-releases@2.0.65: {}
 
   npm-run-path@4.0.1:
@@ -5456,6 +5483,13 @@ snapshots:
       '@solid-primitives/refs': 1.1.4(solid-js@1.9.19)
       '@solid-primitives/transition-group': 1.1.2(solid-js@1.9.19)
       solid-js: 1.9.19
+
+  sonner@2.0.8(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
+    dependencies:
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   source-map-js@1.2.2: {}
 
