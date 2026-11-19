@@ -268,14 +268,14 @@
     }
   },
   "info": {
-    "title": "Backend Services",
+    "title": "HDBeePrice Service",
     "version": "0.1.0"
   },
   "openapi": "3.1.0",
   "paths": {
-    "/admin/auth/login": {
+    "/api/admin/auth/login": {
       "post": {
-        "operationId": "login_admin_admin_auth_login_post",
+        "operationId": "login_admin_api_admin_auth_login_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -314,9 +314,9 @@
         ]
       }
     },
-    "/admin/auth/login/totp": {
+    "/api/admin/auth/login/totp": {
       "post": {
-        "operationId": "login_admin_totp_admin_auth_login_totp_post",
+        "operationId": "login_admin_totp_api_admin_auth_login_totp_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -355,9 +355,9 @@
         ]
       }
     },
-    "/admin/auth/logout": {
+    "/api/admin/auth/logout": {
       "post": {
-        "operationId": "logout_admin_admin_auth_logout_post",
+        "operationId": "logout_admin_api_admin_auth_logout_post",
         "responses": {
           "204": {
             "description": "Successful Response"
@@ -369,9 +369,9 @@
         ]
       }
     },
-    "/admin/auth/me": {
+    "/api/admin/auth/me": {
       "get": {
-        "operationId": "check_admin_auth_admin_auth_me_get",
+        "operationId": "check_admin_auth_api_admin_auth_me_get",
         "responses": {
           "200": {
             "content": {
@@ -390,9 +390,9 @@
         ]
       }
     },
-    "/admin/auth/register": {
+    "/api/admin/auth/register": {
       "post": {
-        "operationId": "register_admin_admin_auth_register_post",
+        "operationId": "register_admin_api_admin_auth_register_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -424,9 +424,9 @@
         ]
       }
     },
-    "/admin/auth/register/complete": {
+    "/api/admin/auth/register/complete": {
       "post": {
-        "operationId": "register_complete_admin_admin_auth_register_complete_post",
+        "operationId": "register_complete_admin_api_admin_auth_register_complete_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -458,9 +458,9 @@
         ]
       }
     },
-    "/admin/auth/register/verify-otp": {
+    "/api/admin/auth/register/verify-otp": {
       "post": {
-        "operationId": "register_verify_otp_admin_admin_auth_register_verify_otp_post",
+        "operationId": "register_verify_otp_admin_api_admin_auth_register_verify_otp_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -492,9 +492,9 @@
         ]
       }
     },
-    "/admin/auth/totp/setup": {
+    "/api/admin/auth/totp/setup": {
       "post": {
-        "operationId": "setup_admin_totp_admin_auth_totp_setup_post",
+        "operationId": "setup_admin_totp_api_admin_auth_totp_setup_post",
         "responses": {
           "200": {
             "content": {
@@ -513,9 +513,9 @@
         ]
       }
     },
-    "/admin/auth/totp/verify": {
+    "/api/admin/auth/totp/verify": {
       "post": {
-        "operationId": "verify_admin_totp_setup_admin_auth_totp_verify_post",
+        "operationId": "verify_admin_totp_setup_api_admin_auth_totp_verify_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -547,9 +547,9 @@
         ]
       }
     },
-    "/auth/login": {
+    "/api/auth/login": {
       "post": {
-        "operationId": "login_user_auth_login_post",
+        "operationId": "login_user_api_auth_login_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -586,9 +586,9 @@
         ]
       }
     },
-    "/auth/me": {
+    "/api/auth/me": {
       "get": {
-        "operationId": "check_auth_auth_me_get",
+        "operationId": "check_auth_api_auth_me_get",
         "responses": {
           "200": {
             "content": {
@@ -607,9 +607,9 @@
         ]
       }
     },
-    "/auth/register": {
+    "/api/auth/register": {
       "post": {
-        "operationId": "register_user_auth_register_post",
+        "operationId": "register_user_api_auth_register_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -641,9 +641,9 @@
         ]
       }
     },
-    "/auth/register/complete": {
+    "/api/auth/register/complete": {
       "post": {
-        "operationId": "register_complete_user_auth_register_complete_post",
+        "operationId": "register_complete_user_api_auth_register_complete_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -675,9 +675,9 @@
         ]
       }
     },
-    "/auth/register/verify-otp": {
+    "/api/auth/register/verify-otp": {
       "post": {
-        "operationId": "register_verify_otp_user_auth_register_verify_otp_post",
+        "operationId": "register_verify_otp_user_api_auth_register_verify_otp_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -706,25 +706,6 @@
         "summary": "Register Verify Otp User",
         "tags": [
           "Auth"
-        ]
-      }
-    },
-    "/healthcheck": {
-      "get": {
-        "operationId": "health_check_healthcheck_get",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          }
-        },
-        "summary": "Health Check",
-        "tags": [
-          "System"
         ]
       }
     }

@@ -1,19 +1,22 @@
-from fastapi import FastAPI, status
-from sqlmodel import select
+from fastapi import APIRouter, FastAPI
 
-from application.core.database import DatabaseSession
+from application.core.spa import register_spa_routes
 from application.features.admin_auth.router import router as admin_auth_router
 from application.features.auth.router import router as auth_router
+from application.features.health.router import router as health_router
 from application.lifespan import lifespan
 
-app = FastAPI(lifespan=lifespan, title="Backend Services")
+app = FastAPI(lifespan=lifespan, title="HDBeePrice Service")
 
+api_router = APIRouter(prefix="/api")
+api_router.include_router(
+    health_router,
+    prefix="/health",
+    tags=["Health"],
+    include_in_schema=False,
+)
+api_router.include_router(auth_router, prefix="/auth", tags=["Auth"])
+api_router.include_router(admin_auth_router, prefix="/admin/auth", tags=["Admin Auth"])
 
-app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(admin_auth_router, prefix="/admin/auth", tags=["Admin Auth"])
-
-
-@app.get("/healthcheck", status_code=status.HTTP_200_OK, tags=["System"])
-async def health_check(db: DatabaseSession):
-    db.exec(select(1)).all()
-    return {"status": "healthy"}
+app.include_router(api_router)
+register_spa_routes(app)

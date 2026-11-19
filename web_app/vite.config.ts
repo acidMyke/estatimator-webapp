@@ -17,6 +17,10 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: '../backend/web_app_dist',
+    emptyOutDir: true,
+  },
   resolve: { tsconfigPaths: true },
   plugins: [devtools(), tailwindcss(), tanstackRouter({ target: 'react', autoCodeSplitting: true }), viteReact()],
 });

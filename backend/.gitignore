@@ -23,3 +23,6 @@ dist/
 .vscode/
 .idea/
 *.sublime-workspace
+
+# frontend build artifect
+web_app_dist

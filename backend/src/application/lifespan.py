@@ -2,15 +2,15 @@ import subprocess
 from contextlib import asynccontextmanager
 from hashlib import sha256
 from json import dumps
-from pathlib import Path
 
 from fastapi import FastAPI
 
-BACKEND_ROOT, REPO_ROOT = Path(__file__).resolve().parents[2:4]
-OPENAPI_SPEC_PATH = BACKEND_ROOT / "openapi" / "spec.json"
-OPENAPI_HASH_PATH = OPENAPI_SPEC_PATH.with_suffix(".json.sha256")
-FRONTEND_DIR = REPO_ROOT / "web_app"
-FRONTEND_CLIENT_PATH = FRONTEND_DIR / "src" / "api"
+from application.core.pathings import (
+    FRONTEND_CLIENT_PATH,
+    FRONTEND_DIR,
+    OPENAPI_HASH_PATH,
+    OPENAPI_SPEC_PATH,
+)
 
 
 @asynccontextmanager
