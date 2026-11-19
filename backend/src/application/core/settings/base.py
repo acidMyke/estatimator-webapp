@@ -10,6 +10,7 @@ class BaseAppSettings(BaseSettings):
 
 
 class CommonSettings(BaseAppSettings):
+    IS_PROD: bool = False
     DEBUG: bool = True
 
 

@@ -13,7 +13,7 @@ from application.core.security import (
     verify_password,
     verify_totp,
 )
-from application.core.settings import settings
+from application.core.settings.security import security_settings
 from application.features.admin.models import Admin
 from application.features.admin.service import get_admin_by_email
 from application.features.admin_auth.models import (
@@ -51,7 +51,7 @@ def is_admin_email_domain_allowed(email: str) -> bool:
 
     return any(
         domain == allowed_domain or domain.endswith(f".{allowed_domain}")
-        for allowed_domain in settings.ADMIN_ALLOWED_EMAIL_DOMAINS
+        for allowed_domain in security_settings.ADMIN_ALLOWED_EMAIL_DOMAINS
     )
 
 
@@ -172,7 +172,7 @@ def create_admin_session(
 
     session_token = generate_session_token()
     expires_at = datetime.now(UTC) + timedelta(
-        minutes=settings.ADMIN_SESSION_TOKEN_EXPIRE_MINUTES
+        minutes=security_settings.ADMIN_SESSION_TOKEN_EXPIRE_MINUTES
     )
     session = AdminSession(
         admin_id=admin_id,
@@ -193,7 +193,7 @@ def create_admin_session(
             samesite="lax",
             max_age=int(
                 timedelta(
-                    minutes=settings.ADMIN_SESSION_TOKEN_EXPIRE_MINUTES
+                    minutes=security_settings.ADMIN_SESSION_TOKEN_EXPIRE_MINUTES
                 ).total_seconds()
             ),
         )

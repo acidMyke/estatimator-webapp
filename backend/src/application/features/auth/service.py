@@ -11,7 +11,7 @@ from application.core.security import (
     jwt_encode,
     verify_password,
 )
-from application.core.settings import settings
+from application.core.settings.security import security_settings
 from application.features.auth.models import (
     AuthMethodType,
     AuthOtpUsageType,
@@ -69,7 +69,7 @@ def create_session(
 ):
     session_token = generate_session_token()
     expires_at = datetime.now(UTC) + timedelta(
-        days=settings.USER_SESSION_TOKEN_EXPIRE_DAYS
+        days=security_settings.USER_SESSION_TOKEN_EXPIRE_DAYS
     )
     session = UserSession(
         user_id=user_id,
@@ -91,7 +91,9 @@ def create_session(
             secure=True,
             samesite="lax",
             max_age=int(
-                timedelta(days=settings.USER_SESSION_TOKEN_EXPIRE_DAYS).total_seconds()
+                timedelta(
+                    days=security_settings.USER_SESSION_TOKEN_EXPIRE_DAYS
+                ).total_seconds()
             ),
         )
 

@@ -2,7 +2,7 @@ from urllib.parse import quote_plus
 
 from pydantic import Field, SecretStr
 
-from application.core.setttings.base import BaseAppSettings
+from application.core.settings.base import BaseAppSettings
 
 
 class DatabaseSettings(BaseAppSettings):

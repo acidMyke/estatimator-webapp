@@ -1,4 +1,4 @@
-from application.core.setttings.base import BaseAppSettings
+from application.core.settings.base import BaseAppSettings
 
 
 class DatasourceSettings(BaseAppSettings):

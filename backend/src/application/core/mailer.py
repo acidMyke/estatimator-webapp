@@ -16,7 +16,7 @@ from application.clients.mailjet_send.models.post_send_v31_body_messages_item_to
     PostSendV31BodyMessagesItemToItem,
 )
 from application.clients.mailjet_send.types import UNSET
-from application.core.settings import settings
+from application.core.settings.email import email_settings as settings
 
 mailjet_client = cast(
     MailjetClient,

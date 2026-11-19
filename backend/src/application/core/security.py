@@ -13,7 +13,7 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from jwt import decode, encode
 
-from application.core.settings import settings
+from application.core.settings.security import security_settings as settings
 
 ph = PasswordHasher()
 
@@ -42,7 +42,7 @@ def jwt_encode(payload: dict[str, Any], *, max_age: timedelta):
     return encode(
         payload,
         settings.JWT_SECRET_KEY,
-        algorithm=settings.ALGORITHM,
+        algorithm=settings.JWT_ALGORITHM,
     )
 
 
@@ -51,7 +51,7 @@ def jwt_decode(token: str):
         token,
         settings.JWT_SECRET_KEY,
         issuer=[settings.JWT_ISSUER],
-        algorithms=[settings.ALGORITHM],
+        algorithms=[settings.JWT_ALGORITHM],
     )
 
 

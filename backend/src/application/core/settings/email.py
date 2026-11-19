@@ -1,7 +1,7 @@
 from base64 import b64encode
 from typing import cast
 
-from application.core.setttings.base import BaseAppSettings
+from application.core.settings.base import BaseAppSettings
 
 
 class EmailSettings(BaseAppSettings):

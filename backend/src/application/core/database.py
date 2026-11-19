@@ -7,7 +7,7 @@ from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlmodel import Session
 
-from application.core.settings import settings
+from application.core.settings.database import database_settings as settings
 
 database_engine = create_engine(
     settings.sync_connection_string,

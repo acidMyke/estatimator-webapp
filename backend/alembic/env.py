@@ -1,8 +1,9 @@
 from logging.config import fileConfig
 
 from alembic import context
+
 from application.core.database import database_engine
-from application.core.settings import settings
+from application.core.settings.database import database_settings as settings
 from application.models import target_metadata
 
 # this is the Alembic Config object, which provides
