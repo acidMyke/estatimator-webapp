@@ -5,5 +5,6 @@
   "jsxSingleQuote": true,
   "trailingComma": "all",
   "quoteProps": "consistent",
-  "sortImports": true
+  "sortImports": true,
+  "ignorePatterns": ["dist/**", "*.gen.ts"]
 }
