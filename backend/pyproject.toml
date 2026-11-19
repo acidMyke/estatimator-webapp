@@ -21,6 +21,7 @@ dependencies = [
 
 [project.scripts]
 application = "application.main:main"
+clientgen = "clientgen.main:main"
 
 [project.optional-dependencies]
 web = [
