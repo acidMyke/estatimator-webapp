@@ -8,10 +8,10 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-        "psycopg[binary]>=3.3.6",
-        "sqlalchemy[asyncio]>=2.0.54",
+    "psycopg[binary]>=3.3.6",
+    "sqlalchemy[asyncio]>=2.0.54",
     "sqlmodel>=0.0.48",
-"pydantic-settings>=2.16.0",
+    "pydantic-settings>=2.16.0",
     "httpx2[http2]>=2.16.0",
     "joblib>=1.6.0",
     "numpy>=2.5.5",
@@ -22,8 +22,8 @@ dependencies = [
 ]
 
 [project.scripts]
-application = "application.main:main"
-clientgen = "clientgen.main:main"
+dev = "application.scripts.dev:main"
+clientgen = "application.scripts.clientgen:main"
 
 [dependency-groups]
 
@@ -31,14 +31,14 @@ webonly = [
     "alembic>=1.20.0",
     "fastapi[standard]>=0.143.2",
     "uvicorn[standard]>=0.54.0",
-"python-multipart>=0.0.32",
+    "python-multipart>=0.0.32",
     "pyjwt>=2.15.1",
     "argon2-cffi>=25.1.0",
     "shap>=0.54.1",
-    ]
+]
 
 dev = [
-"httpx2[cli]>=2.16.0",
+    "httpx2[cli]>=2.16.0",
     "ipykernel>=7.4.0",
     "jupyterlab>=4.6.6",
     "openapi-python-client>=0.30.0",
@@ -53,7 +53,13 @@ requires = ["uv_build>=0.13.1,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = ["application", "ml", "clientgen", "mailjet_send_client"]
+module-name = [
+    "application",
+    "ml",
+    "mailjet_send_client",
+    "flyio_machines_client",
+]
+
 
 [tool.ruff]
 src = ["src"]
@@ -62,7 +68,11 @@ src = ["src"]
 ignore = ["EXE002"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["application", "mailjet_send_client"]
+known-first-party = [
+    "application",
+    "mailjet_send_client",
+    "flyio_machines_client",
+]
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Depends"]
