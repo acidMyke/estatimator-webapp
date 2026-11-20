@@ -8,7 +8,6 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "argon2-cffi>=25.1.0",
     "greenlet>=3.5.6",
     "httpx2[cli,http2]>=2.16.0",
     "psycopg[binary]>=3.3.6",
@@ -21,6 +20,7 @@ dependencies = [
 
 [project.scripts]
 application = "application.main:main"
+clientgen = "clientgen.main:main"
 
 [project.optional-dependencies]
 web = [
@@ -28,6 +28,7 @@ web = [
     "fastapi[standard]>=0.143.2",
     "uvicorn[standard]>=0.54.0",
     "pyjwt>=2.15.1",
+    "argon2-cffi>=25.1.0",
 ]
 ml = [
     "ipykernel>=7.4.0",
@@ -54,7 +55,7 @@ requires = ["uv_build>=0.13.1,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = ["application", "ml"]
+module-name = ["application", "ml", "clientgen", "mailjet_send_client"]
 
 [tool.ruff]
 src = ["src"]
@@ -63,7 +64,7 @@ src = ["src"]
 ignore = ["EXE002"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["application"]
+known-first-party = ["application", "mailjet_send_client"]
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Depends"]

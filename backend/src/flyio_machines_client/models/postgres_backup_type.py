@@ -1,0 +1,10 @@
+from enum import StrEnum
+
+
+class PostgresBackupType(StrEnum):
+    DIFF = "diff"
+    FULL = "full"
+    INCR = "incr"
+
+    def __str__(self) -> str:
+        return str(self.value)
