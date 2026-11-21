@@ -19,9 +19,12 @@ entryPoints:
 certificatesResolvers:
   acidmyke:
     acme:
-      email: owner@acidmyke.link
       storage: /letsencrypt/acme.json
-      tlsChallenge: {}
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - '1.1.1.1:53'
+          - '8.8.8.8:53'
 
 api:
   dashboard: true
