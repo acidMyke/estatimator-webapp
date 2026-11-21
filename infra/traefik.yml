@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
+
+entryPoints:
+  web:
+    address: ':80'
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+
+  websecure:
+    address: ':443'
+    http:
+      tls:
+        certResolver: acidmyke
+
+certificatesResolvers:
+  acidmyke:
+    acme:
+      email: owner@acidmyke.link
+      storage: /letsencrypt/acme.json
+      tlsChallenge: {}
+
+api:
+  dashboard: true
+  insecure: false
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: proxy
+  file:
+    directory: /dynamic
+    watch: true
+
+accessLog: {}
+log:
+  level: INFO

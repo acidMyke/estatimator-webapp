@@ -8,6 +8,7 @@
     "vitest.explorer",
     "njpwerner.autodocstring",
     "mhutchie.git-graph",
-    "mechatroner.rainbow-csv"
+    "mechatroner.rainbow-csv",
+    "redhat.vscode-yaml"
   ]
 }
