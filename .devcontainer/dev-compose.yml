@@ -2,13 +2,16 @@ services:
   dev-container:
     image: ghcr.io/astral-sh/uv:python3.15-trixie
     volumes:
-      - ../:/workspace:cached
+      - ../:/hdbeeprice:cached
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
       POSTGRES_DB: localdb
       POSTGRES_HOST: postgis
       POSTGRES_PORT: 5432
+      MAILPIT_HOST: mailpit
+      MAILPIT_PORT: 8025
+      UV_LINK_MODE: copy
     command: sleep infinity
     depends_on:
       - postgis
@@ -25,18 +28,21 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     shm_size: 256mb
-  
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin-web
     restart: unless-stopped
     ports:
-      - "5050:80"
+      - '5050:80'
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD:-lAOE278hpZQ8}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+      PGADMIN_CONFIG_WTF_CSRF_ENABLED: 'False'
+      PGADMIN_CONFIG_WTF_CSRF_SSL_STRICT: 'False'
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: 'False'
     user: root
     entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
     depends_on:
@@ -47,9 +53,24 @@ services:
       - source: pgadmin-pgpass
         target: /pgpass
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    volumes:
+      - mailpit-data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACEEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
 volumes:
   pgdata:
-
+  mailpit-data:
 
 configs:
   pgadmin-servers:
@@ -70,4 +91,4 @@ configs:
       }
 
   pgadmin-pgpass:
-    content: "postgis:5432:*:postgres:${POSTGRES_PASSWORD:-lAOE278hpZQ8}"
+    content: 'postgis:5432:*:postgres:${POSTGRES_PASSWORD:-lAOE278hpZQ8}'

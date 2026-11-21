@@ -1,12 +1,8 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "categories": {
-    "correctness": "warn"
-  },
+  "categories": { "correctness": "warn" },
   "rules": {
-    "no-unused-vars": "error",
-    "vite-plus/prefer-vite-plus-imports": "error"
+    "no-unused-vars": "error"
   },
-  "jsPlugins": [{ "name": "vite-plus", "specifier": "vite-plus/oxlint-plugin" }],
   "options": { "typeAware": true, "typeCheck": true }
 }

@@ -3,7 +3,7 @@ import { defineConfig, pascal } from 'orval';
 export default defineConfig({
   services: {
     input: {
-      target: '../api_services/openapi/spec.json',
+      target: '../backend/openapi/spec.json',
       filters: {
         mode: 'exclude',
         tags: ['System'],
