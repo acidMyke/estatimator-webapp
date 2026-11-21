@@ -1,5 +1,5 @@
 {
-  "name": "Estatimator environment",
+  "name": "HDBee Price DEV environment",
   "dockerComposeFile": "dev-compose.yml",
   "service": "dev-container",
   "workspaceFolder": "/hdbeeprice",
