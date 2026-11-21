@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+*.swp
+
+.env
+.env.*
+!.env.example
+
+data/
+infra/letsencrypt/acme.json
+infra/certs/*
+!infra/certs/.gitkeep
+!infra/dynamic/.gitkeep
+!infra/letsencrypt/.gitkeep
