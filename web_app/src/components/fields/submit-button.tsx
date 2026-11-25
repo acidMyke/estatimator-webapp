@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 
-import { Button } from '#components/ui/button';
-import { useFormContext } from '#hooks/form-context';
+import { Button } from '@/components/ui/button';
+import { useFormContext } from '@/hooks/form-context';
 
 export type SubmitButtonProps = ComponentProps<typeof Button> & {
   pendingLabel?: ReactNode;

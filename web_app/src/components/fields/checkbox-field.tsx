@@ -1,9 +1,9 @@
 import { useId } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
-import { Checkbox } from '#components/ui/checkbox';
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from '#components/ui/field';
-import { useFieldContext } from '#hooks/form-context';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
+import { useFieldContext } from '@/hooks/form-context';
 
 import { useFieldErrorState } from './field-errors';
 

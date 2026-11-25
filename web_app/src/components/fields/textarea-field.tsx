@@ -1,9 +1,9 @@
 import { useId } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 
-import { Field, FieldDescription, FieldError, FieldLabel } from '#components/ui/field';
-import { Textarea } from '#components/ui/textarea';
-import { useFieldContext } from '#hooks/form-context';
+import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
+import { Textarea } from '@/components/ui/textarea';
+import { useFieldContext } from '@/hooks/form-context';
 
 import { useFieldErrorState } from './field-errors';
 

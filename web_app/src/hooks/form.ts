@@ -1,12 +1,12 @@
 import { createFormHook } from '@tanstack/react-form';
 
-import { CheckboxField } from '#form/checkbox-field';
-import { NumberField } from '#form/number-field';
-import { SelectField } from '#form/select-field';
-import { SubmitButton } from '#form/submit-button';
-import { SwitchField } from '#form/switch-field';
-import { TextField } from '#form/text-field';
-import { TextareaField } from '#form/textarea-field';
+import { CheckboxField } from '@/components/fields/checkbox-field';
+import { NumberField } from '@/components/fields/number-field';
+import { SelectField } from '@/components/fields/select-field';
+import { SubmitButton } from '@/components/fields/submit-button';
+import { SwitchField } from '@/components/fields/switch-field';
+import { TextField } from '@/components/fields/text-field';
+import { TextareaField } from '@/components/fields/textarea-field';
 
 import { fieldContext, formContext } from './form-context';
 
