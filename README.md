@@ -97,7 +97,7 @@ backend/
 web_app/src/
 ├── routes/                  # file-based TanStack Router routes
 ├── api/                     # GENERATED orval client
-├── components/{ui,form}/    # shadcn/ui + TanStack Form fields
+├── components/{ui,fields}/  # shadcn/ui + TanStack Form fields
 └── hooks/                   # useAppForm composition
 ```
 
@@ -106,5 +106,5 @@ web_app/src/
 - Feature folders under `features/<feature>/`, routers wired centrally in `application/server.py`
 - SQLModel-first models with shared `IdMixin` / `TimestampMixin` / `SoftDeleteMixin`; prefer soft delete
 - Sync DB sessions only — don't introduce an async engine
-- Frontend imports use **`#`-prefixed aliases** (`#components/ui/...`), not `@/...`
-- Forms go through `useAppForm` (`#hooks/form`); data fetching uses TanStack Query with `queryOptions` prefetched in route loaders
+- Frontend imports use the **`@/*` alias** (`@/components/ui/...`, `@/hooks/form`)
+- Forms go through `useAppForm` (`@/hooks/form`); data fetching uses TanStack Query with `queryOptions` prefetched in route loaders
