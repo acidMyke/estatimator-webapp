@@ -105,10 +105,11 @@ echo "Feel free to delete '$SSH_KEY_TITLE' from your Github account after we get
 
 echo ""
 echo "=== 4. Git Remote Origin Setup ==="
-EXPECTED_ORIGIN="https://github.com/acidMyke/estatimator-webapp.git"
+EXPECTED_ORIGIN="https://github.com/acidMyke/hdbeeprice.git"
 
 if git remote get-url origin >/dev/null 2>&1; then
   git remote set-url origin "$EXPECTED_ORIGIN"
+  git remote set-url origin "$EXPECTED_ORIGIN" --push
   echo "Updated Git remote origin to: $EXPECTED_ORIGIN"
 else
   git remote add origin "$EXPECTED_ORIGIN"
