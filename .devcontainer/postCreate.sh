@@ -142,3 +142,42 @@ if ! grep -q '^JWT_SECRET_KEY=.' "$ENV_FILE"; then
 else
     echo "JWT_SECRET_KEY already configured. Skipping."
 fi
+
+if ! grep -q "# --- DEVCONTAINER CUSTOM ---" ~/.zshrc; then
+  cat << 'EOF' >> ~/.zshrc
+
+# --- DEVCONTAINER CUSTOM ---
+_find_repo_root() {
+  local dir="$PWD"
+  while [[ "$dir" != "/" ]]; do
+    if [[ "$(basename "$dir")" == "hdbeeprice" ]]; then
+      echo "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+pnpm() {
+  local repo_root
+  if repo_root="$(_find_repo_root)"; then
+    if [[ "$PWD" != "$repo_root/web_app"* ]]; then
+      cd "$repo_root/web_app" || return 1
+    fi
+  fi
+  command pnpm "$@"
+}
+
+uv() {
+  local repo_root
+  if repo_root="$(_find_repo_root)"; then
+    if [[ "$PWD" != "$repo_root/backend"* ]]; then
+      cd "$repo_root/backend" || return 1
+    fi
+  fi
+  command uv "$@"
+}
+
+EOF
+fi
