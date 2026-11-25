@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, type ComponentType } from 'react';
+import { type ComponentType } from 'react';
 
 import { isComponentType } from '@/lib/utils';
 
@@ -24,13 +24,12 @@ export const Route = createFileRoute('/preview/components/ui')({
 
 function RouteComponent() {
   return (
-    <div className='flex-1 overflow-y-auto p-8'>
+    <div className='flex-1 overflow-y-auto p-8 space-y-8'>
       {previewSections.map(({ filename, sections }) => (
         <div className='mx-auto max-w-5xl space-y-8'>
           <div className='border-b pb-4'>
             <h2 className='text-xl font-bold'>{filename}</h2>
           </div>
-
           {sections.map(({ name, Component }) => (
             <div key={name} className='rounded-lg border bg-white p-6 shadow-xs'>
               <h3 className='mb-4 text-xs font-semibold uppercase tracking-wider text-neutral-400'>{name}</h3>
