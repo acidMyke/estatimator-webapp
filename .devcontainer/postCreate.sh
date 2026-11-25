@@ -17,6 +17,8 @@ trap on_exit 0
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+git config --global --add safe.directory /hdbeeprice
+
 if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
   echo "ERROR: This script must be run inside a Git repository."
   exit 1
