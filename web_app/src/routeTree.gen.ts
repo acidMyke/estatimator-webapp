@@ -9,14 +9,49 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicLoginRouteImport } from './routes/_public/login'
+import { Route as PublicRegisterRouteImport } from './routes/_public/register'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminRegisterRouteImport } from './routes/admin/register'
 import { Route as PreviewComponentsUiRouteImport } from './routes/preview/components/ui'
 import { Route as PreviewComponentsBlocksChar123FileChar125Char123CnameChar125RouteImport } from './routes/preview/components/blocks.{-$file}.{-$cname}'
 
-const IndexRoute = IndexRouteImport.update({
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicLoginRoute = PublicLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicRegisterRoute = PublicRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => PublicRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRegisterRoute = AdminRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AdminRoute,
 } as any)
 const PreviewComponentsUiRoute = PreviewComponentsUiRouteImport.update({
   id: '/preview/components/ui',
@@ -33,18 +68,34 @@ const PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route =
   )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof PublicIndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/register': typeof AdminRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
   '/preview/components/blocks/{-$file}/{-$cname}': typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/register': typeof AdminRegisterRoute
+  '/': typeof PublicIndexRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
   '/preview/components/blocks/{-$file}/{-$cname}': typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
+  '/_public/login': typeof PublicLoginRoute
+  '/_public/register': typeof PublicRegisterRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/register': typeof AdminRegisterRoute
+  '/_public/': typeof PublicIndexRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
   '/preview/components/blocks/{-$file}/{-$cname}': typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
 }
@@ -52,34 +103,93 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/login'
+    | '/register'
+    | '/admin/login'
+    | '/admin/register'
     | '/preview/components/ui'
     | '/preview/components/blocks/{-$file}/{-$cname}'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/admin'
+    | '/login'
+    | '/register'
+    | '/admin/login'
+    | '/admin/register'
     | '/'
     | '/preview/components/ui'
     | '/preview/components/blocks/{-$file}/{-$cname}'
   id:
     | '__root__'
-    | '/'
+    | '/_public'
+    | '/admin'
+    | '/_public/login'
+    | '/_public/register'
+    | '/admin/login'
+    | '/admin/register'
+    | '/_public/'
     | '/preview/components/ui'
     | '/preview/components/blocks/{-$file}/{-$cname}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  PublicRoute: typeof PublicRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
   PreviewComponentsUiRoute: typeof PreviewComponentsUiRoute
   PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route: typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/login': {
+      id: '/_public/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/register': {
+      id: '/_public/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof PublicRegisterRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/register': {
+      id: '/admin/register'
+      path: '/register'
+      fullPath: '/admin/register'
+      preLoaderRoute: typeof AdminRegisterRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/preview/components/ui': {
       id: '/preview/components/ui'
@@ -98,8 +208,36 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PublicRouteChildren {
+  PublicLoginRoute: typeof PublicLoginRoute
+  PublicRegisterRoute: typeof PublicRegisterRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicLoginRoute: PublicLoginRoute,
+  PublicRegisterRoute: PublicRegisterRoute,
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminRegisterRoute: typeof AdminRegisterRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+  AdminRegisterRoute: AdminRegisterRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  PublicRoute: PublicRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
   PreviewComponentsUiRoute: PreviewComponentsUiRoute,
   PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route:
     PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route,
