@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PreviewComponentsUiRouteImport } from './routes/preview/components/ui'
+import { Route as PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125RouteImport } from './routes/preview/components/blocks.{-$file}.{-$Component}'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,53 @@ const PreviewComponentsUiRoute = PreviewComponentsUiRouteImport.update({
   path: '/preview/components/ui',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route =
+  PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125RouteImport.update(
+    {
+      id: '/preview/components/blocks/{-$file}/{-$Component}',
+      path: '/preview/components/blocks/{-$file}/{-$Component}',
+      getParentRoute: () => rootRouteImport,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
+  '/preview/components/blocks/{-$file}/{-$Component}': typeof PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
+  '/preview/components/blocks/{-$file}/{-$Component}': typeof PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
+  '/preview/components/blocks/{-$file}/{-$Component}': typeof PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/preview/components/ui'
+  fullPaths:
+    | '/'
+    | '/preview/components/ui'
+    | '/preview/components/blocks/{-$file}/{-$Component}'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/preview/components/ui'
-  id: '__root__' | '/' | '/preview/components/ui'
+  to:
+    | '/'
+    | '/preview/components/ui'
+    | '/preview/components/blocks/{-$file}/{-$Component}'
+  id:
+    | '__root__'
+    | '/'
+    | '/preview/components/ui'
+    | '/preview/components/blocks/{-$file}/{-$Component}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PreviewComponentsUiRoute: typeof PreviewComponentsUiRoute
+  PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route: typeof PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +88,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewComponentsUiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preview/components/blocks/{-$file}/{-$Component}': {
+      id: '/preview/components/blocks/{-$file}/{-$Component}'
+      path: '/preview/components/blocks/{-$file}/{-$Component}'
+      fullPath: '/preview/components/blocks/{-$file}/{-$Component}'
+      preLoaderRoute: typeof PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PreviewComponentsUiRoute: PreviewComponentsUiRoute,
+  PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route:
+    PreviewComponentsBlocksChar123FileChar125Char123ComponentChar125Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
