@@ -8,7 +8,25 @@ Thumbs.db
 
 data/
 infra/letsencrypt/acme.json
-infra/certs/*
-!infra/certs/.gitkeep
-!infra/dynamic/.gitkeep
-!infra/letsencrypt/.gitkeep
+infra/traefik/certs/*
+!infra/traefik/certs/.gitkeep
+infra/traefik/dynamic/*
+!infra/traefik/dynamic/.gitkeep
+infra/traefik/letsencrypt/*
+!infra/traefik/letsencrypt/.gitkeep
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+*.tfplan
