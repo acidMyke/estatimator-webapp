@@ -15,10 +15,10 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./infra/certs:/certs:ro
-      - ./infra/dynamic:/dynamic:ro
+      - ./infra/traefik/certs:/certs:ro
+      - ./infra/traefik/dynamic:/dynamic:ro
       - ./infra/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./infra/letsencrypt:/letsencrypt
+      - ./infra/traefik/letsencrypt:/letsencrypt
     command:
       - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:?}"
     labels:
