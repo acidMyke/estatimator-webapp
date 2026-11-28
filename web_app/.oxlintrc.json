@@ -4,5 +4,6 @@
   "rules": {
     "no-unused-vars": "error"
   },
-  "options": { "typeAware": true, "typeCheck": true }
+  "options": { "typeAware": true, "typeCheck": true },
+  "ignorePatterns": ["*.gen.ts"]
 }

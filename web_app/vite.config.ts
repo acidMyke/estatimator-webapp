@@ -22,5 +22,14 @@ export default defineConfig({
     emptyOutDir: true,
   },
   resolve: { tsconfigPaths: true },
-  plugins: [devtools(), tailwindcss(), tanstackRouter({ target: 'react', autoCodeSplitting: true }), viteReact()],
+  plugins: [
+    devtools(),
+    tailwindcss(),
+    tanstackRouter({
+      target: 'react',
+      routeToken: 'layout',
+      autoCodeSplitting: true,
+    }),
+    viteReact(),
+  ],
 });

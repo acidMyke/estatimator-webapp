@@ -1,9 +1,8 @@
-
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist-mono";
-@import "@fontsource-variable/manrope";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource-variable/manrope';
 
 @custom-variant dark (&:is(.dark *));
 

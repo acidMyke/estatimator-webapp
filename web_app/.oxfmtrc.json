@@ -5,5 +5,11 @@
   "jsxSingleQuote": true,
   "trailingComma": "all",
   "quoteProps": "consistent",
-  "sortImports": true
+  "sortImports": true,
+  "ignorePatterns": ["dist/**", "*.gen.ts"],
+  "sortTailwindcss": {
+    "stylesheet": "./src/styles.css",
+    "functions": ["clsx", "cn"],
+    "preserveWhitespace": true
+  }
 }
