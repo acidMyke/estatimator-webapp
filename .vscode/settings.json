@@ -98,7 +98,7 @@
     ".pnpm-store": true,
     "web_app/.tanstack": true,
     "web_app/.vite-hooks": true,
-    "web_app/node_modules": true
+    "*/node_modules": true
   },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,

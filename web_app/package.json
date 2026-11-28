@@ -2,9 +2,6 @@
   "name": "web_app",
   "private": true,
   "type": "module",
-  "imports": {
-    "#/*": "./src/*"
-  },
   "scripts": {
     "dev": "vite",
     "generate-routes": "tsr generate",
@@ -59,5 +56,5 @@
     "vite": "^8.3.6",
     "vitest": "^5.1.1"
   },
-  "packageManager": "pnpm@12.21.0+sha512.66fd8278ee28935ce951792d34367ff3af5c432a2756445823029533835b8da529bbe0be5130afd56ed0713fb8789e47bad82d93bd5ae2fe54b15562d6276ef0"
+  "packageManager": "pnpm@12.24.0+sha512.5f90f50a48aa40f01dc43bd3acb528922fd899d3b909015fdb23af73bb31c578f29ceb29be9a4d6f0146adb34206aac332796043cc5024b815ef76288cbac767"
 }

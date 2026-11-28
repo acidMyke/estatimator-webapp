@@ -1,0 +1,24 @@
+{
+  "name": "email",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "email:dev": "email dev"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-email": "6.11.17"
+  },
+  "devDependencies": {
+    "@react-email/ui": "6.11.17",
+    "@types/node": "^26.6.11",
+    "@types/react": "^19.3.3",
+    "oxfmt": "^0.80.0",
+    "oxlint": "^1.95.0",
+    "oxlint-tsgolint": "^7.0.2009",
+    "typescript": "^6.0.3"
+  },
+  "packageManager": "pnpm@12.24.0+sha512.5f90f50a48aa40f01dc43bd3acb528922fd899d3b909015fdb23af73bb31c578f29ceb29be9a4d6f0146adb34206aac332796043cc5024b815ef76288cbac767"
+}
