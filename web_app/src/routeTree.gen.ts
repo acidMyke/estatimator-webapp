@@ -18,6 +18,9 @@ import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as AdminDashLayoutRouteImport } from './routes/admin/_dash/layout'
 import { Route as AdminWhoareyouLayoutRouteImport } from './routes/admin/_whoareyou/layout'
 import { Route as AdminDashIndexRouteImport } from './routes/admin/_dash/index'
+import { Route as AdminDashCompareAndDeployRouteImport } from './routes/admin/_dash/compare-and-deploy'
+import { Route as AdminDashDataManagementRouteImport } from './routes/admin/_dash/data-management'
+import { Route as AdminDashTrainingStudioRouteImport } from './routes/admin/_dash/training-studio'
 import { Route as AdminWhoareyouLoginRouteImport } from './routes/admin/_whoareyou/login'
 import { Route as AdminWhoareyouRegisterRouteImport } from './routes/admin/_whoareyou/register'
 import { Route as PreviewComponentsUiRouteImport } from './routes/preview/components/ui'
@@ -65,6 +68,22 @@ const AdminDashIndexRoute = AdminDashIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminDashLayoutRoute,
 } as any)
+const AdminDashCompareAndDeployRoute =
+  AdminDashCompareAndDeployRouteImport.update({
+    id: '/compare-and-deploy',
+    path: '/compare-and-deploy',
+    getParentRoute: () => AdminDashLayoutRoute,
+  } as any)
+const AdminDashDataManagementRoute = AdminDashDataManagementRouteImport.update({
+  id: '/data-management',
+  path: '/data-management',
+  getParentRoute: () => AdminDashLayoutRoute,
+} as any)
+const AdminDashTrainingStudioRoute = AdminDashTrainingStudioRouteImport.update({
+  id: '/training-studio',
+  path: '/training-studio',
+  getParentRoute: () => AdminDashLayoutRoute,
+} as any)
 const AdminWhoareyouLoginRoute = AdminWhoareyouLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -95,6 +114,9 @@ export interface FileRoutesByFullPath {
   '/about': typeof PublicAboutRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
+  '/admin/compare-and-deploy': typeof AdminDashCompareAndDeployRoute
+  '/admin/data-management': typeof AdminDashDataManagementRoute
+  '/admin/training-studio': typeof AdminDashTrainingStudioRoute
   '/admin/login': typeof AdminWhoareyouLoginRoute
   '/admin/register': typeof AdminWhoareyouRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
@@ -107,6 +129,9 @@ export interface FileRoutesByTo {
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/': typeof PublicIndexRoute
+  '/admin/compare-and-deploy': typeof AdminDashCompareAndDeployRoute
+  '/admin/data-management': typeof AdminDashDataManagementRoute
+  '/admin/training-studio': typeof AdminDashTrainingStudioRoute
   '/admin/login': typeof AdminWhoareyouLoginRoute
   '/admin/register': typeof AdminWhoareyouRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
@@ -122,6 +147,9 @@ export interface FileRoutesById {
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
   '/_public/': typeof PublicIndexRoute
+  '/admin/_dash/compare-and-deploy': typeof AdminDashCompareAndDeployRoute
+  '/admin/_dash/data-management': typeof AdminDashDataManagementRoute
+  '/admin/_dash/training-studio': typeof AdminDashTrainingStudioRoute
   '/admin/_whoareyou/login': typeof AdminWhoareyouLoginRoute
   '/admin/_whoareyou/register': typeof AdminWhoareyouRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
@@ -136,6 +164,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/login'
     | '/register'
+    | '/admin/compare-and-deploy'
+    | '/admin/data-management'
+    | '/admin/training-studio'
     | '/admin/login'
     | '/admin/register'
     | '/preview/components/ui'
@@ -148,6 +179,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/'
+    | '/admin/compare-and-deploy'
+    | '/admin/data-management'
+    | '/admin/training-studio'
     | '/admin/login'
     | '/admin/register'
     | '/preview/components/ui'
@@ -162,6 +196,9 @@ export interface FileRouteTypes {
     | '/_public/login'
     | '/_public/register'
     | '/_public/'
+    | '/admin/_dash/compare-and-deploy'
+    | '/admin/_dash/data-management'
+    | '/admin/_dash/training-studio'
     | '/admin/_whoareyou/login'
     | '/admin/_whoareyou/register'
     | '/preview/components/ui'
@@ -241,6 +278,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashIndexRouteImport
       parentRoute: typeof AdminDashLayoutRoute
     }
+    '/admin/_dash/compare-and-deploy': {
+      id: '/admin/_dash/compare-and-deploy'
+      path: '/compare-and-deploy'
+      fullPath: '/admin/compare-and-deploy'
+      preLoaderRoute: typeof AdminDashCompareAndDeployRouteImport
+      parentRoute: typeof AdminDashLayoutRoute
+    }
+    '/admin/_dash/data-management': {
+      id: '/admin/_dash/data-management'
+      path: '/data-management'
+      fullPath: '/admin/data-management'
+      preLoaderRoute: typeof AdminDashDataManagementRouteImport
+      parentRoute: typeof AdminDashLayoutRoute
+    }
+    '/admin/_dash/training-studio': {
+      id: '/admin/_dash/training-studio'
+      path: '/training-studio'
+      fullPath: '/admin/training-studio'
+      preLoaderRoute: typeof AdminDashTrainingStudioRouteImport
+      parentRoute: typeof AdminDashLayoutRoute
+    }
     '/admin/_whoareyou/login': {
       id: '/admin/_whoareyou/login'
       path: '/login'
@@ -291,10 +349,16 @@ const PublicLayoutRouteWithChildren = PublicLayoutRoute._addFileChildren(
 )
 
 interface AdminDashLayoutRouteChildren {
+  AdminDashCompareAndDeployRoute: typeof AdminDashCompareAndDeployRoute
+  AdminDashDataManagementRoute: typeof AdminDashDataManagementRoute
+  AdminDashTrainingStudioRoute: typeof AdminDashTrainingStudioRoute
   AdminDashIndexRoute: typeof AdminDashIndexRoute
 }
 
 const AdminDashLayoutRouteChildren: AdminDashLayoutRouteChildren = {
+  AdminDashCompareAndDeployRoute: AdminDashCompareAndDeployRoute,
+  AdminDashDataManagementRoute: AdminDashDataManagementRoute,
+  AdminDashTrainingStudioRoute: AdminDashTrainingStudioRoute,
   AdminDashIndexRoute: AdminDashIndexRoute,
 }
 

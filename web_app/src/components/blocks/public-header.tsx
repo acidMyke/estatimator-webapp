@@ -12,7 +12,7 @@ export function PublicHeader() {
           <Logo />
         </Link>
 
-        <nav className='hidden items-center gap-6 md:flex' aria-label='Main navigation'>
+        <nav className='flex items-center gap-6' aria-label='Main navigation'>
           {PUBLIC_NAVIGATIONS.map(
             ({ label, showHeader, to }) =>
               showHeader && (
