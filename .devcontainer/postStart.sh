@@ -39,3 +39,7 @@ fi
 
 echo ""
 echo "=== Dependency installation completed ==="
+echo "If you are getting any error in vscode"
+echo "Press F1, type 'Reload Window' and Press Enter"
+echo ""
+echo "Happy Coding!!"

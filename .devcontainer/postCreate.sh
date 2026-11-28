@@ -17,6 +17,8 @@ trap on_exit 0
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
+git config --global --add safe.directory /hdbeeprice
+
 if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
   echo "ERROR: This script must be run inside a Git repository."
   exit 1
@@ -103,10 +105,11 @@ echo "Feel free to delete '$SSH_KEY_TITLE' from your Github account after we get
 
 echo ""
 echo "=== 4. Git Remote Origin Setup ==="
-EXPECTED_ORIGIN="https://github.com/acidMyke/estatimator-webapp.git"
+EXPECTED_ORIGIN="https://github.com/acidMyke/hdbeeprice.git"
 
 if git remote get-url origin >/dev/null 2>&1; then
   git remote set-url origin "$EXPECTED_ORIGIN"
+  git remote set-url origin "$EXPECTED_ORIGIN" --push
   echo "Updated Git remote origin to: $EXPECTED_ORIGIN"
 else
   git remote add origin "$EXPECTED_ORIGIN"
@@ -138,4 +141,43 @@ if ! grep -q '^JWT_SECRET_KEY=.' "$ENV_FILE"; then
     echo "JWT_SECRET_KEY generated."
 else
     echo "JWT_SECRET_KEY already configured. Skipping."
+fi
+
+if ! grep -q "# --- DEVCONTAINER CUSTOM ---" ~/.zshrc; then
+  cat << 'EOF' >> ~/.zshrc
+
+# --- DEVCONTAINER CUSTOM ---
+_find_repo_root() {
+  local dir="$PWD"
+  while [[ "$dir" != "/" ]]; do
+    if [[ "$(basename "$dir")" == "hdbeeprice" ]]; then
+      echo "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+pnpm() {
+  local repo_root
+  if repo_root="$(_find_repo_root)"; then
+    if [[ "$PWD" != "$repo_root/web_app"* ]]; then
+      cd "$repo_root/web_app" || return 1
+    fi
+  fi
+  command pnpm "$@"
+}
+
+uv() {
+  local repo_root
+  if repo_root="$(_find_repo_root)"; then
+    if [[ "$PWD" != "$repo_root/backend"* ]]; then
+      cd "$repo_root/backend" || return 1
+    fi
+  fi
+  command uv "$@"
+}
+
+EOF
 fi
