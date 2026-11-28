@@ -1,15 +1,35 @@
 {
   "[javascript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.oxc": "explicit",
+      "source.addMissingImports.ts": "explicit",
+      "source.removeUnusedImports": "explicit"
+    }
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.oxc": "explicit",
+      "source.addMissingImports.ts": "explicit",
+      "source.removeUnusedImports": "explicit"
+    }
   },
   "[typescript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.oxc": "explicit",
+      "source.addMissingImports.ts": "explicit",
+      "source.removeUnusedImports": "explicit"
+    }
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.oxc": "explicit",
+      "source.addMissingImports.ts": "explicit",
+      "source.removeUnusedImports": "explicit"
+    }
   },
   "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
@@ -58,12 +78,17 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "search.exclude": {
-    "**/routeTree.gen.ts": true
+    "web_app/src/routeTree.gen.ts": true
   },
   "files.readonlyInclude": {
+    "web_app/src/routeTree.gen.ts": true,
+    "web_app/src/api/**": true,
+    "backend/openapi/spec.json": true,
+    "backend/openapi/spec.json.sha256": true,
+    "backend/src/mailjet_send_client/**": true,
+    "backend/src/flyio_machines_client/**": true
+  },
+  "search.exclude": {
     "**/routeTree.gen.ts": true
   },
   "files.exclude": {
