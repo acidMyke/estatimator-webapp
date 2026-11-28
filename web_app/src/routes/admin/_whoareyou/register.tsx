@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { PlaceholderPage } from '@/components/blocks/placeholder-page';
 
-export const Route = createFileRoute('/admin/login')({
+export const Route = createFileRoute('/admin/_whoareyou/register')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <PlaceholderPage title='Admin login'></PlaceholderPage>;
+  return <PlaceholderPage title='Admin register'></PlaceholderPage>;
 }

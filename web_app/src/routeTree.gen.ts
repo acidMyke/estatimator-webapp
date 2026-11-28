@@ -16,9 +16,10 @@ import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as AdminDashLayoutRouteImport } from './routes/admin/_dash/layout'
-import { Route as AdminLoginRouteImport } from './routes/admin/login'
-import { Route as AdminRegisterRouteImport } from './routes/admin/register'
+import { Route as AdminWhoareyouLayoutRouteImport } from './routes/admin/_whoareyou/layout'
 import { Route as AdminDashIndexRouteImport } from './routes/admin/_dash/index'
+import { Route as AdminWhoareyouLoginRouteImport } from './routes/admin/_whoareyou/login'
+import { Route as AdminWhoareyouRegisterRouteImport } from './routes/admin/_whoareyou/register'
 import { Route as PreviewComponentsUiRouteImport } from './routes/preview/components/ui'
 import { Route as PreviewComponentsBlocksChar123FileChar125Char123CnameChar125RouteImport } from './routes/preview/components/blocks.{-$file}.{-$cname}'
 
@@ -55,20 +56,24 @@ const AdminDashLayoutRoute = AdminDashLayoutRouteImport.update({
   id: '/_dash',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AdminLayoutRoute,
-} as any)
-const AdminRegisterRoute = AdminRegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
+const AdminWhoareyouLayoutRoute = AdminWhoareyouLayoutRouteImport.update({
+  id: '/_whoareyou',
   getParentRoute: () => AdminLayoutRoute,
 } as any)
 const AdminDashIndexRoute = AdminDashIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminDashLayoutRoute,
+} as any)
+const AdminWhoareyouLoginRoute = AdminWhoareyouLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminWhoareyouLayoutRoute,
+} as any)
+const AdminWhoareyouRegisterRoute = AdminWhoareyouRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => AdminWhoareyouLayoutRoute,
 } as any)
 const PreviewComponentsUiRoute = PreviewComponentsUiRouteImport.update({
   id: '/preview/components/ui',
@@ -90,8 +95,8 @@ export interface FileRoutesByFullPath {
   '/about': typeof PublicAboutRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/register': typeof AdminRegisterRoute
+  '/admin/login': typeof AdminWhoareyouLoginRoute
+  '/admin/register': typeof AdminWhoareyouRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
   '/admin/': typeof AdminDashIndexRoute
   '/preview/components/blocks/{-$file}/{-$cname}': typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
@@ -101,9 +106,9 @@ export interface FileRoutesByTo {
   '/about': typeof PublicAboutRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/register': typeof AdminRegisterRoute
   '/': typeof PublicIndexRoute
+  '/admin/login': typeof AdminWhoareyouLoginRoute
+  '/admin/register': typeof AdminWhoareyouRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
   '/preview/components/blocks/{-$file}/{-$cname}': typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
 }
@@ -112,12 +117,13 @@ export interface FileRoutesById {
   '/_public': typeof PublicLayoutRouteWithChildren
   '/admin': typeof AdminLayoutRouteWithChildren
   '/admin/_dash': typeof AdminDashLayoutRouteWithChildren
+  '/admin/_whoareyou': typeof AdminWhoareyouLayoutRouteWithChildren
   '/_public/about': typeof PublicAboutRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/register': typeof AdminRegisterRoute
   '/_public/': typeof PublicIndexRoute
+  '/admin/_whoareyou/login': typeof AdminWhoareyouLoginRoute
+  '/admin/_whoareyou/register': typeof AdminWhoareyouRegisterRoute
   '/preview/components/ui': typeof PreviewComponentsUiRoute
   '/admin/_dash/': typeof AdminDashIndexRoute
   '/preview/components/blocks/{-$file}/{-$cname}': typeof PreviewComponentsBlocksChar123FileChar125Char123CnameChar125Route
@@ -141,9 +147,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/login'
     | '/register'
+    | '/'
     | '/admin/login'
     | '/admin/register'
-    | '/'
     | '/preview/components/ui'
     | '/preview/components/blocks/{-$file}/{-$cname}'
   id:
@@ -151,12 +157,13 @@ export interface FileRouteTypes {
     | '/_public'
     | '/admin'
     | '/admin/_dash'
+    | '/admin/_whoareyou'
     | '/_public/about'
     | '/_public/login'
     | '/_public/register'
-    | '/admin/login'
-    | '/admin/register'
     | '/_public/'
+    | '/admin/_whoareyou/login'
+    | '/admin/_whoareyou/register'
     | '/preview/components/ui'
     | '/admin/_dash/'
     | '/preview/components/blocks/{-$file}/{-$cname}'
@@ -220,18 +227,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashLayoutRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof AdminLayoutRoute
-    }
-    '/admin/register': {
-      id: '/admin/register'
-      path: '/register'
-      fullPath: '/admin/register'
-      preLoaderRoute: typeof AdminRegisterRouteImport
+    '/admin/_whoareyou': {
+      id: '/admin/_whoareyou'
+      path: ''
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminWhoareyouLayoutRouteImport
       parentRoute: typeof AdminLayoutRoute
     }
     '/admin/_dash/': {
@@ -240,6 +240,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminDashIndexRouteImport
       parentRoute: typeof AdminDashLayoutRoute
+    }
+    '/admin/_whoareyou/login': {
+      id: '/admin/_whoareyou/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminWhoareyouLoginRouteImport
+      parentRoute: typeof AdminWhoareyouLayoutRoute
+    }
+    '/admin/_whoareyou/register': {
+      id: '/admin/_whoareyou/register'
+      path: '/register'
+      fullPath: '/admin/register'
+      preLoaderRoute: typeof AdminWhoareyouRegisterRouteImport
+      parentRoute: typeof AdminWhoareyouLayoutRoute
     }
     '/preview/components/ui': {
       id: '/preview/components/ui'
@@ -288,16 +302,27 @@ const AdminDashLayoutRouteWithChildren = AdminDashLayoutRoute._addFileChildren(
   AdminDashLayoutRouteChildren,
 )
 
+interface AdminWhoareyouLayoutRouteChildren {
+  AdminWhoareyouLoginRoute: typeof AdminWhoareyouLoginRoute
+  AdminWhoareyouRegisterRoute: typeof AdminWhoareyouRegisterRoute
+}
+
+const AdminWhoareyouLayoutRouteChildren: AdminWhoareyouLayoutRouteChildren = {
+  AdminWhoareyouLoginRoute: AdminWhoareyouLoginRoute,
+  AdminWhoareyouRegisterRoute: AdminWhoareyouRegisterRoute,
+}
+
+const AdminWhoareyouLayoutRouteWithChildren =
+  AdminWhoareyouLayoutRoute._addFileChildren(AdminWhoareyouLayoutRouteChildren)
+
 interface AdminLayoutRouteChildren {
   AdminDashLayoutRoute: typeof AdminDashLayoutRouteWithChildren
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminRegisterRoute: typeof AdminRegisterRoute
+  AdminWhoareyouLayoutRoute: typeof AdminWhoareyouLayoutRouteWithChildren
 }
 
 const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
   AdminDashLayoutRoute: AdminDashLayoutRouteWithChildren,
-  AdminLoginRoute: AdminLoginRoute,
-  AdminRegisterRoute: AdminRegisterRoute,
+  AdminWhoareyouLayoutRoute: AdminWhoareyouLayoutRouteWithChildren,
 }
 
 const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
