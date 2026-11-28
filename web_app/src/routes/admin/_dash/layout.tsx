@@ -1,10 +1,10 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/admin')({
-  component: RouteComponent,
+export const Route = createFileRoute('/admin/_dash')({
+  component: LayoutComponent,
 });
 
-function RouteComponent() {
+function LayoutComponent() {
   return (
     <div>
       <Outlet />
