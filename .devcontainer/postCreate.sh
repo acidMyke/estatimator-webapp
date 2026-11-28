@@ -160,20 +160,28 @@ _find_repo_root() {
 }
 
 pnpm() {
-  local repo_root
-  if repo_root="$(_find_repo_root)"; then
-    if [[ "$PWD" != "$repo_root/web_app"* ]]; then
-      cd "$repo_root/web_app" || return 1
+  if [[ "${SKIP_DIR_CHECK:-0}" != "1" ]]; then
+    local repo_root
+    if repo_root="$(_find_repo_root)"; then
+      if [[ "$PWD" != "$repo_root/web_app"* && "$PWD" != "$repo_root/email"* ]]; then
+        echo "Heads up!! pnpm should be run from the web_app ($repo_root/web_app) or email ($repo_root/email) directory" >&2
+        echo "  Run with 'SKIP_DIR_CHECK=1 pnpm $@' to bypass checking " >&2
+        return 1
+      fi
     fi
   fi
   command pnpm "$@"
 }
 
 uv() {
-  local repo_root
-  if repo_root="$(_find_repo_root)"; then
-    if [[ "$PWD" != "$repo_root/backend"* ]]; then
-      cd "$repo_root/backend" || return 1
+  if [[ "${SKIP_DIR_CHECK:-0}" != "1" ]]; then
+    local repo_root
+    if repo_root="$(_find_repo_root)"; then
+      if [[ "$PWD" != "$repo_root/backend"* ]]; then
+        echo "Heads up!! uv should be be run from the backend ($repo_root/backend) directory" >&2
+        echo "  Run with 'SKIP_DIR_CHECK=1 uv $@' to bypass checking" >&2
+        return 1
+      fi
     fi
   fi
   command uv "$@"
