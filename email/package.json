@@ -4,7 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "email:dev": "email dev"
+    "dev": "email dev -d ./src -p 5002",
+    "build": "email export -d ./src -p"
   },
   "dependencies": {
     "react": "19.3.1",
